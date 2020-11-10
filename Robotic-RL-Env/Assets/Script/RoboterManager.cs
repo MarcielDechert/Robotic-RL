@@ -12,18 +12,27 @@ public class RoboterManager : MonoBehaviour
     [SerializeField] private Slider s1;
     [SerializeField] private Achse j2;
     [SerializeField] private Slider s2;
+    [SerializeField] private Achse j3;
+    [SerializeField] private Slider s3;
+    [SerializeField] private Achse j4;
+    [SerializeField] private Slider s4;
 
-    private float diffJ0, diffJ1, diffJ2;
-    private float aktuellerWinkelJ0, aktuellerWinkelJ1, aktuellerWinkelJ2;
+
+    private float diffJ0, diffJ1, diffJ2, diffJ3, diffJ4;
+    private float aktuellerWinkelJ0, aktuellerWinkelJ1, aktuellerWinkelJ2, aktuellerWinkelJ3, aktuellerWinkelJ4;
 
     private void Start()
     {
        aktuellerWinkelJ0 = 0f;
        aktuellerWinkelJ1 = 0f;
        aktuellerWinkelJ2 = 0f;
+       aktuellerWinkelJ3 = 0f;
+       aktuellerWinkelJ4 = 0f;
        diffJ0 = 0f;
        diffJ1 = 0f;
        diffJ2 = 0f;
+       diffJ3 = 0f;
+       diffJ4 = 0f;
     }
 
     // Update is called once per frame
@@ -32,6 +41,8 @@ public class RoboterManager : MonoBehaviour
         ManageJ0();
         ManageJ1();
         ManageJ2();
+        ManageJ3();
+        ManageJ4();
     }
 
     private void ManageJ0()
@@ -64,6 +75,28 @@ public class RoboterManager : MonoBehaviour
         if (diffJ2 != 0)
         {
             j2.Rotate(-diffJ2);
+        }
+    }
+
+    private void ManageJ3()
+    {
+        diffJ3 = s3.value - aktuellerWinkelJ3;
+        aktuellerWinkelJ3 = s3.value;
+
+        if (diffJ3 != 0)
+        {
+            j3.Rotate(diffJ3);
+        }
+    }
+
+    private void ManageJ4()
+    {
+        diffJ4 = s4.value - aktuellerWinkelJ4;
+        aktuellerWinkelJ4 = s4.value;
+
+        if (diffJ4 != 0)
+        {
+            j4.Rotate(-diffJ4);
         }
     }
 }

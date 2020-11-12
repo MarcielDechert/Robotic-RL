@@ -40,7 +40,7 @@ public class IKManager : MonoBehaviour
             {
                 Armbewegung current = m_root;
 
-                //silange bis es keine Achse mehr zum rotieren gibt
+                //solange bis es keine Achse mehr zum rotieren gibt
                 while(current != null)
                 {
                     float slope = CalculateSlope(current);

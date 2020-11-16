@@ -207,12 +207,8 @@ C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bi
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\ExCSS.Unity.dll
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.Legacy.NRefactory.dll
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEditor.TestRunner.dll
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\nunit.framework.dll
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.CecilTools.dll
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEngine.TestRunner.dll
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.ML-Agents.CommunicatorObjects.pdb
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.ML-Agents.Editor.pdb
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.ML-Agents.pdb
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEngine.xml
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEditor.xml
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEngine.AIModule.xml
@@ -296,8 +292,6 @@ C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bi
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.Mathematics.Editor.pdb
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\Unity.Barracuda.ONNX.pdb
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEditor.TestRunner.pdb
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\nunit.framework.pdb
-C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\nunit.framework.xml
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\Temp\bin\Debug\UnityEngine.TestRunner.pdb
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
 C:\Users\Dechert\Documents\Masterarbeit\GitHub\Robotic-RL\Robotic-RL-Env\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

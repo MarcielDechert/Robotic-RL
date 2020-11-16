@@ -1,11 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.ML-Agents", "Unity.ML-Agents.csproj", "{FF7D2EF8-74E3-C20E-A2D5-93CBC7948028}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.ML-Agents.CommunicatorObjects", "Unity.ML-Agents.CommunicatorObjects.csproj", "{1D7C2108-FCA4-5B38-1B2D-CD1A4405EDA3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{F2120CFE-788C-6808-CDAE-ABC5815C875E}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "RoboticReinforcementLearning", "..\RoboticReinforcementLearning\RoboticReinforcementLearning.pyproj", "{58CA2F70-8697-44E2-ACB0-DC3F0F0BD96C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.ML-Agents.Editor", "Unity.ML-Agents.Editor.csproj", "{1CC42F67-42D9-A5F7-3A8F-C85B963B7AC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,17 +15,24 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF7D2EF8-74E3-C20E-A2D5-93CBC7948028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF7D2EF8-74E3-C20E-A2D5-93CBC7948028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF7D2EF8-74E3-C20E-A2D5-93CBC7948028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF7D2EF8-74E3-C20E-A2D5-93CBC7948028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D7C2108-FCA4-5B38-1B2D-CD1A4405EDA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D7C2108-FCA4-5B38-1B2D-CD1A4405EDA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D7C2108-FCA4-5B38-1B2D-CD1A4405EDA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D7C2108-FCA4-5B38-1B2D-CD1A4405EDA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2120CFE-788C-6808-CDAE-ABC5815C875E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2120CFE-788C-6808-CDAE-ABC5815C875E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2120CFE-788C-6808-CDAE-ABC5815C875E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2120CFE-788C-6808-CDAE-ABC5815C875E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58CA2F70-8697-44E2-ACB0-DC3F0F0BD96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58CA2F70-8697-44E2-ACB0-DC3F0F0BD96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC42F67-42D9-A5F7-3A8F-C85B963B7AC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CC42F67-42D9-A5F7-3A8F-C85B963B7AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CC42F67-42D9-A5F7-3A8F-C85B963B7AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC42F67-42D9-A5F7-3A8F-C85B963B7AC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {FE4DD4ED-32F1-49FB-9301-2F6AE6C7AD51}
 	EndGlobalSection
 EndGlobal

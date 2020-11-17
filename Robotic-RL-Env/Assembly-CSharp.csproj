@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\Abwurfpunkt.cs" />
     <Compile Include="Assets\Script\Achse.cs" />
     <Compile Include="Assets\Script\AchseV1.cs" />
     <Compile Include="Assets\Script\Armbewegung.cs" />

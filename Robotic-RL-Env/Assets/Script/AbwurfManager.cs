@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Abwurfpunkt : MonoBehaviour
+public class AbwurfManager : MonoBehaviour
 {
 
     [SerializeField] private Rigidbody r_Ball;
+    [SerializeField] private Text geschwindigkeitText;
 
     private Vector3 abwurfGeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
@@ -25,6 +27,7 @@ public class Abwurfpunkt : MonoBehaviour
         if (other.gameObject.layer == 9)
         {
             Abwurf();
+            geschwindigkeitText.text = ""+abwurfGeschwindigkeit.magnitude;
         }
     }
 

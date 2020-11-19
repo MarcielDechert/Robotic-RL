@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8440832421116879315}
   - component: {fileID: 8440832421116879312}
   - component: {fileID: 8440832421116879313}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BallRoboter
   m_TagString: Untagged
   m_Icon: {fileID: 0}

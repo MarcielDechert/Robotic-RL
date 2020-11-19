@@ -40,6 +40,11 @@ public class IKManagerRobot : MonoBehaviour
 
     }
 
+    public void FahrZuAusgangsposition()
+    {
+        aktullesZiel = r_Ausgangsposition.transform.position;
+    }
+
     float BerechneSteigung(AchseV1 _achse)
     {
         float deltaTheta = 0.01f;
@@ -60,7 +65,11 @@ public class IKManagerRobot : MonoBehaviour
     {
         if (aktion)
         {
-            for( int i = 0; i < r_Schritte; ++i)
+            if (BerechneDistanz(r_Endpunkt.transform.position, r_Zielpunkt.transform.position) < r_Schwelle)
+            {
+                StartCoroutine(Verzoegerung(1));
+            }
+                    for ( int i = 0; i < r_Schritte; ++i)
             {
                 // solange bis das Ziel mit einer gewissen Abweichung erreicht wurde
                 if(BerechneDistanz(r_Endpunkt.transform.position, aktullesZiel) > r_Schwelle)
@@ -81,6 +90,12 @@ public class IKManagerRobot : MonoBehaviour
             }
 
         }
+    }
+
+    IEnumerator Verzoegerung(float time)
+    {
+        yield return new WaitForSeconds(time);
+        FahrZuAusgangsposition();
     }
     float BerechneDistanz(Vector3 _punkt1, Vector3 _punkt2)
     {

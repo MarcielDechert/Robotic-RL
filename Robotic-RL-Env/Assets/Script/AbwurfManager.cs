@@ -11,11 +11,12 @@ public class AbwurfManager : MonoBehaviour
 
     private Vector3 abwurfGeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
+    private bool abwurfpositionErreicht;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        abwurfpositionErreicht = true;
     }
     private void Update()
     {
@@ -26,10 +27,18 @@ public class AbwurfManager : MonoBehaviour
     {
         if (other.gameObject.layer == 9)
         {
-            Abwurf();
-            geschwindigkeitText.text = ""+abwurfGeschwindigkeit.magnitude;
+            if (abwurfpositionErreicht)
+            {
+                //BerechneGeschwindigkeit();
+                Abwurf();
+                geschwindigkeitText.text = "Abwurfgeschwindigkeit: "+abwurfGeschwindigkeit.magnitude+" ms";
+                //geschwindigkeitText.text = "" + Mathf.Acos(this.transform.position.y / abwurfGeschwindigkeit.magnitude);
+            }
+            abwurfpositionErreicht = !abwurfpositionErreicht;
         }
+        
     }
+
 
     void BerechneGeschwindigkeit()
     {

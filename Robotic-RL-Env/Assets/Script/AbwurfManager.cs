@@ -18,7 +18,7 @@ public class AbwurfManager : MonoBehaviour
     {
         abwurfpositionErreicht = true;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         BerechneGeschwindigkeit();
     }

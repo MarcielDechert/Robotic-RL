@@ -61,7 +61,7 @@ public class IKManagerRobot : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (aktion)
         {
@@ -96,6 +96,9 @@ public class IKManagerRobot : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         FahrZuAusgangsposition();
+        yield return new WaitForSeconds(time);
+        AbwurfButtonGeklickt();
+
     }
     float BerechneDistanz(Vector3 _punkt1, Vector3 _punkt2)
     {

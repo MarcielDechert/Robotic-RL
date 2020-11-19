@@ -9,15 +9,6 @@ public class BecherManager : MonoBehaviour
 
     private int punkte = 0;
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 8)

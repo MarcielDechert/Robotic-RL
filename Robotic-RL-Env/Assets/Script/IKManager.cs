@@ -35,14 +35,19 @@ public class IKManager : MonoBehaviour
     {
         for( int i = 0; i < m_steps; ++i)
         {
+            // solange bis das Ziel mit einer gewissen Abweichung erreicht wurde
             if(GetDistance(m_end.transform.position, m_target.transform.position) > m_threshold)
             {
                 Armbewegung current = m_root;
 
+                //solange bis es keine Achse mehr zum rotieren gibt
                 while(current != null)
                 {
                     float slope = CalculateSlope(current);
+                    // dreht die aktuelle Achse mit der berechneten Steigung mit einer Drehrate
                     current.Rotate(-slope * m_rate);
+
+                    // holt sich die nächste Achse/Verbindungspunkt
                     current = current.GetChild();
                 }
             }

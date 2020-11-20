@@ -44,8 +44,6 @@ public class Ball : MonoBehaviour
 
             Vector3 Vo = CalculateVelocity(hit.point, shootPoint.position, 1f);
 
-            transform.rotation = Quaternion.LookRotation(Vo);
-
             if (Input.GetMouseButtonDown(0))
             {
                 Rigidbody obj = Instantiate(bullet, shootPoint.position, Quaternion.identity);

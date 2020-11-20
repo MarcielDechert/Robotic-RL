@@ -138,7 +138,7 @@ def test_large_normalization():
         length=time_horizon,
         max_step_complete=True,
         observation_shapes=[(1,)],
-        action_space=[2],
+        action_spec=behavior_spec.action_spec,
     )
     for i in range(time_horizon):
         trajectory.steps[i].obs[0] = np.array([large_obs1[i]], dtype=np.float32)
@@ -159,7 +159,7 @@ def test_large_normalization():
         length=time_horizon,
         max_step_complete=True,
         observation_shapes=[(1,)],
-        action_space=[2],
+        action_spec=behavior_spec.action_spec,
     )
     for i in range(time_horizon):
         trajectory.steps[i].obs[0] = np.array([large_obs2[i]], dtype=np.float32)
@@ -188,7 +188,7 @@ def test_normalization():
         length=time_horizon,
         max_step_complete=True,
         observation_shapes=[(1,)],
-        action_space=[2],
+        action_spec=behavior_spec.action_spec,
     )
     # Change half of the obs to 0
     for i in range(3):
@@ -220,7 +220,7 @@ def test_normalization():
         length=time_horizon,
         max_step_complete=True,
         observation_shapes=[(1,)],
-        action_space=[2],
+        action_spec=behavior_spec.action_spec,
     )
     trajectory_buffer = trajectory.to_agentbuffer()
     policy.update_normalization(trajectory_buffer["vector_obs"])
@@ -263,6 +263,26 @@ def test_min_visual_size():
 
                 enc_func = ModelUtils.get_encoder_for_type(encoder_type)
                 enc_func(vis_input, 32, ModelUtils.swish, 1, "test", False)
+
+
+def test_step_overflow():
+    behavior_spec = mb.setup_test_behavior_specs(
+        use_discrete=True, use_visual=False, vector_action_space=[2], vector_obs_space=1
+    )
+
+    policy = TFPolicy(
+        0,
+        behavior_spec,
+        TrainerSettings(network_settings=NetworkSettings(normalize=True)),
+        create_tf_graph=False,
+    )
+    policy.create_input_placeholders()
+    policy.initialize()
+
+    policy.set_step(2 ** 31 - 1)
+    assert policy.get_current_step() == 2 ** 31 - 1
+    policy.increment_step(3)
+    assert policy.get_current_step() == 2 ** 31 + 2
 
 
 if __name__ == "__main__":

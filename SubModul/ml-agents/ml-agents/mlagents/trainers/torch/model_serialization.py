@@ -1,4 +1,3 @@
-import os
 import threading
 from mlagents.torch_utils import torch
 
@@ -19,14 +18,20 @@ class exporting_to_onnx:
     This implementation is thread safe.
     """
 
+    # local is_exporting flag for each thread
     _local_data = threading.local()
     _local_data._is_exporting = False
 
+    # global lock shared among all threads, to make sure only one thread is exporting at a time
+    _lock = threading.Lock()
+
     def __enter__(self):
+        self._lock.acquire()
         self._local_data._is_exporting = True
 
     def __exit__(self, *args):
         self._local_data._is_exporting = False
+        self._lock.release()
 
     @staticmethod
     def is_exporting():
@@ -52,7 +57,9 @@ class ModelSerializer:
             for shape in self.policy.behavior_spec.observation_shapes
             if len(shape) == 3
         ]
-        dummy_masks = torch.ones(batch_dim + [sum(self.policy.actor_critic.act_size)])
+        dummy_masks = torch.ones(
+            batch_dim + [sum(self.policy.behavior_spec.action_spec.discrete_branches)]
+        )
         dummy_memories = torch.zeros(
             batch_dim + seq_len_dim + [self.policy.export_memory_size]
         )
@@ -82,9 +89,6 @@ class ModelSerializer:
 
         :param output_filepath: file path to output the model (without file suffix)
         """
-        if not os.path.exists(output_filepath):
-            os.makedirs(output_filepath)
-
         onnx_output_path = f"{output_filepath}.onnx"
         logger.info(f"Converting to {onnx_output_path}")
 

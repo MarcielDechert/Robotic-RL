@@ -32,10 +32,15 @@ class Policy:
         self.trainer_settings = trainer_settings
         self.network_settings: NetworkSettings = trainer_settings.network_settings
         self.seed = seed
+        if (
+            self.behavior_spec.action_spec.continuous_size > 0
+            and self.behavior_spec.action_spec.discrete_size > 0
+        ):
+            raise UnityPolicyException("Trainers do not support mixed action spaces.")
         self.act_size = (
-            list(behavior_spec.discrete_action_branches)
-            if behavior_spec.is_action_discrete()
-            else [behavior_spec.action_size]
+            list(self.behavior_spec.action_spec.discrete_branches)
+            if self.behavior_spec.action_spec.is_discrete()
+            else [self.behavior_spec.action_spec.continuous_size]
         )
         self.vec_obs_size = sum(
             shape[0] for shape in behavior_spec.observation_shapes if len(shape) == 1
@@ -43,8 +48,12 @@ class Policy:
         self.vis_obs_size = sum(
             1 for shape in behavior_spec.observation_shapes if len(shape) == 3
         )
-        self.use_continuous_act = behavior_spec.is_action_continuous()
-        self.num_branches = self.behavior_spec.action_size
+        self.use_continuous_act = self.behavior_spec.action_spec.is_continuous()
+        # This line will be removed in the ActionBuffer change
+        self.num_branches = (
+            self.behavior_spec.action_spec.continuous_size
+            + self.behavior_spec.action_spec.discrete_size
+        )
         self.previous_action_dict: Dict[str, np.array] = {}
         self.memory_dict: Dict[str, np.ndarray] = {}
         self.normalize = trainer_settings.network_settings.normalize
@@ -131,6 +140,16 @@ class Policy:
         self, decision_requests: DecisionSteps, worker_id: int = 0
     ) -> ActionInfo:
         raise NotImplementedError
+
+    @staticmethod
+    def check_nan_action(action: Optional[np.ndarray]) -> None:
+        # Fast NaN check on the action
+        # See https://stackoverflow.com/questions/6736590/fast-check-for-nan-in-numpy for background.
+        if action is not None:
+            d = np.sum(action)
+            has_nan = np.isnan(d)
+            if has_nan:
+                raise RuntimeError("NaN action detected.")
 
     @abstractmethod
     def update_normalization(self, vector_obs: np.ndarray) -> None:

@@ -92,8 +92,13 @@ def test_evaluate_actions(rnn, visual, discrete):
         memories=memories,
         seq_len=policy.sequence_length,
     )
-    assert log_probs.shape == (64, policy.behavior_spec.action_size)
-    assert entropy.shape == (64, policy.behavior_spec.action_size)
+    if discrete:
+        _size = policy.behavior_spec.action_spec.discrete_size
+    else:
+        _size = policy.behavior_spec.action_spec.continuous_size
+
+    assert log_probs.shape == (64, _size)
+    assert entropy.shape == (64,)
     for val in values.values():
         assert val.shape == (64,)
 
@@ -121,7 +126,13 @@ def test_sample_actions(rnn, visual, discrete):
     if len(memories) > 0:
         memories = torch.stack(memories).unsqueeze(0)
 
-    (sampled_actions, log_probs, entropies, memories) = policy.sample_actions(
+    (
+        sampled_actions,
+        clipped_actions,
+        log_probs,
+        entropies,
+        memories,
+    ) = policy.sample_actions(
         vec_obs,
         vis_obs,
         masks=act_masks,
@@ -132,11 +143,23 @@ def test_sample_actions(rnn, visual, discrete):
     if discrete:
         assert log_probs.shape == (
             64,
-            sum(policy.behavior_spec.discrete_action_branches),
+            sum(policy.behavior_spec.action_spec.discrete_branches),
         )
     else:
-        assert log_probs.shape == (64, policy.behavior_spec.action_shape)
-    assert entropies.shape == (64, policy.behavior_spec.action_size)
+        assert log_probs.shape == (64, policy.behavior_spec.action_spec.continuous_size)
+        assert clipped_actions.shape == (
+            64,
+            policy.behavior_spec.action_spec.continuous_size,
+        )
+    assert entropies.shape == (64,)
 
     if rnn:
         assert memories.shape == (1, 1, policy.m_size)
+
+
+def test_step_overflow():
+    policy = create_policy_mock(TrainerSettings())
+    policy.set_step(2 ** 31 - 1)
+    assert policy.get_current_step() == 2 ** 31 - 1  # step = 2147483647
+    policy.increment_step(3)
+    assert policy.get_current_step() == 2 ** 31 + 2  # step = 2147483650

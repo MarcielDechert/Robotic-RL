@@ -136,7 +136,7 @@ class TorchPPOOptimizer(TorchOptimizer):
         vec_obs = [ModelUtils.list_to_tensor(batch["vector_obs"])]
         act_masks = ModelUtils.list_to_tensor(batch["action_mask"])
         if self.policy.use_continuous_act:
-            actions = ModelUtils.list_to_tensor(batch["actions"]).unsqueeze(-1)
+            actions = ModelUtils.list_to_tensor(batch["actions_pre"]).unsqueeze(-1)
         else:
             actions = ModelUtils.list_to_tensor(batch["actions"], dtype=torch.long)
 
@@ -187,7 +187,9 @@ class TorchPPOOptimizer(TorchOptimizer):
 
         self.optimizer.step()
         update_stats = {
-            "Losses/Policy Loss": policy_loss.item(),
+            # NOTE: abs() is not technically correct, but matches the behavior in TensorFlow.
+            # TODO: After PyTorch is default, change to something more correct.
+            "Losses/Policy Loss": torch.abs(policy_loss).item(),
             "Losses/Value Loss": value_loss.item(),
             "Policy/Learning Rate": decay_lr,
             "Policy/Epsilon": decay_eps,

@@ -3,7 +3,7 @@ import abc
 
 from mlagents.torch_utils import torch, nn
 
-from mlagents_envs.base_env import ActionType
+from mlagents_envs.base_env import ActionSpec
 from mlagents.trainers.torch.distributions import (
     GaussianDistribution,
     MultiCategoricalDistribution,
@@ -256,20 +256,24 @@ class SimpleActor(nn.Module, Actor):
         self,
         observation_shapes: List[Tuple[int, ...]],
         network_settings: NetworkSettings,
-        act_type: ActionType,
-        act_size: List[int],
+        action_spec: ActionSpec,
         conditional_sigma: bool = False,
         tanh_squash: bool = False,
     ):
         super().__init__()
-        self.act_type = act_type
-        self.act_size = act_size
+        self.action_spec = action_spec
         self.version_number = torch.nn.Parameter(torch.Tensor([2.0]))
         self.is_continuous_int = torch.nn.Parameter(
-            torch.Tensor([int(act_type == ActionType.CONTINUOUS)])
+            torch.Tensor([int(self.action_spec.is_continuous())])
         )
         self.act_size_vector = torch.nn.Parameter(
-            torch.Tensor([sum(act_size)]), requires_grad=False
+            torch.Tensor(
+                [
+                    self.action_spec.continuous_size
+                    + sum(self.action_spec.discrete_branches)
+                ]
+            ),
+            requires_grad=False,
         )
         self.network_body = NetworkBody(observation_shapes, network_settings)
         if network_settings.memory is not None:
@@ -277,17 +281,20 @@ class SimpleActor(nn.Module, Actor):
         else:
             self.encoding_size = network_settings.hidden_units
 
-        if self.act_type == ActionType.CONTINUOUS:
+        if self.action_spec.is_continuous():
             self.distribution = GaussianDistribution(
                 self.encoding_size,
-                act_size[0],
+                self.action_spec.continuous_size,
                 conditional_sigma=conditional_sigma,
                 tanh_squash=tanh_squash,
             )
         else:
             self.distribution = MultiCategoricalDistribution(
-                self.encoding_size, act_size
+                self.encoding_size, self.action_spec.discrete_branches
             )
+        # During training, clipping is done in TorchPolicy, but we need to clip before ONNX
+        # export as well.
+        self._clip_action_on_export = not tanh_squash
 
     @property
     def memory_size(self) -> int:
@@ -314,7 +321,7 @@ class SimpleActor(nn.Module, Actor):
         encoding, memories = self.network_body(
             vec_inputs, vis_inputs, memories=memories, sequence_length=sequence_length
         )
-        if self.act_type == ActionType.CONTINUOUS:
+        if self.action_spec.is_continuous():
             dists = self.distribution(encoding)
         else:
             dists = self.distribution(encoding, masks)
@@ -332,9 +339,11 @@ class SimpleActor(nn.Module, Actor):
         Note: This forward() method is required for exporting to ONNX. Don't modify the inputs and outputs.
         """
         dists, _ = self.get_dists(vec_inputs, vis_inputs, masks, memories, 1)
-        if self.act_type == ActionType.CONTINUOUS:
+        if self.action_spec.is_continuous():
             action_list = self.sample_action(dists)
             action_out = torch.stack(action_list, dim=-1)
+            if self._clip_action_on_export:
+                action_out = torch.clamp(action_out, -3, 3) / 3
         else:
             action_out = torch.cat([dist.all_log_prob() for dist in dists], dim=1)
         return (
@@ -351,8 +360,7 @@ class SharedActorCritic(SimpleActor, ActorCritic):
         self,
         observation_shapes: List[Tuple[int, ...]],
         network_settings: NetworkSettings,
-        act_type: ActionType,
-        act_size: List[int],
+        action_spec: ActionSpec,
         stream_names: List[str],
         conditional_sigma: bool = False,
         tanh_squash: bool = False,
@@ -360,8 +368,7 @@ class SharedActorCritic(SimpleActor, ActorCritic):
         super().__init__(
             observation_shapes,
             network_settings,
-            act_type,
-            act_size,
+            action_spec,
             conditional_sigma,
             tanh_squash,
         )
@@ -391,7 +398,7 @@ class SharedActorCritic(SimpleActor, ActorCritic):
         encoding, memories = self.network_body(
             vec_inputs, vis_inputs, memories=memories, sequence_length=sequence_length
         )
-        if self.act_type == ActionType.CONTINUOUS:
+        if self.action_spec.is_continuous():
             dists = self.distribution(encoding)
         else:
             dists = self.distribution(encoding, masks=masks)
@@ -405,8 +412,7 @@ class SeparateActorCritic(SimpleActor, ActorCritic):
         self,
         observation_shapes: List[Tuple[int, ...]],
         network_settings: NetworkSettings,
-        act_type: ActionType,
-        act_size: List[int],
+        action_spec: ActionSpec,
         stream_names: List[str],
         conditional_sigma: bool = False,
         tanh_squash: bool = False,
@@ -417,8 +423,7 @@ class SeparateActorCritic(SimpleActor, ActorCritic):
         super().__init__(
             observation_shapes,
             network_settings,
-            act_type,
-            act_size,
+            action_spec,
             conditional_sigma,
             tanh_squash,
         )
@@ -488,7 +493,9 @@ class SeparateActorCritic(SimpleActor, ActorCritic):
 class GlobalSteps(nn.Module):
     def __init__(self):
         super().__init__()
-        self.__global_step = nn.Parameter(torch.Tensor([0]), requires_grad=False)
+        self.__global_step = nn.Parameter(
+            torch.Tensor([0]).to(torch.int64), requires_grad=False
+        )
 
     @property
     def current_step(self):

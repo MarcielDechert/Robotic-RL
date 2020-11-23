@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IKManagerRobot : MonoBehaviour
+public class RoboterManagerV4 : MonoBehaviour
 {
 
     [SerializeField] private AchseV1 r_Ausgangsachse;
@@ -60,7 +60,7 @@ public class IKManagerRobot : MonoBehaviour
     }
 
 
-    // Update is called once per frame
+   
     void FixedUpdate()
     {
         if (aktion)

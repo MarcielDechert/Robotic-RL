@@ -17,4 +17,9 @@ public class BecherManager : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+
+    public void RandomMoveCup()
+    {
+
+    }
 }

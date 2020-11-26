@@ -96,8 +96,8 @@ public class RoboterManagerV4 : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         FahrZuAusgangsposition();
-        //yield return new WaitForSeconds(time);
-        //AbwurfButtonGeklickt();
+        yield return new WaitForSeconds(time);
+        AbwurfButtonGeklickt();
 
     }
     float BerechneDistanz(Vector3 _punkt1, Vector3 _punkt2)

@@ -6,14 +6,14 @@ using Unity.MLAgents.Sensors;
 
 public class RoboterAgent : Agent
 {
-    IKManagerRobot Roboter;
-    Rigidbody ball;
+    //IKManagerRobot Roboter;
+    //Rigidbody ball;
 
     // Start is called before the first frame update
     void Start()
     {
-        Roboter = GetComponent<IKManagerRobot>();
-        ball = GetComponent<Rigidbody>();
+        //Roboter = GetComponent<IKManagerRobot>();
+        //ball = GetComponent<Rigidbody>();
     }
 
     public Transform Target;

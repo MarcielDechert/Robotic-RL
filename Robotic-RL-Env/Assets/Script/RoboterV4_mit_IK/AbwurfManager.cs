@@ -45,7 +45,7 @@ public class AbwurfManager : MonoBehaviour
         // aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
         abwurfGeschwindigkeit = (this.transform.position - letztePosition) / Time.deltaTime;
         letztePosition = this.transform.position;
-        Debug.Log(abwurfGeschwindigkeit);
+       //Debug.Log(abwurfGeschwindigkeit);
 
     }
 

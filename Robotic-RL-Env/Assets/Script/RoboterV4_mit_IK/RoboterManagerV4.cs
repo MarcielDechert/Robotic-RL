@@ -9,8 +9,6 @@ public class RoboterManagerV4 : MonoBehaviour
 
     [SerializeField] private AchseV1 r_Ausgangsachse;
     [SerializeField] private AchseV1 r_Endpunkt;
-    [SerializeField] private GameObject r_Zielpunkt;
-    [SerializeField] private GameObject r_Ausgangsposition;
     [SerializeField] private Button Abwurfbutton;
     [SerializeField] private Button Startbutton;
 
@@ -18,31 +16,49 @@ public class RoboterManagerV4 : MonoBehaviour
     [SerializeField] private float r_Schwelle = 0.05f;
     [SerializeField] private int r_Schritte = 20;
 
+    private ArticulationBody Joint;
+
     private bool aktion = false;
     private Vector3 aktullesZiel;
 
+    private AchseV1 J01;
+    private AchseV1 J02;
+    private AchseV1 J03;
+    private AchseV1 J04;
+    private AchseV1 J05;
+    private AchseV1 J06;
+
     private void Start()
     {
-        aktullesZiel = r_Ausgangsposition.transform.position;
         Abwurfbutton.onClick.AddListener(AbwurfButtonGeklickt);
         Startbutton.onClick.AddListener(StartButtonGeglickt);
+
+
+        J01 = r_Ausgangsachse;
+        J02 = J01.GetChild();
+        J03 = J02.GetChild();
+        J04 = J03.GetChild();
+        J05 = J04.GetChild();
+        J06 = J05.GetChild();
+
+        Debug.Log(J02.getRotation().ToString());
+        J02.Rotate(0, 25, 0);
+        Debug.Log(J02.getRotation().ToString());
+        J03.Rotate(0, -180, 0);
     }
 
     public void AbwurfButtonGeklickt()
     {
-        aktullesZiel = r_Zielpunkt.transform.position;
     }
     
     public void StartButtonGeglickt()
     {
         aktion = !aktion;
         //r_Ball.useGravity = true;
-
     }
 
     public void FahrZuAusgangsposition()
     {
-        aktullesZiel = r_Ausgangsposition.transform.position;
     }
 
     float BerechneSteigung(AchseV1 _achse)
@@ -63,13 +79,16 @@ public class RoboterManagerV4 : MonoBehaviour
    
     void FixedUpdate()
     {
+        //Debug.Log(J02.getRotation().ToString());
         if (aktion)
         {
-            if (BerechneDistanz(r_Endpunkt.transform.position, r_Zielpunkt.transform.position) < r_Schwelle)
-            {
-                StartCoroutine(Verzoegerung(1));
-            }
-                    for ( int i = 0; i < r_Schritte; ++i)
+            //if (BerechneDistanz(r_Endpunkt.transform.position, r_Zielpunkt.transform.position) < r_Schwelle)
+            //{
+            //    StartCoroutine(Verzoegerung(1));
+            //}
+
+            /*
+            for ( int i = 0; i < r_Schritte; ++i)
             {
                 // solange bis das Ziel mit einer gewissen Abweichung erreicht wurde
                 if(BerechneDistanz(r_Endpunkt.transform.position, aktullesZiel) > r_Schwelle)
@@ -88,6 +107,7 @@ public class RoboterManagerV4 : MonoBehaviour
                     }
                 }
             }
+            */
 
         }
     }
@@ -96,8 +116,8 @@ public class RoboterManagerV4 : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         FahrZuAusgangsposition();
-        //yield return new WaitForSeconds(time);
-        //AbwurfButtonGeklickt();
+        yield return new WaitForSeconds(time);
+        AbwurfButtonGeklickt();
 
     }
     float BerechneDistanz(Vector3 _punkt1, Vector3 _punkt2)

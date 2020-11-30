@@ -8,6 +8,7 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private Button abwurfbutton;
     [SerializeField] private Button startbutton;
     [SerializeField] private Text geschwindigkeitText;
+    [SerializeField] private Rigidbody ball;
 
     [SerializeField] private AchseV6 j0;
     [SerializeField] private AchseV6 j1;
@@ -84,7 +85,7 @@ public class RoboterManagerV6 : MonoBehaviour
         start = !start;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         BerechneGeschwindigkeit();
         Startvorgang();
@@ -98,7 +99,7 @@ public class RoboterManagerV6 : MonoBehaviour
         // aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
         abwurfgeschwindigkeit = (abwurfPosition.transform.position - letztePosition) / Time.deltaTime;
         letztePosition = abwurfPosition.transform.position;
-        // Debug.Log(abwurfGeschwindigkeit);
+        Debug.Log(abwurfgeschwindigkeit);
 
     }
 
@@ -128,7 +129,7 @@ public class RoboterManagerV6 : MonoBehaviour
                         achsen[i].rotationState = RotationDirection.Negative;
 
 
-                        Debug.Log(achsen[i].CurrentPrimaryAxisRotation());
+                       // Debug.Log(achsen[i].CurrentPrimaryAxisRotation());
                     }
                     else
                     {
@@ -175,6 +176,8 @@ public class RoboterManagerV6 : MonoBehaviour
         if (abwurf && j2.CurrentPrimaryAxisRotation() <= abwurfwinkel + toleranzwinkel && j2.CurrentPrimaryAxisRotation() >= abwurfwinkel - toleranzwinkel && abwurfpositionErreicht)
         {
             Abwurf();
+           // ball.useGravity = true;
+           // ball.AddForce(abwurfgeschwindigkeit);
             geschwindigkeitText.text = "Abwurfgeschwindigkeit: " + abwurfgeschwindigkeit.magnitude + " ms";
             abwurfpositionErreicht = false;
 

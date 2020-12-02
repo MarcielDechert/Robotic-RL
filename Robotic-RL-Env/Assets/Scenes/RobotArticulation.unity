@@ -476,12 +476,6 @@ ArticulationBody:
   m_JointFriction: 0.05
   m_Immovable: 1
   m_UseGravity: 1
---- !u!54 &449839023 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e,
-    type: 3}
-  m_PrefabInstance: {fileID: 863019976}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &458929887 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2931665792886372150, guid: d4058c4abe6bf0b4cbb542158448a5f3,
@@ -1262,7 +1256,7 @@ MonoBehaviour:
   abwurfbutton: {fileID: 1533906437}
   startbutton: {fileID: 1503493445}
   geschwindigkeitText: {fileID: 146351856}
-  ball: {fileID: 449839023}
+  ball: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e, type: 3}
   j0: {fileID: 1040109882}
   j1: {fileID: 1115647206}
   j2: {fileID: 1314691854}
@@ -1271,12 +1265,12 @@ MonoBehaviour:
   r_Ball: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e, type: 3}
   abwurfPosition: {fileID: 1688562269}
   startRotationJ0: 0
-  startRotationJ1: 90
+  startRotationJ1: 40
   startRotationJ2: -200
   startRotationJ3: 0
   startRotationJ4: 0
   abwurfwinkel: -90
-  wurfgeschwindigkeit: 300
+  wurfgeschwindigkeit: 200
   toleranzwinkel: 2
 --- !u!4 &991874716
 Transform:

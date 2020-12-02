@@ -22,7 +22,7 @@ public class AchseV6 : MonoBehaviour
             float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
             RotateTo(rotationGoal);
         }
-        
+
     }
 
     public float CurrentPrimaryAxisRotation()
@@ -39,5 +39,4 @@ public class AchseV6 : MonoBehaviour
         drive.target = primaryAxisRotation;
         articulation.xDrive = drive;
     }
-
 }

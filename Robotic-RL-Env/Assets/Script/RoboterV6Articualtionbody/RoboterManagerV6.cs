@@ -109,8 +109,9 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private void AbwurfV1()
     {
+        ball.MovePosition(abwurfPosition.position);
         ball.useGravity = true;
-        ball.AddForce(abwurfgeschwindigkeit);
+        ball.velocity =(abwurfgeschwindigkeit);
     }
 
     void InStartpositionFahren()
@@ -221,8 +222,8 @@ public class RoboterManagerV6 : MonoBehaviour
         if (j2.CurrentPrimaryAxisRotation() <= abwurfwinkel + toleranzwinkel && j2.CurrentPrimaryAxisRotation() >= abwurfwinkel - toleranzwinkel && !abgeworfenSignal)
         {
             
-            Abwurf();
-           // AbwurfV1();
+            //Abwurf();
+            AbwurfV1();
             geschwindigkeitText.text = "Abwurfgeschwindigkeit: " + abwurfgeschwindigkeit.magnitude + " ms";
             abwurfwinkelText.text = "Abwurfwinkel: " + j2.CurrentPrimaryAxisRotation() + " Grad";
             abgeworfenSignal = true;
@@ -251,10 +252,10 @@ public class RoboterManagerV6 : MonoBehaviour
     }
 
     // Rechnet die den Geschwindigkeit von 0 bis 500 um
-    private float UebersetzGeschwindigkeit(float gechwindigkeit)
+    private float UebersetzGeschwindigkeit(float geschwindigkeit)
     {
-        if (gechwindigkeit < 0 || gechwindigkeit > 1) return 0;
-        return  gechwindigkeit * 500;
+        if (geschwindigkeit < 0 || geschwindigkeit > 1) return 0;
+        return  geschwindigkeit * 500;
     }
 
 

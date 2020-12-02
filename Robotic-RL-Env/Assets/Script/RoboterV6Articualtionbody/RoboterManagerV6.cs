@@ -41,7 +41,7 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private AchseV6[] achsen;
 
-    private bool start;
+    public bool start;
     private bool abwurf;
 
     // Start is called before the first frame update

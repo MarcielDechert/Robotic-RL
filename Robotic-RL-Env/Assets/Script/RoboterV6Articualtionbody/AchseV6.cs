@@ -33,7 +33,7 @@ public class AchseV6 : MonoBehaviour
     }
 
     // Rotiert um xx Grad um die x Achse
-    void RotateTo(float primaryAxisRotation)
+    public void RotateTo(float primaryAxisRotation)
     {
         var drive = articulation.xDrive;
         drive.target = primaryAxisRotation;

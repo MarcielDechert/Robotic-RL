@@ -6,50 +6,62 @@ using Unity.MLAgents.Sensors;
 
 public class RoboterAgent : Agent
 {
-    RoboterManagerRL Roboter;
-    Rigidbody Target;
-    Rigidbody ball;
+    public GameObject roboter;
+    public GameObject target;
+    public GameObject ball;
+
+    RoboterManagerRL r_robot;
+    Rigidbody r_target;
+    Rigidbody r_ball;
 
     // Start is called before the first frame update
     void Start()
     {
-        Roboter = GetComponent<RoboterManagerRL>();
-        Target = GetComponent<Rigidbody>();
+        r_robot = roboter.GetComponent<RoboterManagerRL>();
+        r_target = target.GetComponent<Rigidbody>();
+        r_ball = ball.GetComponent<Rigidbody>();
     }
 
     public override void OnEpisodeBegin()
     {
-        Target.transform.localPosition = new Vector3((float)((Random.value - 0.5) * 2), 0.2f, 0);
+        r_robot.StartPosition();
+        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value * 2 + 0.2)), 0, 0);
+        //r_robot.start = true;
+        r_robot.abwurf = true;
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(Target.transform.localPosition);
-        sensor.AddObservation(this.transform.localPosition);
-
-        // Agent velocity
-        //sensor.AddObservation(Roboter.Abwurfwinkel);
+        sensor.AddObservation(r_target.transform.localPosition);
+        sensor.AddObservation(r_robot.transform.localPosition);
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
         // Actions, size = 2
-        //Roboter.AbwurfWinkel = vectorAction[0];
-        //Roboter.Abwurfgeschwinidgkeit = vectorAction[1];
+        r_robot.abwurfwinkel = vectorAction[0];
+        r_robot.wurfgeschwindigkeit = vectorAction[1];
+        r_robot.abwurf = true;
 
         // Rewards
-        float distanceToTarget = Vector3.Distance(ball.position, Target.position);
+        float distanceToTarget = Vector3.Distance(r_ball.position, r_target.position);
 
         // Getroffen
-        if (distanceToTarget < 1.42f)
+        if (distanceToTarget < 0.1f)
         {
             SetReward(1.0f);
             EndEpisode();
         }
         // Danebengeworfen
-        else
+        else if(r_ball.position.y < -0.1f)
         {
             EndEpisode();
         }
+    }
+
+    public override void Heuristic(float[] actionsOut)
+    {
+        actionsOut[0] = Input.GetAxis("Horizontal");
+        actionsOut[1] = Input.GetAxis("Vertical");
     }
 }

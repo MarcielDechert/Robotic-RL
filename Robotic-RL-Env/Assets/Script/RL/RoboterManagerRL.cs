@@ -1,83 +1,177 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RoboterManagerRL : MonoBehaviour
-{ 
-    [SerializeField] private AchseV1 r_Ausgangsachse;
-    [SerializeField] private AchseV1 r_Endpunkt;
+{
+    [SerializeField] private Button abwurfbutton;
+    [SerializeField] private Button startbutton;
+    [SerializeField] private Text geschwindigkeitText;
+    [SerializeField] private Rigidbody ball;
 
-    [SerializeField] private float r_Drehrate = 0.1f;
-    [SerializeField] private float r_Schwelle = 0.05f;
+    [SerializeField] private AchseV6 j0;
+    [SerializeField] private AchseV6 j1;
+    [SerializeField] private AchseV6 j2;
+    [SerializeField] private AchseV6 j3;
+    [SerializeField] private AchseV6 j4;
+    private AchseV6[] achsen;
 
-    private List<AchseV1> Joints = new List<AchseV1>();
-    private List<float> TargetAngles = new List<float>();
-    private bool rotate = false;
+    [SerializeField] private Rigidbody r_Ball;
+    [SerializeField] private Transform abwurfPosition;
 
-    private void Start()
+
+    [SerializeField] private float startRotationJ0 = 0.0f;
+    [SerializeField] private float startRotationJ1 = 40.0f;
+    [SerializeField] private float startRotationJ2 = -200.0f;
+    [SerializeField] private float startRotationJ3 = 0.0f;
+    [SerializeField] private float startRotationJ4 = 0.0f;
+    private float[] startRotation;
+
+    [SerializeField] public float abwurfwinkel = -90.0f;
+    [SerializeField] public float wurfgeschwindigkeit = 300.0f;
+    [SerializeField] private float toleranzwinkel = 2f;
+
+    // [SerializeField] private float speed = 0.0f;
+
+    private Vector3 abwurfgeschwindigkeit;
+    private Vector3 letztePosition = Vector3.zero;
+
+    private bool abwurfpositionErreicht;
+    public bool start;
+    public bool abwurf;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        GetJoints();
-        RotateJointsAngle(0, 25, 180, 0, 0, 0);
+        abwurfbutton.onClick.AddListener(AbwurfButtonGeklickt);
+        startbutton.onClick.AddListener(StartButtonGeglickt);
+
+        startRotation = new float[5];
+        achsen = new AchseV6[5];
+        
+        start = false;
+        abwurf = false;
+        abwurfpositionErreicht = false;
+
+        startRotation[0] = startRotationJ0;
+        startRotation[1] = startRotationJ1;
+        startRotation[2] = startRotationJ2;
+        startRotation[3] = startRotationJ3;
+        startRotation[4] = startRotationJ4;
+
+        achsen[0] = j0;
+        achsen[1] = j1;
+        achsen[2] = j2;
+        achsen[3] = j3;
+        achsen[4] = j4;
     }
-   
-    float BerechneDistanz(Vector3 _punkt1, Vector3 _punkt2)
-    {
-        return Vector3.Distance(_punkt1, _punkt2);
-    }
 
-    private void RotateJointsAngle(float J01_Angle, float J02_Angle, float J03_Angle, float J04_Angle, float J05_Angle, float J06_Angle)
+    public void AbwurfButtonGeklickt()
     {
-        if(TargetAngles.Count == 0)
+        abwurf = !abwurf;
+    }
+    public void StartButtonGeglickt()
+    {
+        start = !start;
+    }
+    private void FixedUpdate()
+    {
+        BerechneGeschwindigkeit();
+        Startvorgang();
+        Abwurfvorgang();
+
+    }
+    void BerechneGeschwindigkeit()
+    {
+        // aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
+        abwurfgeschwindigkeit = (abwurfPosition.transform.position - letztePosition) / Time.deltaTime;
+        letztePosition = abwurfPosition.transform.position;
+        Debug.Log(abwurfgeschwindigkeit);
+
+    }
+    public void StartPosition()
+    {
+        for (int i = 0; i < 5; i++)
         {
-            TargetAngles.Add(J01_Angle);
-            TargetAngles.Add(J02_Angle);
-            TargetAngles.Add(J03_Angle);
-            TargetAngles.Add(J04_Angle);
-            TargetAngles.Add(J05_Angle);
-            TargetAngles.Add(J06_Angle);
+            achsen[i].RotateTo(startRotation[i]);
         }
-        else
-        {
-            TargetAngles[0] = J01_Angle;
-            TargetAngles[1] = J02_Angle;
-            TargetAngles[2] = J03_Angle;
-            TargetAngles[3] = J04_Angle;
-            TargetAngles[4] = J05_Angle;
-            TargetAngles[5] = J06_Angle;
-        }
-        rotate = true;
     }
-
-    private void GetJoints()
+    void Abwurf()
     {
-        Joints.Add(r_Ausgangsachse);
-        Joints.Add(Joints[Joints.Count - 1].GetChild());
-        Joints.Add(Joints[Joints.Count - 1].GetChild());
-        Joints.Add(Joints[Joints.Count - 1].GetChild());
-        Joints.Add(Joints[Joints.Count - 1].GetChild());
-        Joints.Add(Joints[Joints.Count - 1].GetChild());
+        abwurfPosition.rotation = Quaternion.LookRotation(abwurfgeschwindigkeit);
+        Rigidbody obj = Instantiate(r_Ball, abwurfPosition.position, Quaternion.identity);
+        obj.velocity = abwurfgeschwindigkeit;
     }
-
-    public void Update()
+    void Startvorgang()
     {
-        if(rotate)
+
+        // ist der Startbutton betätigt werden alle Achsen in die voher bestimmte Startposition gefahren
+        if (start)
         {
-            foreach (var Joint in Joints)
+
+            //Debug.Log(j1.CurrentPrimaryAxisRotation());
+
+            for (int i = 0; i < 5; i++)
             {
-                float target = TargetAngles[Joints.IndexOf(Joint)];
-                if (target != Joint.getRotation()) 
+                if (startRotation[i] < 0)
                 {
-                    RotateJoint(Joint, target);
+                    if (!(achsen[i].CurrentPrimaryAxisRotation() <= startRotation[i] + toleranzwinkel && achsen[i].CurrentPrimaryAxisRotation() >= startRotation[i] - toleranzwinkel))
+                    {
+                        achsen[i].rotationState = RotationDirection.Negative;
+
+
+                       // Debug.Log(achsen[i].CurrentPrimaryAxisRotation());
+                    }
+                    else
+                    {
+                        achsen[i].rotationState = RotationDirection.None;
+                    }
+                }
+                else
+                {
+                    if (!(achsen[i].CurrentPrimaryAxisRotation() >= startRotation[i] - toleranzwinkel && achsen[i].CurrentPrimaryAxisRotation() <= startRotation[i] + toleranzwinkel))
+                    {
+                        achsen[i].rotationState = RotationDirection.Positive;
+                    }
+                    else
+                    {
+                        achsen[i].rotationState = RotationDirection.None;
+                    }
+
                 }
             }
-        }
-    }
 
-    private void RotateJoint(AchseV1 joint, float target)
+            // Debug.Log(J1.CurrentPrimaryAxisRotation());
+
+        }
+
+    }
+    void Abwurfvorgang ()
     {
-        joint.Rotate(0, target, 0);
-        joint.setRotation(target);
+        // ist der Abwurfbutton betätigt wird der Wurfvorgang gestartet bis die Ausgangsposition wieder ereicht  ist
+        if (abwurf)
+        {
+            if (!(j2.CurrentPrimaryAxisRotation() >= -toleranzwinkel && j2.CurrentPrimaryAxisRotation() <= toleranzwinkel))
+            {
+                j2.speed = wurfgeschwindigkeit;
+                j2.rotationState = RotationDirection.Positive;
+            }
+            else
+            {
+                j2.rotationState = RotationDirection.None;
+                abwurf = !abwurf;
+                abwurfpositionErreicht = true;
+            }
+        }
+        // ist der vorher angegebene Abwurfwinkel mit einer Toleranz erreicht wird der Abwurf des Balls gestartet
+        if (abwurf && j2.CurrentPrimaryAxisRotation() <= abwurfwinkel + toleranzwinkel && j2.CurrentPrimaryAxisRotation() >= abwurfwinkel - toleranzwinkel && abwurfpositionErreicht)
+        {
+            //Abwurf();
+            ball.useGravity = true;
+            ball.AddForce(abwurfgeschwindigkeit);
+            geschwindigkeitText.text = "Abwurfgeschwindigkeit: " + abwurfgeschwindigkeit.magnitude + " ms";
+            abwurfpositionErreicht = false;
+        }
     }
 }

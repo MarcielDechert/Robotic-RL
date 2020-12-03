@@ -38,7 +38,6 @@ public class RoboterManagerV6 : MonoBehaviour
     private float[] startRotation;
 
     private AchseV6[] achsen;
-
     
 
     // Start is called before the first frame update
@@ -96,7 +95,7 @@ public class RoboterManagerV6 : MonoBehaviour
         // aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
         abwurfgeschwindigkeit = (abwurfPosition.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = abwurfPosition.transform.position;
-        Debug.Log(abwurfgeschwindigkeit);
+        //Debug.Log(abwurfgeschwindigkeit);
 
     }
 
@@ -230,6 +229,10 @@ public class RoboterManagerV6 : MonoBehaviour
             
 
         }
+        if(!abgeworfenSignal)
+        {
+            ball.MovePosition(abwurfPosition.position);
+        }
 
     }
     // Startet den Ballabwurf mit der Wurfgschwindigkeit des Arms von 0-1 und dem Abwurfwinkel von 0-1
@@ -248,7 +251,7 @@ public class RoboterManagerV6 : MonoBehaviour
     private float UebersetzeWinkel(float winkel)
     {
         if (winkel < 0 || winkel > 1) return 0;
-        return -1*(winkel * 150 + 50);
+        return -1 * (winkel * 150 + 50);
     }
 
     // Rechnet die den Geschwindigkeit von 0 bis 500 um
@@ -270,7 +273,8 @@ public class RoboterManagerV6 : MonoBehaviour
         abwurfwinkelText.text = "Abwurfwinkel: --  Grad";
         ball.velocity = Vector3.zero;
         ball.useGravity = false;
-        ball.transform.position = abwurfPosition.position;
+        ball.MovePosition(abwurfPosition.position);
+      //  ball.transform.position = abwurfPosition.position;
 
 
     }

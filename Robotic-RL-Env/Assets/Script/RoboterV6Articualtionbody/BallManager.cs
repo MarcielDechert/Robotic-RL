@@ -5,13 +5,18 @@ using UnityEngine.UI;
 
 public class BallManager : MonoBehaviour
 {
-    private bool kollidiert;
+    private bool kollidiert ;
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        kollidiert = true;
-        Debug.Log("HHHHHH");
+    private void OnCollisionEnter(Collision other) {
+        
+        
+        if (other.gameObject.layer != 0)
+        {
+            kollidiert = true;
+            Debug.Log("Kollision erkannt");
+        }
+    
     }
 }

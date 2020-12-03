@@ -23,8 +23,8 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private float startRotationJ3 = 0.0f;
     [SerializeField] private float startRotationJ4 = 0.0f;
 
-    [SerializeField] private float abwurfwinkel = 0.0f;
-    [SerializeField] private float wurfgeschwindigkeit = 0.0f;
+    [SerializeField] public float abwurfwinkel = 0.0f;
+    [SerializeField] public float wurfgeschwindigkeit = 0.0f;
     [SerializeField] private float toleranzwinkel = 0.5f;
 
     private Vector3 abwurfgeschwindigkeit;
@@ -32,17 +32,20 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private bool abgeworfenSignal;
     private bool abwurfSignal;
+    private bool abwurfvorgangbool;
 
     private float[] startRotation;
 
-    private AchseV6[] achsen;
+    public AchseV6[] achsen;
 
-    
+    public bool AbwurfSignal { get => abwurfSignal; }
+    public bool Abwurfvorgangbool { get => abwurfvorgangbool; set => abwurfvorgangbool = value; }
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-
         abwurfbutton.onClick.AddListener(AbwurfButtonGeklickt);
         startbutton.onClick.AddListener(StartButtonGeglickt);
 
@@ -53,6 +56,7 @@ public class RoboterManagerV6 : MonoBehaviour
     void Init()
     {
         abwurfSignal = false;
+        Abwurfvorgangbool = false;
         //abwurfpositionErreicht = false;
 
         startRotation[0] = startRotationJ0;
@@ -67,7 +71,6 @@ public class RoboterManagerV6 : MonoBehaviour
         achsen[3] = j3;
         achsen[4] = j4;
         // Debug.Log(StartRotationJ1);
-        
     }
 
     public void AbwurfButtonGeklickt()
@@ -104,7 +107,7 @@ public class RoboterManagerV6 : MonoBehaviour
         obj.velocity = abwurfgeschwindigkeit;
     }
 
-    void InStartpositionFahren()
+    public void InStartpositionFahren()
     {
             for (int i = 0; i < 5; i++)
             {
@@ -197,6 +200,7 @@ public class RoboterManagerV6 : MonoBehaviour
             abwurfSignal = false;
             j2.speed = wurfgeschwindigkeit;
             j2.rotationState = RotationDirection.Positive;
+            Abwurfvorgangbool = true;
         }
         if (j2.CurrentPrimaryAxisRotation() >= -toleranzwinkel && j2.CurrentPrimaryAxisRotation() <= toleranzwinkel)
         {
@@ -216,7 +220,7 @@ public class RoboterManagerV6 : MonoBehaviour
         }
 
     }
-    void SetzeAbwurfSignal()
+    public void SetzeAbwurfSignal()
     {
         abwurfSignal = !abwurfSignal;
     }

@@ -233,30 +233,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 42755456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a448ada7af832ae4aa3c1013fc6b1ccc, type: 3}
+  m_Script: {fileID: 11500000, guid: 642b6064916cf93449941de42a333a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   abwurfbutton: {fileID: 1533906437}
   startbutton: {fileID: 1503493445}
   geschwindigkeitText: {fileID: 146351856}
-  ball: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e, type: 3}
+  ball: {fileID: 863019977}
+  r_Ball: {fileID: 863019977}
+  abwurfPosition: {fileID: 1688562269}
   j0: {fileID: 1040109882}
   j1: {fileID: 1115647206}
   j2: {fileID: 1314691854}
   j3: {fileID: 1031973465}
   j4: {fileID: 1135116904}
-  r_Ball: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e, type: 3}
-  abwurfPosition: {fileID: 1688562269}
   startRotationJ0: 0
   startRotationJ1: 40
-  startRotationJ2: -200
+  startRotationJ2: -190
   startRotationJ3: 0
   startRotationJ4: 0
   abwurfwinkel: -90
-  wurfgeschwindigkeit: 300
+  wurfgeschwindigkeit: 400
   toleranzwinkel: 2
-  start: 0
-  abwurf: 0
+  achsen: []
 --- !u!1 &128275546
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,8 +494,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317726743}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.1, z: 0.2}
+  m_LocalPosition: {x: -1, y: 0.05, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
   m_Children: []
   m_Father: {fileID: 1304489633}
   m_RootOrder: 2
@@ -929,7 +928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 6
+    VectorObservationSize: 7
     NumStackedVectorObservations: 1
     VectorActionSize: 02000000
     VectorActionDescriptions: []
@@ -1524,6 +1523,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f330791b601e494990f05468a33b13e, type: 3}
+--- !u!54 &863019977 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e,
+    type: 3}
+  m_PrefabInstance: {fileID: 863019976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &946101760
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,20 +13,20 @@ public class RoboterAgent : Agent
 
     RoboterManagerV6 r_robot;
     Rigidbody r_target;
-    Rigidbody r_ball;
+    BallManager r_ball;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Initialize()
     {
         r_robot = roboter.GetComponent<RoboterManagerV6>();
         r_target = target.GetComponent<Rigidbody>();
-        r_ball = ball.GetComponent<Rigidbody>();
+        r_ball = ball.GetComponent<BallManager>();
     }
 
     public override void OnEpisodeBegin()
     {
         r_robot.InStartpositionFahren();
-        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value * 2 + 0.2)), 0, 0);
+        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value * 2 + 0.2)), 0.08f, 0);
         r_robot.Abwurfvorgangbool = false;
     }
 
@@ -37,31 +37,38 @@ public class RoboterAgent : Agent
         sensor.AddObservation(r_robot.achsen[2].CurrentPrimaryAxisRotation());
     }
 
-    public override void OnActionReceived(ActionBuffers actionBuffers)
+    public override void OnActionReceived(float[] vectorAction)
     {
-        float distanceToTarget = Vector3.Distance(r_ball.position, r_target.position);
+        float distanceToTarget = Vector3.Distance(r_ball.transform.position, r_target.position);
 
         if (r_robot.Abwurfvorgangbool == false)
         {
-            var continuousActions = actionBuffers.ContinuousActions;
-            r_robot.abwurfwinkel = continuousActions[0];
-            r_robot.wurfgeschwindigkeit = continuousActions[1];
-            r_robot.SetzeAbwurfSignal();
+            float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.3f, 1f);
+            float winkel = Mathf.Clamp(vectorAction[1], 0f, 1f);
+
+            r_robot.StarteAbwurf(geschwindigkeit, winkel);
+            r_robot.Abwurfvorgangbool = true;
         }
-        else if (distanceToTarget < 0.1f)
+        else if (distanceToTarget < 0.1f && r_ball.Kollidiert == true)
         {
             SetReward(1.0f);
             EndEpisode();
         }
-        else if (r_ball.position.y < -0.1f)
+        else if (distanceToTarget > 0.1f && r_ball.Kollidiert == true)
         {
+            SetReward(-0.5f);
+            EndEpisode();
+        }
+        else if (r_ball.transform.position.y < -0.5f)
+        {
+            SetReward(-1.0f);
             EndEpisode();
         }
     }
 
     public override void Heuristic(float[] actionsOut)
     {
-        actionsOut[0] = Input.GetAxis("Horizontal");
-        actionsOut[1] = Input.GetAxis("Vertical");
+        actionsOut[0] = Input.GetAxis("Geschwindigkeit");
+        actionsOut[1] = Input.GetAxis("Winkel");
     }
 }

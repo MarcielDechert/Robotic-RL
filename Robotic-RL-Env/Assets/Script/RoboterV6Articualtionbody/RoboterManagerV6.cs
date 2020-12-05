@@ -25,9 +25,9 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private float startRotationJ3 = 0.0f;
     [SerializeField] private float startRotationJ4 = 0.0f;
 
-    [SerializeField] private float abwurfwinkel = 0.0f;
-    [SerializeField] private float wurfgeschwindigkeit = 0.0f;
-    [SerializeField] private float toleranzwinkel = 0.5f;
+    [SerializeField] public float abwurfwinkel = 0.0f;
+    [SerializeField] public float wurfgeschwindigkeit = 0.0f;
+    [SerializeField] public float toleranzwinkel = 0.5f;
 
     private Vector3 abwurfgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
@@ -37,8 +37,10 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private float[] startRotation;
 
-    private AchseV6[] achsen;
-    
+    public AchseV6[] achsen;
+
+    public bool Abwurfvorgangbool { get; internal set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +57,7 @@ public class RoboterManagerV6 : MonoBehaviour
     {
         abwurfSignal = false;
         abgeworfenSignal = true;
+        Abwurfvorgangbool = false;
         //abwurfpositionErreicht = false;
 
         startRotation[0] = startRotationJ0;
@@ -113,7 +116,7 @@ public class RoboterManagerV6 : MonoBehaviour
         ball.velocity =(abwurfgeschwindigkeit);
     }
 
-    void InStartpositionFahren()
+    public void InStartpositionFahren()
     {
             for (int i = 0; i < 5; i++)
             {
@@ -210,6 +213,7 @@ public class RoboterManagerV6 : MonoBehaviour
             abwurfSignal = false;
             j2.speed = wurfgeschwindigkeit;
             j2.rotationState = RotationDirection.Positive;
+            //Abwurfvorgangbool = true;
         }
         if (j2.CurrentPrimaryAxisRotation() >= -toleranzwinkel && j2.CurrentPrimaryAxisRotation() <= toleranzwinkel)
         {
@@ -236,7 +240,7 @@ public class RoboterManagerV6 : MonoBehaviour
 
     }
     // Startet den Ballabwurf mit der Wurfgschwindigkeit des Arms von 0-1 und dem Abwurfwinkel von 0-1
-    void StarteAbwurf(float geschwindigkeit, float winkel)
+    public void StarteAbwurf(float geschwindigkeit, float winkel)
     {
         abwurfwinkel = UebersetzeWinkel(winkel);
         wurfgeschwindigkeit = UebersetzGeschwindigkeit(geschwindigkeit);

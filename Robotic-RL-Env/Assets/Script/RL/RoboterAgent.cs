@@ -10,6 +10,7 @@ public class RoboterAgent : Agent
     public GameObject roboter;
     public GameObject target;
     public GameObject ball;
+    private bool Abwurfvorgang = false;
 
     RoboterManagerV6 r_robot;
     Rigidbody r_target;
@@ -26,8 +27,11 @@ public class RoboterAgent : Agent
     public override void OnEpisodeBegin()
     {
         r_robot.InStartpositionFahren();
-        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value * 2 + 0.2)), 0.08f, 0);
-        r_robot.Abwurfvorgangbool = false;
+        r_ball.Kollidiert = false;
+        //r_target.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0.08f, 0);
+        r_target.velocity = Vector3.zero;
+        Abwurfvorgang = false;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -41,25 +45,30 @@ public class RoboterAgent : Agent
     {
         float distanceToTarget = Vector3.Distance(r_ball.transform.position, r_target.position);
 
-        if (r_robot.Abwurfvorgangbool == false)
+        if (Abwurfvorgang == false)
         {
             float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.3f, 1f);
             float winkel = Mathf.Clamp(vectorAction[1], 0f, 1f);
 
             r_robot.StarteAbwurf(geschwindigkeit, winkel);
-            r_robot.Abwurfvorgangbool = true;
+            Abwurfvorgang = true;
         }
-        else if (distanceToTarget < 0.1f && r_ball.Kollidiert == true)
+        else if (distanceToTarget < 0.5f && r_ball.Kollidiert == true)
         {
-            SetReward(1.0f);
+            SetReward(20.0f);
             EndEpisode();
         }
-        else if (distanceToTarget > 0.1f && r_ball.Kollidiert == true)
+        else if (r_ball.Kollidiert == true)
         {
-            SetReward(-0.5f);
+            SetReward(1 / distanceToTarget);
             EndEpisode();
         }
-        else if (r_ball.transform.position.y < -0.5f)
+        //else if (distanceToTarget > 0.1f && r_ball.Kollidiert == true)
+        //{
+        //    SetReward(-1f);
+        //    EndEpisode();
+        //}
+        else if (r_ball.transform.position.y < -10f)
         {
             SetReward(-1.0f);
             EndEpisode();

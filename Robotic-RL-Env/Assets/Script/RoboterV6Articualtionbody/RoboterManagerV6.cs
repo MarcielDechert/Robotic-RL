@@ -8,6 +8,8 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private Button startbutton;
     [SerializeField] private Text geschwindigkeitText;
     [SerializeField] private Text abwurfwinkelText;
+    [SerializeField] private Text abwurfwinkelJ2Text;
+    [SerializeField] public Text einwurfwinkelText;
     [SerializeField] private Rigidbody ball;
     [SerializeField] private Rigidbody r_Ball;
     [SerializeField] private Transform abwurfPosition;
@@ -31,8 +33,6 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private Vector3 abwurfgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
-
-    private bool abgeworfenSignal;
     private bool abwurfSignal;
 
     private float[] startRotation;
@@ -54,7 +54,6 @@ public class RoboterManagerV6 : MonoBehaviour
     void Init()
     {
         abwurfSignal = false;
-        abgeworfenSignal = true;
         //abwurfpositionErreicht = false;
 
         startRotation[0] = startRotationJ0;
@@ -125,6 +124,8 @@ public class RoboterManagerV6 : MonoBehaviour
             }
         geschwindigkeitText.text = "Abwurfgeschwindigkeit: -- ms";
         abwurfwinkelText.text = "Abwurfwinkel: --  Grad";
+        abwurfwinkelJ2Text.text = "AbwurfwinkelJ2: --  Grad";
+        einwurfwinkelText.text = "Einwurfwinkel: --  Grad";
         ball.velocity = Vector3.zero;
         ball.useGravity = false;
 
@@ -210,12 +211,13 @@ public class RoboterManagerV6 : MonoBehaviour
             
             j2.speed = wurfgeschwindigkeit;
             j2.rotationState = RotationDirection.Positive;
-        
+        /*
         if (j2.CurrentPrimaryAxisRotation() >= -toleranzwinkel && j2.CurrentPrimaryAxisRotation() <= toleranzwinkel)
         {
             j2.rotationState = RotationDirection.None;
             abwurfSignal = false;
         }
+        */
         // ist der vorher angegebene Abwurfwinkel mit einer Toleranz erreicht wird der Abwurf des Balls gestartet
         if (j2.CurrentPrimaryAxisRotation() <= abwurfwinkel + toleranzwinkel && j2.CurrentPrimaryAxisRotation() >= abwurfwinkel - toleranzwinkel )
         {
@@ -223,7 +225,10 @@ public class RoboterManagerV6 : MonoBehaviour
             //Abwurf();
             AbwurfV1();
             geschwindigkeitText.text = "Abwurfgeschwindigkeit: " + abwurfgeschwindigkeit.magnitude + " ms";
-            abwurfwinkelText.text = "Abwurfwinkel: " + j2.CurrentPrimaryAxisRotation() + " Grad";
+            abwurfwinkelJ2Text.text = "AbwurfwinkelJ2: " + j2.CurrentPrimaryAxisRotation() + " Grad";
+            abwurfwinkelText.text = "Abwurfwinkel: " + Mathf.Rad2Deg * Mathf.Acos(-abwurfgeschwindigkeit.x/abwurfgeschwindigkeit.magnitude) + " Grad";
+            abwurfSignal = false;
+            j2.rotationState = RotationDirection.None;
         }
 
     }

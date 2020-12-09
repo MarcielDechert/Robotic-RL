@@ -48,14 +48,14 @@ public class RoboterAgent : Agent
         if (Abwurfvorgang == false)
         {
             float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.3f, 1f);
-            float winkel = Mathf.Clamp(vectorAction[1], 0f, 1f);
+            float winkel = Mathf.Clamp(vectorAction[1], 0.3f, 1f);
 
             r_robot.StarteAbwurf(geschwindigkeit, winkel);
             Abwurfvorgang = true;
         }
-        else if (distanceToTarget < 0.5f && r_ball.Kollidiert == true)
+        else if (distanceToTarget < 0.15f && r_ball.Kollidiert == true)
         {
-            SetReward(20.0f);
+            SetReward(100.0f);
             EndEpisode();
         }
         else if (r_ball.Kollidiert == true)

@@ -662,8 +662,8 @@ MonoBehaviour:
   j3: {fileID: 1031973465}
   j4: {fileID: 1135116904}
   startRotationJ0: 0
-  startRotationJ1: 50
-  startRotationJ2: -200
+  startRotationJ1: 20
+  startRotationJ2: -110
   startRotationJ3: 0
   startRotationJ4: 0
   abwurfwinkel: -90

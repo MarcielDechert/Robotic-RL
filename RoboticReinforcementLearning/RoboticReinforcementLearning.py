@@ -4,16 +4,8 @@ import mlagents
 from mlagents_envs.environment import UnityEnvironment
 from mlagents_envs.side_channel.engine_configuration_channel import EngineConfigurationChannel
 
-# -----------------
-# This code is used to close an env that might not have been closed before
-try:
-  env.close()
-except:
-  pass
-# -----------------
-
 channel = EngineConfigurationChannel()
-env = UnityEnvironment(file_name="./EnvBuild/Robotic-RL-Env", seed=1, side_channels=[channel])
+env = UnityEnvironment(file_name="../Robotic-RL-Env/Build/Robotic-RL-Env", seed=1, side_channels=[channel])
 channel.set_configuration_parameters(time_scale = 2.0)
 
 env.reset()
@@ -38,8 +30,6 @@ print(f"There are {spec.action_spec.continuous_size} action(s)")
 decision_steps, terminal_steps = env.get_steps(behavior_name)
 env.set_actions(behavior_name, spec.action_spec.empty_action(len(decision_steps)))
 env.step()
-
-import matplotlib.pyplot as plt
 
 for index, shape in enumerate(spec.observation_shapes):
   if len(shape) == 1:

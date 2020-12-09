@@ -128,7 +128,6 @@ public class RoboterManagerV6 : MonoBehaviour
         einwurfwinkelText.text = "Einwurfwinkel: --  Grad";
         ball.velocity = Vector3.zero;
         ball.useGravity = false;
-
     }
     
     /*

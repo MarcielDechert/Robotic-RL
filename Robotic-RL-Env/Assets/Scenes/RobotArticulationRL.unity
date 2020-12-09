@@ -2404,6 +2404,8 @@ MonoBehaviour:
   startbutton: {fileID: 1503493445}
   geschwindigkeitText: {fileID: 146351856}
   abwurfwinkelText: {fileID: 198532662}
+  abwurfwinkelJ2Text: {fileID: 0}
+  einwurfwinkelText: {fileID: 0}
   ball: {fileID: 2104463417}
   r_Ball: {fileID: 0}
   abwurfPosition: {fileID: 1688562269}
@@ -2420,7 +2422,6 @@ MonoBehaviour:
   abwurfwinkel: -90
   wurfgeschwindigkeit: 500
   toleranzwinkel: 5
-  achsen: []
 --- !u!1001 &1343991172
 PrefabInstance:
   m_ObjectHideFlags: 0

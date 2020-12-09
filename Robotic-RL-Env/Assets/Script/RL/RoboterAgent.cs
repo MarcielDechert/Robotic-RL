@@ -28,8 +28,8 @@ public class RoboterAgent : Agent
     {
         r_robot.InStartpositionFahren();
         r_ball.Kollidiert = false;
-        //r_target.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0.08f, 0);
+        //r_ball.transform.localScale = new Vector3(0, 1f, 0);
+        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0, 0);
         r_target.velocity = Vector3.zero;
         Abwurfvorgang = false;
     }
@@ -38,7 +38,6 @@ public class RoboterAgent : Agent
     {
         sensor.AddObservation(r_target.transform.localPosition);
         sensor.AddObservation(r_robot.transform.localPosition);
-        sensor.AddObservation(r_robot.achsen[2].CurrentPrimaryAxisRotation());
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -47,8 +46,8 @@ public class RoboterAgent : Agent
 
         if (Abwurfvorgang == false)
         {
-            float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.3f, 1f);
-            float winkel = Mathf.Clamp(vectorAction[1], 0.3f, 1f);
+            float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.5f, 1f);
+            float winkel = Mathf.Clamp(vectorAction[1], 0.5f, 1f);
 
             r_robot.StarteAbwurf(geschwindigkeit, winkel);
             Abwurfvorgang = true;

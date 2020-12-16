@@ -26,7 +26,7 @@ public class RoboterAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        r_robot.InStartpositionFahren();
+        r_robot.Startvorgang();
         r_ball.Kollidiert = false;
         //r_ball.transform.localScale = new Vector3(0, 1f, 0);
         r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0, 0);
@@ -49,7 +49,7 @@ public class RoboterAgent : Agent
             float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.5f, 1f);
             float winkel = Mathf.Clamp(vectorAction[1], 0.5f, 1f);
 
-            r_robot.StarteAbwurf(geschwindigkeit, winkel);
+            r_robot.StarteAbwurfMitKI(geschwindigkeit, winkel);
             Abwurfvorgang = true;
         }
         else if (distanceToTarget < 0.15f && r_ball.Kollidiert == true)

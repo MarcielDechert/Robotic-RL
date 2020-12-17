@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum RotationDirection { None = 0, Positive = 1, Negative = -1 };
+public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
 public class AchseV6 : MonoBehaviour
 {
-    public float speed = 30.0f;
+    public float achsengeschwindigkeit = 30.0f;
 
-    public RotationDirection rotationState = RotationDirection.None;
+    public RotationsRichtung rotationState = RotationsRichtung.Neutral;
     private ArticulationBody articulation;
 
     void Start()
@@ -16,27 +16,27 @@ public class AchseV6 : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (rotationState != RotationDirection.None)
+        if (rotationState != RotationsRichtung.Neutral)
         {
-            float rotationChange = (float)rotationState * speed * Time.fixedDeltaTime;
-            float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
-            RotateTo(rotationGoal);
+            float rotationAenderung = (float)rotationState * achsengeschwindigkeit * Time.fixedDeltaTime;
+            float rotationZiel = AktuelleRotationDerAchse() + rotationAenderung;
+            RotiereAchse(rotationZiel);
         }
 
     }
 
-    public float CurrentPrimaryAxisRotation()
+    public float AktuelleRotationDerAchse()
     {
-        float currentRotationRads = articulation.jointPosition[0]; // Aktuelle Drehung der x Achse 
-        float currentRotation = Mathf.Rad2Deg * currentRotationRads; // Rotation in Grad umrechnen
-        return currentRotation;
+        float aktuelleRotationRads = articulation.jointPosition[0]; // Aktuelle Drehung der x Achse 
+        float aktuelleRoatationGrad = Mathf.Rad2Deg * aktuelleRotationRads; // Rotation in Grad umrechnen
+        return aktuelleRoatationGrad;
     }
 
     // Rotiert um xx Grad um die x Achse
-    public void RotateTo(float primaryAxisRotation)
+    public void RotiereAchse(float zielRotation)
     {
         var drive = articulation.xDrive;
-        drive.target = primaryAxisRotation;
+        drive.target = zielRotation;
         articulation.xDrive = drive;
     }
 }

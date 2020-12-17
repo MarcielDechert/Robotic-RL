@@ -1,0 +1,24 @@
+{
+    "RobotArticulation": {
+        "checkpoints": [
+            {
+                "steps": 3,
+                "file_path": "results\\RobotArticulation\\RobotArticulation\\RobotArticulation-3.onnx",
+                "reward": 0.0,
+                "creation_time": 1608046936.9346433
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3,
+            "file_path": "results\\RobotArticulation\\RobotArticulation.onnx",
+            "reward": 0.0,
+            "creation_time": 1608046936.9346433
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.22.0",
+        "torch_version": "1.4.0",
+        "tensorflow_version": "2.1.0"
+    }
+}

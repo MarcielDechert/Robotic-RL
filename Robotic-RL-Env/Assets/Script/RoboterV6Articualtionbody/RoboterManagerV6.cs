@@ -22,14 +22,14 @@ public class RoboterManagerV6 : MonoBehaviour
 
 
     [SerializeField] private float startRotationJ0 = 0.0f;
-    [SerializeField] private float startRotationJ1 = 0.0f;
-    [SerializeField] private float startRotationJ2 = 0.0f;
+    [SerializeField] private float startRotationJ1 = 40.0f;
+    [SerializeField] private float startRotationJ2 = -200.0f;
     [SerializeField] private float startRotationJ3 = 0.0f;
     [SerializeField] private float startRotationJ4 = 0.0f;
 
-    [SerializeField] private float abwurfwinkel = 0.0f;
-    [SerializeField] private float wurfgeschwindigkeit = 0.0f;
-    [SerializeField] private float toleranzwinkel = 0.5f;
+    [SerializeField] private float abwurfwinkel = -110f;
+    [SerializeField] private float wurfgeschwindigkeit = 1000.0f;
+    [SerializeField] private float toleranzwinkel = 5f;
 
     private Vector3 abwurfgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
@@ -37,8 +37,7 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private float[] startRotation;
 
-    private AchseV6[] achsen;
-    
+    public AchseV6[] achsen;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +49,7 @@ public class RoboterManagerV6 : MonoBehaviour
         startRotation = new float[5];
         achsen = new AchseV6[5];
         Init();
+        InStartpositionFahren();
     }
     void Init()
     {
@@ -126,6 +126,7 @@ public class RoboterManagerV6 : MonoBehaviour
         abwurfwinkelText.text = "Abwurfwinkel: --  Grad";
         abwurfwinkelJ2Text.text = "AbwurfwinkelJ2: --  Grad";
         einwurfwinkelText.text = "Einwurfwinkel: --  Grad";
+        ball.transform.position = new Vector3(0, 1f, 0);
         ball.velocity = Vector3.zero;
         ball.useGravity = false;
     }

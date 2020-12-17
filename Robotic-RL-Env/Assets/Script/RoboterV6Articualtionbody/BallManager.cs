@@ -17,7 +17,6 @@ public class BallManager : MonoBehaviour
     private void FixedUpdate() 
     {
         BerechneBallgeschwindigkeit();
-        
     }
 
     private void OnCollisionEnter(Collision other) {

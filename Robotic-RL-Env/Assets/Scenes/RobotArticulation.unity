@@ -662,13 +662,14 @@ MonoBehaviour:
   j3: {fileID: 1031973465}
   j4: {fileID: 1135116904}
   startRotationJ0: 0
-  startRotationJ1: 20
-  startRotationJ2: -110
+  startRotationJ1: 40
+  startRotationJ2: -200
   startRotationJ3: 0
   startRotationJ4: 0
-  abwurfwinkel: -90
+  abwurfwinkel: -110
   wurfgeschwindigkeit: 500
-  toleranzwinkel: 10
+  toleranzwinkel: 5
+  achsen: []
 --- !u!1 &661294413
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,7 +681,6 @@ GameObject:
   - component: {fileID: 661294414}
   - component: {fileID: 661294417}
   - component: {fileID: 661294416}
-  - component: {fileID: 661294415}
   m_Layer: 0
   m_Name: RobotAgent
   m_TagString: Untagged
@@ -703,20 +703,6 @@ Transform:
   m_Father: {fileID: 709010877}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &661294415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661294413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 10
-  TakeActionsBetweenDecisions: 0
 --- !u!114 &661294416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,7 +710,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661294413}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ddcd6edc0fac124286aef9eb6da2b22, type: 3}
   m_Name: 
@@ -734,8 +720,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 10000
   roboter: {fileID: 652372036}
-  target: {fileID: 2084335465}
-  ball: {fileID: 2104463415}
+  area: {fileID: 709010876}
 --- !u!114 &661294417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,7 +740,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 1
+  m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: RobotArticulation
   TeamId: 0
@@ -837,6 +822,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 709010877}
+  - component: {fileID: 709010878}
   m_Layer: 0
   m_Name: RobotArea
   m_TagString: Untagged
@@ -863,6 +849,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &709010878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709010876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6452a6817a3acaf42903ea7784adb608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roboter: {fileID: 652372036}
+  target: {fileID: 2084335465}
+  ball: {fileID: 2104463415}
+  Agent: {fileID: 661294413}
+  r_robot: {fileID: 652372038}
+  r_target: {fileID: 6896967783516621472}
+  r_ball: {fileID: 2104463421}
 --- !u!1 &710026333 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 877861717960577303, guid: d4058c4abe6bf0b4cbb542158448a5f3,
@@ -3253,3 +3258,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3bb336f2400a34c82a3d36fa718ed9, type: 3}
+--- !u!54 &6896967783516621472 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 6896967782938909407, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6896967783516621471}
+  m_PrefabAsset: {fileID: 0}

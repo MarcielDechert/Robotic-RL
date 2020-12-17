@@ -41,6 +41,7 @@ for episode in range(10000):
   tracked_agent = -1 # -1 indicates not yet tracking
   done = False # For the tracked_agent
   episode_rewards = 0 # For the tracked_agent
+
   while not done:
     # Track the first agent we see if not tracking
     # Note : len(decision_steps) = [number of agents that requested a decision]
@@ -49,6 +50,7 @@ for episode in range(10000):
 
     # Generate an action for all agents
     action = spec.action_spec.random_action(len(decision_steps))
+    print(action)
 
     # Set the actions
     env.set_actions(behavior_name, action)

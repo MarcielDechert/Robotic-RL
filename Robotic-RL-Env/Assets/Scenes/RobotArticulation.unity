@@ -1873,8 +1873,8 @@ MonoBehaviour:
   startRotationJ4: 0
   startRotationJ5: 0
   abwurfwinkel: -140
-  wurfgeschwindigkeit: 1650
-  toleranzwinkel: 5
+  wurfgeschwindigkeit: 2000
+  toleranzwinkel: 7
   anzahlAchsen: 5
   WurfAchse: 3
 --- !u!114 &652372039
@@ -2108,7 +2108,7 @@ PrefabInstance:
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.06
+      value: 0.569
       objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
@@ -3700,18 +3700,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057232815}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 642b6064916cf93449941de42a333a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 391478647}
   abwurfPosition: {fileID: 841923707}
-  j1: {fileID: 1808436767}
-  j2: {fileID: 1923704638}
-  j3: {fileID: 73980977}
-  j4: {fileID: 1345605905}
-  j5: {fileID: 0}
+  j1: {fileID: 722251458}
+  j2: {fileID: 1808436767}
+  j3: {fileID: 1923704638}
+  j4: {fileID: 73980977}
+  j5: {fileID: 1345605905}
   startRotationJ1: -60
   startRotationJ2: -60
   startRotationJ3: 0
@@ -3720,8 +3720,32 @@ MonoBehaviour:
   abwurfwinkel: -5
   wurfgeschwindigkeit: 500
   toleranzwinkel: 7
-  anzahlAchsen: 0
+  anzahlAchsen: 5
   WurfAchse: 3
+--- !u!114 &1057232818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057232815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35698119d7c1c284d99f7eb9ba10db4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abwurfgeschwindigkeitText: {fileID: 146351856}
+  abwurfwinkelBallText: {fileID: 198532662}
+  abwurfwinkelJ3Text: {fileID: 2072937215}
+  einwurfwinkelText: {fileID: 1446200636}
+  j1RotationText: {fileID: 1379611081}
+  j2RotationText: {fileID: 616699478}
+  j3RotationText: {fileID: 1280308623}
+  j4RotationText: {fileID: 176932086}
+  j5RotationText: {fileID: 2005869017}
+  j6RotationText: {fileID: 0}
+  roboter: {fileID: 1057232815}
+  ball: {fileID: 391478646}
 --- !u!1 &1080399853
 GameObject:
   m_ObjectHideFlags: 0
@@ -6407,6 +6431,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1057232816}
+        m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
+        m_MethodName: Startvorgang
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
 --- !u!114 &1503493446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6677,6 +6713,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1057232816}
+        m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
+        m_MethodName: StarteAbwurf
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
 --- !u!1 &1537348370
 GameObject:
   m_ObjectHideFlags: 0

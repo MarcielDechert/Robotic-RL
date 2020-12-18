@@ -41,10 +41,17 @@ public class RoboterGUI : MonoBehaviour
     void Update()
     {
 
-        abwurfwinkelJ3Text.text = "Abwurfwinkel J3: "+ roboterManager.AbwurfwinkelJ3 + " Grad";
+        //abwurfwinkelJ3Text.text = "Abwurfwinkel J3: "+ roboterManager.AbwurfwinkelJ3 + " Grad";
         abwurfwinkelBallText.text = "Abwurfwinkel: " + roboterManager.AbwurfwinkelBall + " Grad";
         abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboterManager.Abwurfgeschwindigkeit + " ms";
         einwurfwinkelText.text = "Einwurfwinkel: " + ballManager.Einwurfwinkel + " Grad";
+       
+        j1RotationText.text = "J1: "+ Mathf.Round(roboterManager.IstRotation[0]) + " Grad";
+        j2RotationText.text = "J2: "+ Mathf.Round(roboterManager.IstRotation[1]) + " Grad";
+        j3RotationText.text = "J3: "+ Mathf.Round(roboterManager.IstRotation[2]) + " Grad";
+        j4RotationText.text = "J4: "+ Mathf.Round(roboterManager.IstRotation[3]) + " Grad";
+        j5RotationText.text = "J5: "+ Mathf.Round(roboterManager.IstRotation[4]) + " Grad";
+       
        
     }
 }

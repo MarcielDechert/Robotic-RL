@@ -124,8 +124,8 @@ public class RoboterManagerV6 : MonoBehaviour
                                         if(befehl == Befehl.Start)
                                         {
                                             abwurfStatus = RoboterStatus.Faehrt;
-                                            SetzeSollwinkel(startRotation);
-                                            SetzeSollRotationsGeschwindigkeit(sollRotationsGeschwindigkeit);
+                                            //SetzeSollrotation(startRotation);
+                                           // SetzeSollRotationsGeschwindigkeit(sollRotationsGeschwindigkeit);
 
                                         }
                                         break;
@@ -155,7 +155,7 @@ public class RoboterManagerV6 : MonoBehaviour
                                                 abwurfSignal = true;
                                                 if (befehl == Befehl.Abwurf)
                                                 {
-                                                    SetzeSollwinkel(abwurfRotation);
+                                                    //SetzeSollrotation(abwurfRotation);
                                                     sollIst = false;
                                                     abwurfStatus = RoboterStatus.Faehrt;
                                                 }
@@ -167,7 +167,7 @@ public class RoboterManagerV6 : MonoBehaviour
                                         {
                                             abwurfStatus = RoboterStatus.Faehrt;
                                             sollIst = false;
-                                            SetzeSollwinkel(startRotation);
+                                            //SetzeSollrotation(startRotation);
                                         }
                                         break;
         }
@@ -240,7 +240,7 @@ public class RoboterManagerV6 : MonoBehaviour
         abwurfwinkelBall =  BerechneAbwurfwinkel();
     }
 
-    private void SetzeSollwinkel(float[] sollWinkel)
+    private void SetzeSollrotation(float[] sollWinkel)
     {
         for(int i = 0; i < anzahlAchsen; i++)
         {
@@ -397,22 +397,29 @@ public class RoboterManagerV6 : MonoBehaviour
         return  geschwindigkeit * 500;
     }
     // Startet den Ballabwurf mit der Wurfgschwindigkeit des Arms von 0-1 und dem Abwurfwinkel von 0-1
+
+    /*
     public void StarteAbwurfMitKI(float geschwindigkeit, float winkel)
     {
         abwurfwinkel = UebersetzeWinkel(winkel);
         wurfgeschwindigkeit = UebersetzGeschwindigkeit(geschwindigkeit);
         abwurfSignal = true;
     }
-    public void StarteAbwurf()
+    */
+    public void StarteAbwurf(float[] abwurfRotation,float[] abwurfGeschwindigkeit)
     {
        //abwurfSignal = true;
-       befehl = Befehl.Abwurf;
+        SetzeSollrotation(abwurfRotation);
+        SetzeSollRotationsGeschwindigkeit(abwurfGeschwindigkeit);
+        befehl = Befehl.Abwurf;
 
     }
 
-    public void Startvorgang()
+    public void InStartposition(float[] startRotation,float[] startGeschwindigkeit )
     {
         //abwurfStatus = RoboterStatus.InStartposition;
+        SetzeSollrotation(startRotation);
+        SetzeSollRotationsGeschwindigkeit(startGeschwindigkeit);
         befehl = Befehl.Start;
     }
 

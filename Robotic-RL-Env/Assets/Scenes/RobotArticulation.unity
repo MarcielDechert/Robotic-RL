@@ -1392,7 +1392,7 @@ GameObject:
   - component: {fileID: 355398466}
   - component: {fileID: 355398465}
   m_Layer: 5
-  m_Name: InputFieldJ7
+  m_Name: InputFieldAbwurfwinkelJ3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1689,12 +1689,6 @@ PrefabInstance:
 --- !u!1 &391478646 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8440832421116878894, guid: 5f330791b601e494990f05468a33b13e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1857263387}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &391478647 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8440832421116879313, guid: 5f330791b601e494990f05468a33b13e,
     type: 3}
   m_PrefabInstance: {fileID: 1857263387}
   m_PrefabAsset: {fileID: 0}
@@ -2450,12 +2444,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1323649380}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &652372037 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2082249701029375991, guid: d4058c4abe6bf0b4cbb542158448a5f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1323649380}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &652372038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2463,7 +2451,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652372036}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 642b6064916cf93449941de42a333a8e, type: 3}
   m_Name: 
@@ -2475,12 +2463,12 @@ MonoBehaviour:
   j3: {fileID: 1314691854}
   j4: {fileID: 1031973465}
   j5: {fileID: 1135116904}
-  startRotationJ1: 0
-  startRotationJ2: 60
-  startRotationJ3: -220
+  startRotationJ1: 180
+  startRotationJ2: 90
+  startRotationJ3: 0
   startRotationJ4: 0
-  startRotationJ5: 0
-  abwurfwinkel: -140
+  startRotationJ5: -40
+  abwurfwinkel: -160
   wurfgeschwindigkeit: 2000
   toleranzwinkel: 7
   anzahlAchsen: 5
@@ -2510,6 +2498,12 @@ MonoBehaviour:
   j5RotationText: {fileID: 2005869017}
   j6RotationText: {fileID: 0}
   inputJ1: {fileID: 1165513983}
+  inputJ2: {fileID: 690716798}
+  inputJ3: {fileID: 748661777}
+  inputJ4: {fileID: 1019779284}
+  inputJ5: {fileID: 1831140154}
+  wurfgeschwindigkeitJ3: {fileID: 1555722549}
+  abwurfwinkelJ3: {fileID: 355398465}
   roboter: {fileID: 652372036}
   ball: {fileID: 2104463415}
 --- !u!1 &661294413
@@ -2539,7 +2533,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 652372037}
+  - {fileID: 1057232817}
   m_Father: {fileID: 709010877}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3038,6 +3032,7 @@ GameObject:
   - component: {fileID: 739366301}
   - component: {fileID: 739366300}
   - component: {fileID: 739366299}
+  - component: {fileID: 739366303}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3150,6 +3145,39 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &739366303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739366298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35698119d7c1c284d99f7eb9ba10db4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abwurfButton: {fileID: 1533906437}
+  StartfButton: {fileID: 1503493445}
+  abwurfgeschwindigkeitText: {fileID: 146351856}
+  abwurfwinkelBallText: {fileID: 198532662}
+  abwurfwinkelJ3Text: {fileID: 2072937215}
+  einwurfwinkelText: {fileID: 1446200636}
+  j1RotationText: {fileID: 1379611081}
+  j2RotationText: {fileID: 616699478}
+  j3RotationText: {fileID: 1280308623}
+  j4RotationText: {fileID: 176932086}
+  j5RotationText: {fileID: 2005869017}
+  j6RotationText: {fileID: 0}
+  inputJ1: {fileID: 1165513983}
+  inputJ2: {fileID: 690716798}
+  inputJ3: {fileID: 748661777}
+  inputJ4: {fileID: 1019779284}
+  inputJ5: {fileID: 1831140154}
+  wurfgeschwindigkeitJ3: {fileID: 1555722549}
+  abwurfwinkelJ3: {fileID: 355398465}
+  roboter: {fileID: 1057232815}
+  ball: {fileID: 2104463415}
 --- !u!1 &748661775
 GameObject:
   m_ObjectHideFlags: 0
@@ -3641,7 +3669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 841923707}
   m_Layer: 0
-  m_Name: Abwurfposition
+  m_Name: TCP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4899,7 +4927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 642b6064916cf93449941de42a333a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 391478647}
+  ball: {fileID: 2104463417}
   abwurfPosition: {fileID: 841923707}
   j1: {fileID: 722251458}
   j2: {fileID: 1808436767}
@@ -4916,33 +4944,12 @@ MonoBehaviour:
   toleranzwinkel: 7
   anzahlAchsen: 5
   WurfAchse: 3
---- !u!114 &1057232818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!4 &1057232817 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1341121164}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057232815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35698119d7c1c284d99f7eb9ba10db4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  abwurfButton: {fileID: 0}
-  StartfButton: {fileID: 0}
-  abwurfgeschwindigkeitText: {fileID: 146351856}
-  abwurfwinkelBallText: {fileID: 198532662}
-  abwurfwinkelJ3Text: {fileID: 2072937215}
-  einwurfwinkelText: {fileID: 1446200636}
-  j1RotationText: {fileID: 1379611081}
-  j2RotationText: {fileID: 616699478}
-  j3RotationText: {fileID: 1280308623}
-  j4RotationText: {fileID: 176932086}
-  j5RotationText: {fileID: 2005869017}
-  j6RotationText: {fileID: 0}
-  inputJ1: {fileID: 0}
-  roboter: {fileID: 1057232815}
-  ball: {fileID: 391478646}
 --- !u!1 &1080399853
 GameObject:
   m_ObjectHideFlags: 0
@@ -5973,7 +5980,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 661294414}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 681267385985303661, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
@@ -6043,12 +6050,12 @@ PrefabInstance:
     - target: {fileID: 2082249701029375990, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2082249701029375991, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2082249701029375991, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
@@ -6073,7 +6080,7 @@ PrefabInstance:
     - target: {fileID: 2082249701029375991, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.36
       objectReference: {fileID: 0}
     - target: {fileID: 2082249701029375991, guid: d4058c4abe6bf0b4cbb542158448a5f3,
         type: 3}
@@ -6585,7 +6592,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 661294414}
     m_Modifications:
     - target: {fileID: 3624461794708077428, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -6927,6 +6934,36 @@ PrefabInstance:
       propertyPath: m_XDrive.damping
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900817, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900828, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900828, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900828, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900829, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624461795461900829, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_Immovable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3624461795754803180, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_ParentAnchorPosition.x
@@ -7075,37 +7112,37 @@ PrefabInstance:
     - target: {fileID: 3624461796557133648, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.131
+      value: -0.315
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.248
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -7115,7 +7152,7 @@ PrefabInstance:
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -7852,7 +7889,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 652372038}
         m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
-        m_MethodName: Startvorgang
+        m_MethodName: InStartposition
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8279,7 +8316,7 @@ GameObject:
   - component: {fileID: 1555722550}
   - component: {fileID: 1555722549}
   m_Layer: 5
-  m_Name: InputFieldJ6
+  m_Name: InputFieldWurfgeschJ3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9009,7 +9046,7 @@ PrefabInstance:
     - target: {fileID: 8440832421116879317, guid: 5f330791b601e494990f05468a33b13e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8440832421116879317, guid: 5f330791b601e494990f05468a33b13e,
         type: 3}

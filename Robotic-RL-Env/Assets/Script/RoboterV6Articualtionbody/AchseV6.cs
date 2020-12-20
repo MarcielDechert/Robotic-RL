@@ -4,7 +4,7 @@ using UnityEngine;
 public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
 public class AchseV6 : MonoBehaviour
 {
-    public float achsengeschwindigkeit = 30.0f;
+    public float achsengeschwindigkeit = 30.0f; // Grad/Frame
 
     public RotationsRichtung rotationState = RotationsRichtung.Neutral;
     private ArticulationBody articulation;

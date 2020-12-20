@@ -76,11 +76,11 @@ public class RoboterManagerV6 : MonoBehaviour
         abwurfRotation= new float[anzahlAchsen];
         sollRotationsGeschwindigkeit = new float[anzahlAchsen];
 
-        abwurfRotation[0] = 0.0f;
-        abwurfRotation[1] = 60.0f;
+        abwurfRotation[0] = 180.0f;
+        abwurfRotation[1] = 90.0f;
         abwurfRotation[2] = abwurfwinkel;
         abwurfRotation[3] = 0.0f;
-        abwurfRotation[4] = 0.0f;
+        abwurfRotation[4] = -40.0f;
 
         sollRotationsGeschwindigkeit[0] = 500.0f;
         sollRotationsGeschwindigkeit[1] = 500.0f;
@@ -125,13 +125,14 @@ public class RoboterManagerV6 : MonoBehaviour
                                         {
                                             abwurfStatus = RoboterStatus.Faehrt;
                                             //SetzeSollrotation(startRotation);
-                                           // SetzeSollRotationsGeschwindigkeit(sollRotationsGeschwindigkeit);
+                                           //SetzeSollRotationsGeschwindigkeit(sollRotationsGeschwindigkeit);
 
                                         }
                                         break;
 
             case RoboterStatus.Faehrt:
                                         Debug.Log(sollRotation[2]);
+                                        Debug.Log(istRotation[2]);
                                         if(sollIst){
                                             if(abwurfSignal)
                                             {
@@ -155,7 +156,7 @@ public class RoboterManagerV6 : MonoBehaviour
                                                 abwurfSignal = true;
                                                 if (befehl == Befehl.Abwurf)
                                                 {
-                                                    //SetzeSollrotation(abwurfRotation);
+                                                   // SetzeSollrotation(abwurfRotation);
                                                     sollIst = false;
                                                     abwurfStatus = RoboterStatus.Faehrt;
                                                 }
@@ -422,6 +423,16 @@ public class RoboterManagerV6 : MonoBehaviour
         SetzeSollRotationsGeschwindigkeit(startGeschwindigkeit);
         befehl = Befehl.Start;
     }
+    // public void StarteAbwurf()
+    // {
+    //     befehl = Befehl.Abwurf;
+
+    // }
+
+    // public void InStartposition()
+    // {
+    //     befehl = Befehl.Start;
+    // }
 
     public void SetzeGeschwindikeitDerScene(float geschwindigkeit)
     {

@@ -15,7 +15,6 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private AchseV6 j4;
     [SerializeField] private AchseV6 j5;
 
-
     [SerializeField] private float startRotationJ1 = 0.0f;
     [SerializeField] private float startRotationJ2 = 0.0f;
     [SerializeField] private float startRotationJ3 = 0.0f;
@@ -28,7 +27,7 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private int anzahlAchsen = 0;
     [SerializeField] private int WurfAchse = 3;
 
-    private AbwurfStatus abwurfStatus = AbwurfStatus.Neutral;
+    public AbwurfStatus abwurfStatus = AbwurfStatus.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
     
     private float abwurfwinkelJ3;
@@ -39,15 +38,12 @@ public class RoboterManagerV6 : MonoBehaviour
     private float abwurfwinkelBall;
     public float AbwurfwinkelBall { get => abwurfwinkelBall; set => abwurfwinkelBall = value; }
 
-
     private Vector3 letztePosition = Vector3.zero;
     private bool abwurfSignal;
 
     private float[] startRotation;
 
-    private AchseV6[] achsen;
-
-
+    public AchseV6[] achsen;
 
 
     // Start is called before the first frame update
@@ -57,7 +53,6 @@ public class RoboterManagerV6 : MonoBehaviour
     }
     void Init()
     {
-
         startRotation = new float[anzahlAchsen];
         achsen = new AchseV6[anzahlAchsen];
 
@@ -77,41 +72,32 @@ public class RoboterManagerV6 : MonoBehaviour
         {
             WurfAchse = 1;
         }
-        
         abwurfSignal = false;
-        
     }
 
     private void FixedUpdate()
     {
-
         switch(abwurfStatus)
         {
-
             case AbwurfStatus.Neutral: 
-                                                break;
-
+                break;
             case AbwurfStatus.InStartposition:    
-                                                abwurfSignal = false;
-                                                InStartpositionFahren();
-                                                abwurfStatus = AbwurfStatus.Abwurfbereit;
-                                                break;
-
+                abwurfSignal = false;
+                InStartpositionFahren();
+                abwurfStatus = AbwurfStatus.Abwurfbereit;
+                break;
             case AbwurfStatus.Abwurfbereit:
-                                                if(abwurfSignal)
-                                                {
-                                                    abwurfStatus = AbwurfStatus.Wirft;
-                                                }
-                                                break;
-
+                if(abwurfSignal)
+                {
+                    abwurfStatus = AbwurfStatus.Wirft;
+                }
+                break;
             case AbwurfStatus.Wirft:   
-                                                abwurfSignal = false;
-                                                BerechneGeschwindigkeit();
-                                                Abwurfvorgang(); 
-                                                break;
-
+                abwurfSignal = false;
+                BerechneGeschwindigkeit();
+                Abwurfvorgang(); 
+                break;
         }
-
     }
 
 
@@ -121,7 +107,6 @@ public class RoboterManagerV6 : MonoBehaviour
         abwurfgeschwindigkeitVector3 = (abwurfPosition.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = abwurfPosition.transform.position;
         //Debug.Log(abwurfgeschwindigkeitVector3);
-
     }
 
     private void Abwurf()
@@ -131,25 +116,22 @@ public class RoboterManagerV6 : MonoBehaviour
         ball.velocity =(abwurfgeschwindigkeitVector3);
     }
 
-    private void InStartpositionFahren()
+    public void InStartpositionFahren()
     {
-            for (int i = 0; i < anzahlAchsen; i++)
-            {
-                achsen[i].RotiereAchse(startRotation[i]);
-            }
+        for (int i = 0; i < anzahlAchsen; i++)
+        { 
+            achsen[i].RotiereAchse(startRotation[i]);
+        }
             
         achsen[WurfAchse-1].rotationState = RotationsRichtung.Neutral;
         abwurfgeschwindigkeitVector3 = Vector3.zero;
         abwurfgeschwindigkeit = 0.0f;
         abwurfwinkelJ3 = 0.0f;
-        ball.velocity = Vector3.zero;
-        ball.useGravity = false;
     }
     private void Abwurfvorgang()
-    {
-            
-            achsen[WurfAchse-1].achsengeschwindigkeit = wurfgeschwindigkeit;
-            achsen[WurfAchse-1].rotationState = RotationsRichtung.Positiv;
+    {   
+        achsen[WurfAchse-1].achsengeschwindigkeit = wurfgeschwindigkeit;
+        achsen[WurfAchse-1].rotationState = RotationsRichtung.Positiv;
         // ist der vorher angegebene Abwurfwinkel mit einer Toleranz erreicht wird der Abwurf des Balls gestartet
         if (achsen[WurfAchse-1].AktuelleRotationDerAchse() <= abwurfwinkel + toleranzwinkel && achsen[WurfAchse-1].AktuelleRotationDerAchse() >= abwurfwinkel - toleranzwinkel )
         {
@@ -160,10 +142,10 @@ public class RoboterManagerV6 : MonoBehaviour
             achsen[WurfAchse-1].rotationState = RotationsRichtung.Neutral;
             abwurfStatus = AbwurfStatus.Neutral;
         }
-
     }
 
-    private float BerechneAbwurfwinkel(){
+    private float BerechneAbwurfwinkel()
+    {
         return  Mathf.Rad2Deg * Mathf.Acos(-abwurfgeschwindigkeitVector3.x/abwurfgeschwindigkeitVector3.magnitude);
     }
 
@@ -226,5 +208,4 @@ public class RoboterManagerV6 : MonoBehaviour
     {
         j5.RotiereAchse(winkel);
     }
-
 }

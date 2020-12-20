@@ -5,9 +5,9 @@ using UnityEngine;
 public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
-    public GameObject roboter;
-    public GameObject target;
-    public GameObject ball;
+    public Transform roboter;
+    public Rigidbody target;
+    public Rigidbody ball;
     public GameObject Agent;
 
     public RoboterManagerV6 r_robot;
@@ -33,8 +33,11 @@ public class RobotsLearningArea : MonoBehaviour
     public void Reset()
     {
         r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0, 0);
-        r_robot.InStartpositionFahren();
+        ball.transform.localPosition = new Vector3(0, 1f, 0);
+        ball.velocity = Vector3.zero;
+        ball.useGravity = false;
         r_ball.Kollidiert = false;
+        r_robot.abwurfStatus = AbwurfStatus.InStartposition;
     }
 
     public float DistanceToTarget()

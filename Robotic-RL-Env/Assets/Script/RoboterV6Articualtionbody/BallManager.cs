@@ -30,15 +30,13 @@ public class BallManager : MonoBehaviour
         BerechneBallgeschwindigkeit();
     }
 
-    private void OnCollisionEnter(Collision other) {
-        
-        
+    private void OnCollisionEnter(Collision other) 
+    {      
         if (other.gameObject.layer != 0)
         {
             kollidiert = true;
             Debug.Log("Kollision erkannt");
         }
-    
     }
 
     void OnTriggerEnter(Collider other) { 

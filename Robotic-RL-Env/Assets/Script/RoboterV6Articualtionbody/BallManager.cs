@@ -9,7 +9,6 @@ public class BallManager : MonoBehaviour
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
 
-    private RoboterManagerV6 roboter;
 
     private Vector3 ballgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
@@ -18,20 +17,13 @@ public class BallManager : MonoBehaviour
 
     public float Einwurfwinkel { get => einwurfwinkel; set => einwurfwinkel = value; }
 
-    void Start()
-    {
-        
-        roboter = new RoboterManagerV6();
-
-    }
-
     private void FixedUpdate() 
     {
         BerechneBallgeschwindigkeit();
     }
 
-    private void OnCollisionEnter(Collision other) 
-    {      
+    private void OnCollisionEnter(Collision other) {
+        
         if (other.gameObject.layer != 0)
         {
             kollidiert = true;
@@ -46,7 +38,6 @@ public class BallManager : MonoBehaviour
             einwurfwinkel =  Mathf.Rad2Deg * Mathf.Acos(-ballgeschwindigkeit.y/ballgeschwindigkeit.magnitude);
             Debug.Log("Trigger erkannt");
         }
-    
     }
 
     private void BerechneBallgeschwindigkeit()

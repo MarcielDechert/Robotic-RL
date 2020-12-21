@@ -368,7 +368,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 73980974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -1311,7 +1311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 342582239}
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1.277129, y: 15.158, z: -8.413863}
+  m_LocalPosition: {x: 0, y: 0.0361, z: 0}
   m_LocalScale: {x: 0.0012609, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 885113601}
@@ -2463,6 +2463,7 @@ MonoBehaviour:
   j3: {fileID: 1314691854}
   j4: {fileID: 1031973465}
   j5: {fileID: 1135116904}
+  j6: {fileID: 0}
   startRotationJ1: 180
   startRotationJ2: 90
   startRotationJ3: 0
@@ -2845,6 +2846,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 709010877}
     m_Modifications:
+    - target: {fileID: 6896967782319495215, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967782319495215, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967782319495215, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909344, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_Name
@@ -2853,17 +2869,17 @@ PrefabInstance:
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.547
+      value: -1.0091
       objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -21.422
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.7562
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
@@ -2918,7 +2934,67 @@ PrefabInstance:
     - target: {fileID: 6896967782938909406, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0405536
+      value: 1.2321196
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783029646351, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783029646351, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783029646351, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783501755829, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783501755829, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783501755829, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783972080425, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783972080425, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967783972080425, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967784182290213, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967784182290213, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.039
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896967784182290213, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3bb336f2400a34c82a3d36fa718ed9, type: 3}
@@ -2937,7 +3013,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 722251455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -3154,7 +3230,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 739366298}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35698119d7c1c284d99f7eb9ba10db4f, type: 3}
+  m_Script: {fileID: 11500000, guid: 81cb2dbe589a59243b7259f1ad279882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   abwurfButton: {fileID: 1533906437}
@@ -4924,7 +5000,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1057232815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 642b6064916cf93449941de42a333a8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 70fa286a37f4b8942bbc652058b1f252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 2104463417}
@@ -4934,16 +5010,9 @@ MonoBehaviour:
   j3: {fileID: 1923704638}
   j4: {fileID: 73980977}
   j5: {fileID: 1345605905}
-  startRotationJ1: -60
-  startRotationJ2: -60
-  startRotationJ3: 0
-  startRotationJ4: 0
-  startRotationJ5: 0
-  abwurfwinkel: -5
-  wurfgeschwindigkeit: 500
-  toleranzwinkel: 7
-  anzahlAchsen: 5
-  WurfAchse: 3
+  j6: {fileID: 1521988042}
+  toleranzwinkel: 4
+  anzahlAchsen: 6
 --- !u!4 &1057232817 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3624461796557133649, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
@@ -6757,7 +6826,7 @@ PrefabInstance:
     - target: {fileID: 3624461795075486435, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_Twist
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3624461795075486435, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -6857,7 +6926,7 @@ PrefabInstance:
     - target: {fileID: 3624461795327548568, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_Twist
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3624461795327548568, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -6872,7 +6941,7 @@ PrefabInstance:
     - target: {fileID: 3624461795365477437, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_ParentAnchorPosition.x
-      value: 0.5777757
+      value: 0.5777758
       objectReference: {fileID: 0}
     - target: {fileID: 3624461795365477437, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
@@ -7104,6 +7173,11 @@ PrefabInstance:
       propertyPath: m_XDrive.damping
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3624461796118348802, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
+        type: 3}
+      propertyPath: m_XDrive.forceLimit
+      value: 3.402823e+38
+      objectReference: {fileID: 0}
     - target: {fileID: 3624461796557133648, guid: d0e8ae4f25b55954fa200c3b8122a5a0,
         type: 3}
       propertyPath: m_Name
@@ -7295,7 +7369,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1345605904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -7899,7 +7973,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 0
-      - m_Target: {fileID: 1057232816}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
         m_MethodName: Startvorgang
         m_Mode: 1
@@ -8045,7 +8119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1521988040}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -8181,7 +8255,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 0
-      - m_Target: {fileID: 1057232816}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
         m_MethodName: StarteAbwurf
         m_Mode: 1
@@ -8810,7 +8884,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1808436764}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -9244,7 +9318,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1923704635}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3454e872f6f346144952c373b7ac218f, type: 3}
+  m_Script: {fileID: 11500000, guid: 221216adfc3f4a7419a3aa1f8e8d9257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   achsengeschwindigkeit: 30
@@ -9785,7 +9859,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2104463415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38161b1d33bab0442bbe6095ed348f52, type: 3}
+  m_Script: {fileID: 11500000, guid: 933493e0b01aefe4197cdb4a6eb86aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2113719137

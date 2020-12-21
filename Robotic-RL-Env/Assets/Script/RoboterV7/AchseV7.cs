@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
-public class AchseV6 : MonoBehaviour
+
+public class AchseV7 : MonoBehaviour
 {
     public float achsengeschwindigkeit = 30.0f; // Grad/Frame
     //public float rotationsZiel = 30.0f; // Grad/Frame
@@ -19,7 +19,7 @@ public class AchseV6 : MonoBehaviour
     {
         if (rotationState != RotationsRichtung.Neutral)
         {
-             float rotationAenderung = (float)rotationState * achsengeschwindigkeit * Time.fixedDeltaTime;
+            float rotationAenderung = (float)rotationState * achsengeschwindigkeit * Time.fixedDeltaTime;
             float rotationZiel = AktuelleRotationDerAchse() + rotationAenderung;
             RotiereAchse(rotationZiel);
         }
@@ -28,11 +28,7 @@ public class AchseV6 : MonoBehaviour
 
     public float AktuelleRotationDerAchse()
     {
-
         return articulation.xDrive.target;
-        // float aktuelleRotationRads = articulation.jointPosition[0]; // Aktuelle Drehung der x Achse 
-        // float aktuelleRoatationGrad = Mathf.Rad2Deg * aktuelleRotationRads; // Rotation in Grad umrechnen
-        // return aktuelleRoatationGrad;
     }
 
     // Rotiert um xx Grad um die x Achse
@@ -40,12 +36,11 @@ public class AchseV6 : MonoBehaviour
     {
         var drive = articulation.xDrive;
         drive.target = zielRotation;
-        //drive.targetVelocity = zielGeschwindigkeit;
         articulation.xDrive = drive;
     }
 
-    // public Vector3 GetSpeed(){
-    //     return articulation.xDrive.targetVelocity.
-
-    // }
+    public Vector3 GetSpeed()
+    {
+        return articulation.velocity;
+    }
 }

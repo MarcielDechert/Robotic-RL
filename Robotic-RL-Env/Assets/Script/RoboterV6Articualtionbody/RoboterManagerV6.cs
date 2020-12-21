@@ -15,6 +15,7 @@ public class RoboterManagerV6 : MonoBehaviour
     [SerializeField] private AchseV6 j3;
     [SerializeField] private AchseV6 j4;
     [SerializeField] private AchseV6 j5;
+    [SerializeField] private AchseV6 j6;
 
 
     [SerializeField] private float startRotationJ1 = 0.0f;
@@ -131,8 +132,6 @@ public class RoboterManagerV6 : MonoBehaviour
                                         break;
 
             case RoboterStatus.Faehrt:
-                                        Debug.Log(sollRotation[2]);
-                                        Debug.Log(istRotation[2]);
                                         if(sollIst){
                                             if(abwurfSignal)
                                             {
@@ -150,6 +149,10 @@ public class RoboterManagerV6 : MonoBehaviour
                                         {
                                             RotiereAlleAchsen();
                                         }
+                                        // if(abwurfSignal && AbwurfwinkelErreicht())
+                                        // {
+                                        //      Abwurf();   
+                                        // }
                                         break;
 
             case RoboterStatus.Abwurfbereit:
@@ -172,14 +175,6 @@ public class RoboterManagerV6 : MonoBehaviour
                                         }
                                         break;
         }
-
-
-
-
-
-
-
-
 
             /*
 
@@ -268,15 +263,20 @@ public class RoboterManagerV6 : MonoBehaviour
 
     private void BerechneGeschwindigkeit()
     {
-        // aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
+        //aktuelle Geschwindigkeit des Abwurfpunktes am Greifer
         abwurfgeschwindigkeitVector3 = (abwurfPosition.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = abwurfPosition.transform.position;
+
+        //abwurfgeschwindigkeitVector3 = j6.GetSpeed();
+        Debug.Log(abwurfgeschwindigkeitVector3);
+
         //Debug.Log(abwurfgeschwindigkeitVector3);
 
     }
 
     private void Abwurf()
     {
+        Debug.Log("Abwurf");
         ball.MovePosition(abwurfPosition.position);
         ball.useGravity = true;
         ball.velocity =(abwurfgeschwindigkeitVector3);
@@ -325,7 +325,7 @@ public class RoboterManagerV6 : MonoBehaviour
         {
             if(sollRotation[i] < 0)
             {
-                if(istRotation[i] < sollRotation[i] + toleranzwinkel && istRotation[i] > sollRotation[i] - toleranzwinkel)
+                if(istRotation[i] <= sollRotation[i] + toleranzwinkel && istRotation[i] >= sollRotation[i] - toleranzwinkel)
                 {
                     achsen[i].rotationState = RotationsRichtung.Neutral;
                 }
@@ -344,7 +344,7 @@ public class RoboterManagerV6 : MonoBehaviour
             }
             else
             {
-                if(istRotation[i] > sollRotation[i] - toleranzwinkel && istRotation[i]< sollRotation[i] + toleranzwinkel)
+                if(istRotation[i] >= sollRotation[i] - toleranzwinkel && istRotation[i]<= sollRotation[i] + toleranzwinkel)
                 {
                     achsen[i].rotationState = RotationsRichtung.Neutral;
                 }
@@ -380,6 +380,31 @@ public class RoboterManagerV6 : MonoBehaviour
 
     }
 
+    // private bool AbwurfwinkelErreicht()
+    // {
+
+    //     for(int i = 0; i < anzahlAchsen; i++)
+    //     {
+    //         if(sollRotation[i] < 0)
+    //         {
+    //             if(istRotation[i] <= sollRotation[i] + toleranzwinkel && istRotation[i] >= sollRotation[i] - toleranzwinkel)
+    //             {
+    //                 return true;
+    //             }
+
+    //         }
+    //         else
+    //         {
+    //             if(istRotation[i] >= sollRotation[i] - toleranzwinkel && istRotation[i]<= sollRotation[i] + toleranzwinkel)
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+
+    // }
+
     private float BerechneAbwurfwinkel(){
         return  Mathf.Rad2Deg * Mathf.Acos(-abwurfgeschwindigkeitVector3.x/abwurfgeschwindigkeitVector3.magnitude);
     }
@@ -409,7 +434,7 @@ public class RoboterManagerV6 : MonoBehaviour
     */
     public void StarteAbwurf(float[] abwurfRotation,float[] abwurfGeschwindigkeit)
     {
-       //abwurfSignal = true;
+        Debug.Log("Los");
         SetzeSollrotation(abwurfRotation);
         SetzeSollRotationsGeschwindigkeit(abwurfGeschwindigkeit);
         befehl = Befehl.Abwurf;
@@ -439,29 +464,29 @@ public class RoboterManagerV6 : MonoBehaviour
         Time.timeScale = geschwindigkeit;
     }
 
-    public void RotiereAchseJ1(float winkel)
-    {
-        j1.RotiereAchse(winkel);
-    }
+    // public void RotiereAchseJ1(float winkel)
+    // {
+    //     j1.RotiereAchse(winkel);
+    // }
 
-    public void RotiereAchseJ2(float winkel)
-    {
-        j2.RotiereAchse(winkel);
-    }
+    // public void RotiereAchseJ2(float winkel)
+    // {
+    //     j2.RotiereAchse(winkel);
+    // }
 
-    public void RotiereAchseJ3(float winkel)
-    {
-        j3.RotiereAchse(winkel);
-    }
+    // public void RotiereAchseJ3(float winkel)
+    // {
+    //     j3.RotiereAchse(winkel);
+    // }
 
-    public void RotiereAchseJ4(float winkel)
-    {
-        j4.RotiereAchse(winkel);
-    }
+    // public void RotiereAchseJ4(float winkel)
+    // {
+    //     j4.RotiereAchse(winkel);
+    // }
 
-    public void RotiereAchseJ5(float winkel)
-    {
-        j5.RotiereAchse(winkel);
-    }
+    // public void RotiereAchseJ5(float winkel)
+    // {
+    //     j5.RotiereAchse(winkel);
+    // }
 
 }

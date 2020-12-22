@@ -27,9 +27,12 @@ public class AchseV6 : MonoBehaviour
 
     public float AktuelleRotationDerAchse()
     {
-        float aktuelleRotationRads = articulation.jointPosition[0]; // Aktuelle Drehung der x Achse 
-        float aktuelleRoatationGrad = Mathf.Rad2Deg * aktuelleRotationRads; // Rotation in Grad umrechnen
-        return aktuelleRoatationGrad;
+        return articulation.xDrive.target;
+    }
+
+    public float GetVelocity()
+    {
+        return articulation.xDrive.targetVelocity;
     }
 
     // Rotiert um xx Grad um die x Achse
@@ -37,6 +40,7 @@ public class AchseV6 : MonoBehaviour
     {
         var drive = articulation.xDrive;
         drive.target = zielRotation;
+        drive.targetVelocity = 3.4f;
         articulation.xDrive = drive;
     }
 }

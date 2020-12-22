@@ -13,7 +13,7 @@ public class BecherManager : MonoBehaviour
     {
         if (other.gameObject.layer == 8)
         {
-            trefferTextfeld.text = "Punkte: " + punkte++;
+            //trefferTextfeld.text = "Punkte: " + punkte++;
             Destroy(other.gameObject);
         }
     }

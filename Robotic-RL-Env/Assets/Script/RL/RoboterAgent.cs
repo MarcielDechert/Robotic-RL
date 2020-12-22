@@ -25,6 +25,11 @@ public class RoboterAgent : Agent
     {
         area.Reset();
         Abwurfvorgang = false;
+
+        float[] sollgeschwindigkeit = new float[] { 180f, 180f, 180f, 180f, 180f };
+        float[] sollwinkel = new float[] { 180f, 0, 90f, 0, 0 };
+        robot.InStartposition(sollwinkel, sollgeschwindigkeit);
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -39,20 +44,21 @@ public class RoboterAgent : Agent
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        float geschwindigkeit = Mathf.Clamp(vectorAction[0], 0.5f, 1f);
-        float winkel = Mathf.Clamp(vectorAction[1], 0.5f, 1f);
-        robot.StarteAbwurfMitKI(geschwindigkeit, winkel);
+        float kigeschwindigkeit = Mathf.Clamp(vectorAction[0], 100f, 500f);
+        float kiwinkel = Mathf.Clamp(vectorAction[0], -80f, 120f);
+
+        float[] geschwindigkeit = new float[] { 180f, 180f, kigeschwindigkeit, 180f, 180f };
+        float[] winkel = new float[] { 180f, 0f, kiwinkel, 0f, 0f }; // Startposition J3 = 90 Abwurf = -90
+
+        robot.StarteAbwurf(winkel, geschwindigkeit);
+        Debug.Log("Befehl in StartAbwurf mit Geschwindigkeit: " + kigeschwindigkeit + " und Winkel: " + kiwinkel);
     }
 
     public void FixedUpdate()
     {
         var distanceToTarget = area.DistanceToTarget();
 
-        if(Abwurfvorgang == false && robot.abwurfStatus == AbwurfStatus.Neutral)
-        {
-            area.Reset();
-        }
-        else if(Abwurfvorgang == false && robot.abwurfStatus == AbwurfStatus.Abwurfbereit)
+        if(Abwurfvorgang == false && robot.abwurfStatus == RoboterStatus.Abwurfbereit)
         {
             RequestDecision();
             Abwurfvorgang = true;
@@ -73,5 +79,10 @@ public class RoboterAgent : Agent
             SetReward(-1.0f);
             EndEpisode();
         }
+    }
+
+    public override void Heuristic(float[] actionsOut)
+    {
+
     }
 }

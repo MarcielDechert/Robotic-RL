@@ -69,14 +69,22 @@ public class RoboterGUI : MonoBehaviour
         StartfButton.onClick.AddListener(StartButtonGedrueckt);
         abwurfButton.onClick.AddListener(AbwurfButtonGedrueckt);
 
+        inputJ1.text = "180";
+        inputJ2.text = "0";
+        inputJ3.text = "90";
+        inputJ4.text = "0";
+        inputJ5.text = "0";
+
+        wurfgeschwindigkeitJ3.text = "180";
+        abwurfwinkelJ3.text = "-90";
+
         //inputJ1.onValueChanged.AddListener(SetzeTextfelder);
 
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
         //abwurfwinkelJ3Text.text = "Abwurfwinkel J3: "+ roboterManager.AbwurfwinkelJ3 + " Grad";
         abwurfwinkelBallText.text = "Abwurfwinkel: " + roboterManager.AbwurfwinkelBall + " Grad";
         abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboterManager.Abwurfgeschwindigkeit + " ms";

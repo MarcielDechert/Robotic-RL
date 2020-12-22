@@ -22,7 +22,6 @@ public class RobotsLearningArea : MonoBehaviour
         r_robot = roboter.GetComponent<RoboterManagerV6>();
         r_target = target.GetComponent<Rigidbody>();
         r_ball = ball.GetComponent<BallManager>();
-        Reset();
     }
 
     void LateUpdate()
@@ -37,7 +36,6 @@ public class RobotsLearningArea : MonoBehaviour
         ball.velocity = Vector3.zero;
         ball.useGravity = false;
         r_ball.Kollidiert = false;
-        r_robot.abwurfStatus = AbwurfStatus.InStartposition;
     }
 
     public float DistanceToTarget()

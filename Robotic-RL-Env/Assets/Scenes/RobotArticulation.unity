@@ -938,8 +938,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 652372038}
-        m_TargetAssemblyTypeName: RoboterManagerV6, Assembly-CSharp
+      - m_Target: {fileID: 739366303}
+        m_TargetAssemblyTypeName: RoboterGUIV7, Assembly-CSharp
         m_MethodName: SetzeGeschwindikeitDerScene
         m_Mode: 0
         m_Arguments:
@@ -5011,7 +5011,6 @@ MonoBehaviour:
   j4: {fileID: 73980977}
   j5: {fileID: 1345605905}
   j6: {fileID: 1521988042}
-  toleranzwinkel: 4
   anzahlAchsen: 6
 --- !u!4 &1057232817 stripped
 Transform:

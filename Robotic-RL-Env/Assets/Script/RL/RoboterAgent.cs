@@ -29,16 +29,12 @@ public class RoboterAgent : Agent
         float[] sollgeschwindigkeit = new float[] { 180f, 180f, 180f, 180f, 180f, 180f };
         float[] sollwinkel = new float[] { 180f, 0, 90f, 0, 0, 0 };
         robot.InStartposition(sollwinkel, sollgeschwindigkeit);
-
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(area.DistanceToTarget());
-        foreach (var item in robot.IstRotation)
-        {
-            sensor.AddObservation(item);
-        }
+        sensor.AddObservation(robot.IstRotation);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -76,10 +72,9 @@ public class RoboterAgent : Agent
             SetReward(1 / distanceToTarget);
             EndEpisode();
         }
-
     }
 
-    public override void Heuristic(float[] actionsOut)
+    public override void Heuristic(in ActionBuffers actionsOut)
     {
 
     }

@@ -154,4 +154,8 @@ public class RoboterGUIV7 : MonoBehaviour
         roboterManager.StarteAbwurf(abwurfRotation,abwurfGeschwindigkeit);
 
     }
+    public void SetzeGeschwindikeitDerScene(float geschwindigkeit)
+    {
+        Time.timeScale = geschwindigkeit;
+    }
 }

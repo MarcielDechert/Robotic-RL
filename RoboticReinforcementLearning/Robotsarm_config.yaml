@@ -2,8 +2,8 @@ behaviors:
   RobotArticulation:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 10
-      buffer_size: 100
+      batch_size: 32
+      buffer_size: 256
       learning_rate: 3.0e-4
       beta: 5.0e-4
       epsilon: 0.2
@@ -12,12 +12,12 @@ behaviors:
       learning_rate_schedule: linear
     network_settings:
       normalize: false
-      hidden_units: 128
+      hidden_units: 256
       num_layers: 2
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 500000
-    time_horizon: 64
-    summary_freq: 10000
+    max_steps: 10000
+    time_horizon: 1
+    summary_freq: 20000

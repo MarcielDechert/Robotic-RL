@@ -11,13 +11,13 @@ public class RoboterAgent : Agent
     public GameObject g_area;
     private bool Abwurfvorgang = false;
 
-    RoboterManagerV6 robot;
+    RoboterControllerV7 robot;
     RobotsLearningArea area;
 
     // Start is called before the first frame update
     public override void Initialize()
     {
-        robot = g_roboter.GetComponent<RoboterManagerV6>();
+        robot = g_roboter.GetComponent<RoboterControllerV7>();
         area = g_area.GetComponent<RobotsLearningArea>();
     }
 
@@ -26,8 +26,8 @@ public class RoboterAgent : Agent
         area.Reset();
         Abwurfvorgang = false;
 
-        float[] sollgeschwindigkeit = new float[] { 180f, 180f, 180f, 180f, 180f };
-        float[] sollwinkel = new float[] { 180f, 0, 90f, 0, 0 };
+        float[] sollgeschwindigkeit = new float[] { 180f, 180f, 180f, 180f, 180f, 180f };
+        float[] sollwinkel = new float[] { 180f, 0, 90f, 0, 0, 0 };
         robot.InStartposition(sollwinkel, sollgeschwindigkeit);
 
     }
@@ -35,21 +35,23 @@ public class RoboterAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(area.DistanceToTarget());
-        sensor.AddObservation(robot.achsen[0].AktuelleRotationDerAchse());
-        sensor.AddObservation(robot.achsen[1].AktuelleRotationDerAchse());
-        sensor.AddObservation(robot.achsen[2].AktuelleRotationDerAchse());
-        sensor.AddObservation(robot.achsen[3].AktuelleRotationDerAchse());
-        sensor.AddObservation(robot.achsen[4].AktuelleRotationDerAchse());
+        foreach (var item in robot.IstRotation)
+        {
+            sensor.AddObservation(item);
+        }
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        float kigeschwindigkeit = Mathf.Clamp(vectorAction[0], 100f, 500f);
-        float kiwinkel = Mathf.Clamp(vectorAction[0], -80f, 120f);
+        var continuousActions = actionBuffers.ContinuousActions;
+        continuousActions[0] = (float)((continuousActions[0] / 2) + 0.5);
+        continuousActions[1] = (float)((continuousActions[1] / 2) + 0.5);
+        float kigeschwindigkeit = Mathf.Lerp(50f, 500f, continuousActions[0]);
+        float kiwinkel = Mathf.Lerp(-120f, 45f, continuousActions[1]);
+        Debug.Log("KI Übergabe: " + continuousActions[0] + " und Winkel: " + continuousActions[1]);
 
-        float[] geschwindigkeit = new float[] { 180f, 180f, kigeschwindigkeit, 180f, 180f };
-        float[] winkel = new float[] { 180f, 0f, kiwinkel, 0f, 0f }; // Startposition J3 = 90 Abwurf = -90
-
+        float[] geschwindigkeit = new float[] { 0, 0, kigeschwindigkeit, 0, 0, 0 };
+        float[] winkel = new float[] { 180f, 0f, kiwinkel, 0f, 0f, 0f }; // Startposition J3 = 90 Abwurf = -90
         robot.StarteAbwurf(winkel, geschwindigkeit);
         Debug.Log("Befehl in StartAbwurf mit Geschwindigkeit: " + kigeschwindigkeit + " und Winkel: " + kiwinkel);
     }
@@ -58,15 +60,15 @@ public class RoboterAgent : Agent
     {
         var distanceToTarget = area.DistanceToTarget();
 
-        if(Abwurfvorgang == false && robot.abwurfStatus == RoboterStatus.Abwurfbereit)
+        if(Abwurfvorgang == false && robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
             RequestDecision();
             Abwurfvorgang = true;
         }
 
-        if (distanceToTarget < 0.15f && area.r_ball.Kollidiert == true)
+        if (distanceToTarget < 0.05f && area.r_ball.Kollidiert == true)
         {
-            SetReward(100.0f);
+            SetReward(10.0f);
             EndEpisode();
         }
         else if (area.r_ball.Kollidiert == true)
@@ -74,11 +76,7 @@ public class RoboterAgent : Agent
             SetReward(1 / distanceToTarget);
             EndEpisode();
         }
-        else if (area.r_ball.transform.position.y < -10f)
-        {
-            SetReward(-1.0f);
-            EndEpisode();
-        }
+
     }
 
     public override void Heuristic(float[] actionsOut)

@@ -10,18 +10,18 @@ public class RobotsLearningArea : MonoBehaviour
     public Rigidbody ball;
     public GameObject Agent;
 
-    public RoboterManagerV6 r_robot;
+    public RoboterControllerV7 r_robot;
     public Rigidbody r_target;
-    public BallManager r_ball;
+    public BallControllerV7 r_ball;
 
 
     // Start is called before the first frame update
 
     void Start()
     {
-        r_robot = roboter.GetComponent<RoboterManagerV6>();
+        r_robot = roboter.GetComponent<RoboterControllerV7>();
         r_target = target.GetComponent<Rigidbody>();
-        r_ball = ball.GetComponent<BallManager>();
+        r_ball = ball.GetComponent<BallControllerV7>();
     }
 
     void LateUpdate()
@@ -32,8 +32,9 @@ public class RobotsLearningArea : MonoBehaviour
     public void Reset()
     {
         r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0, 0);
-        ball.transform.localPosition = new Vector3(0, 1f, 0);
+        ball.transform.localPosition = new Vector3(0, 2f, 0);
         ball.velocity = Vector3.zero;
+        ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
         r_ball.Kollidiert = false;
     }

@@ -19,6 +19,7 @@ public class RoboterControllerV7 : MonoBehaviour
     [SerializeField] private int anzahlAchsen = 6;
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
+    public RoboterStatus RoboterStatus { get => roboterStatus; set => roboterStatus = value; }
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
@@ -35,6 +36,7 @@ public class RoboterControllerV7 : MonoBehaviour
     private Vector3 letztePosition = Vector3.zero;
 
     private AchseV7[] achse;
+    public AchseV7[] Achse { get => achse; set => achse = value; }
 
     private float[] sollRotation;
 
@@ -53,17 +55,18 @@ public class RoboterControllerV7 : MonoBehaviour
     }
     void Init()
     {
+        List<AchseV7> AchsenListe = new List<AchseV7>();
         sollRotation = new float[anzahlAchsen];
         istRotation = new float[anzahlAchsen];
 
-        achse = new AchseV7[anzahlAchsen];
-
-        achse[0] = j1;
-        achse[1] = j2;
-        achse[2] = j3;
-        achse[3] = j4;
-        achse[4] = j5;
-        achse[5] = j6;
+        Achse = new AchseV7[anzahlAchsen];
+        AchsenListe.Add(j1);
+        Achse[0] = j1;
+        Achse[1] = j2;
+        Achse[2] = j3;
+        Achse[3] = j4;
+        Achse[4] = j5;
+        Achse[5] = j6;
         
         abwurfSignal = false;
         sollIst = false;
@@ -74,59 +77,58 @@ public class RoboterControllerV7 : MonoBehaviour
     {
         AktuelleRotationenAuslesen();
 
-        switch(roboterStatus)
+        switch(RoboterStatus)
         {
 
             case RoboterStatus.Neutral:
-                                        if(befehl == Befehl.Start)
-                                        {
-                                            roboterStatus = RoboterStatus.Faehrt;
-
-                                        }
-                                        break;
+                if(befehl == Befehl.Start)
+                {
+                    RoboterStatus = RoboterStatus.Faehrt;
+                }
+                break;
 
             case RoboterStatus.Faehrt:
-                                        if(sollIst){
-                                            if(abwurfSignal)
-                                            {
-                                                roboterStatus = RoboterStatus.Wirft;
-                                                //zeit = Time.deltaTime -zeit;
-                                                Debug.Log(zeit);
-                                                Abwurf();
-                                                WerteSetzen();
-                                            }
-                                            else
-                                            {
-                                                roboterStatus = RoboterStatus.Abwurfbereit;
-                                                WerteZurueckSetzen();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            BerechneAbwurfgeschwindigkeit();
-                                            RotiereAlleAchsen();
-                                           // zeit = Time.deltaTime;
-                                        }
-                                        break;
+                if(sollIst){
+                    if(abwurfSignal)
+                    {
+                        RoboterStatus = RoboterStatus.Wirft;
+                        //zeit = Time.deltaTime -zeit;
+                        Debug.Log(zeit);
+                        Abwurf();
+                        WerteSetzen();
+                    }
+                    else
+                    {
+                        RoboterStatus = RoboterStatus.Abwurfbereit;
+                        WerteZurueckSetzen();
+                    }
+                }
+                else
+                {
+                    BerechneAbwurfgeschwindigkeit();
+                    RotiereAlleAchsen();
+                    // zeit = Time.deltaTime;
+                }
+                break;
 
             case RoboterStatus.Abwurfbereit:
-                                        abwurfSignal = true;
-                                        if (befehl == Befehl.Abwurf)
-                                        {
-                                            sollIst = false;
-                                            roboterStatus = RoboterStatus.Faehrt;
-                                            zeit += Time.fixedDeltaTime;
-                                        }
-                                        break;
+                abwurfSignal = true;
+                if (befehl == Befehl.Abwurf)
+                {
+                    sollIst = false;
+                    RoboterStatus = RoboterStatus.Faehrt;
+                    zeit += Time.fixedDeltaTime;
+                }
+                break;
 
             case RoboterStatus.Wirft:
-                                        abwurfSignal = false;
-                                        if (befehl == Befehl.Start)
-                                        {
-                                            roboterStatus = RoboterStatus.Faehrt;
-                                            sollIst = false;
-                                        }
-                                        break;
+                abwurfSignal = false;
+                if (befehl == Befehl.Start)
+                {
+                    RoboterStatus = RoboterStatus.Faehrt;
+                    sollIst = false;
+                }
+                break;
         }
     }
 
@@ -158,7 +160,7 @@ public class RoboterControllerV7 : MonoBehaviour
     {
         for(int i = 0; i < anzahlAchsen; i++)
         {
-            achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
+            Achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
         }
     }
 
@@ -166,7 +168,7 @@ public class RoboterControllerV7 : MonoBehaviour
     {
         for(int i = 0; i < anzahlAchsen; i++)
         {
-            istRotation[i] = achse[i].AktuelleRotationDerAchse();
+            istRotation[i] = Achse[i].AktuelleRotationDerAchse();
         }
     }
 
@@ -177,7 +179,7 @@ public class RoboterControllerV7 : MonoBehaviour
        // abwurfgeschwindigkeitVector3 = (abwurfPosition.transform.position - letztePosition) / Time.fixedDeltaTime;
        // letztePosition = abwurfPosition.transform.position;
 
-        abwurfgeschwindigkeitVector3 = achse[anzahlAchsen-1].GetSpeed();
+        abwurfgeschwindigkeitVector3 = Achse[anzahlAchsen-1].GetSpeed();
 
     }
 
@@ -199,17 +201,17 @@ public class RoboterControllerV7 : MonoBehaviour
             {
                 if(istRotation[i] <= sollRotation[i] + toleranzwinkel && istRotation[i] >= sollRotation[i] - toleranzwinkel)
                 {
-                    achse[i].rotationState = RotationsRichtung.Neutral;
+                    Achse[i].rotationState = RotationsRichtung.Neutral;
                 }
                 else
                 {
                     if(istRotation[i] - sollRotation[i] < 0)
                     {
-                    achse[i].rotationState = RotationsRichtung.Positiv;
+                    Achse[i].rotationState = RotationsRichtung.Positiv;
                     }
                     else
                     {
-                    achse[i].rotationState = RotationsRichtung.Negativ;
+                    Achse[i].rotationState = RotationsRichtung.Negativ;
                     }
                 }
 
@@ -218,17 +220,17 @@ public class RoboterControllerV7 : MonoBehaviour
             {
                 if(istRotation[i] >= sollRotation[i] - toleranzwinkel && istRotation[i]<= sollRotation[i] + toleranzwinkel)
                 {
-                    achse[i].rotationState = RotationsRichtung.Neutral;
+                    Achse[i].rotationState = RotationsRichtung.Neutral;
                 }
                 else
                 {
                     if(istRotation[i] - sollRotation[i] < 0)
                     {
-                    achse[i].rotationState = RotationsRichtung.Positiv;
+                    Achse[i].rotationState = RotationsRichtung.Positiv;
                     }
                     else
                     {
-                    achse[i].rotationState = RotationsRichtung.Negativ;
+                    Achse[i].rotationState = RotationsRichtung.Negativ;
                     }
                 }
 
@@ -237,7 +239,7 @@ public class RoboterControllerV7 : MonoBehaviour
         bool fix = true;
         for(int i = 0; i < anzahlAchsen; i++)
         {
-            if(achse[i].rotationState != RotationsRichtung.Neutral)
+            if(Achse[i].rotationState != RotationsRichtung.Neutral)
             {
                 fix = false;
             }

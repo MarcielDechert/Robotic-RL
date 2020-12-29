@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CollisionWith { BecherInnen = 0, Becheraußen = 1, BecherBoden = 2, Boden = 3, Roboter = 4 };
+
 public class BallControllerV7 : MonoBehaviour
 {
     private bool kollidiert ;

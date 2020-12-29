@@ -36,6 +36,7 @@ public class AchseV7 : MonoBehaviour
     {
         var drive = articulation.xDrive;
         drive.target = zielRotation;
+        articulation.jointVelocity = new ArticulationReducedSpace(3.6f);
         articulation.xDrive = drive;
     }
 

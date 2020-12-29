@@ -6,7 +6,7 @@ from mlagents_envs.side_channel.engine_configuration_channel import EngineConfig
 
 channel = EngineConfigurationChannel()
 env = UnityEnvironment(file_name="../Robotic-RL-Env/Build/Robotic-RL-Env", seed=1, side_channels=[channel])
-channel.set_configuration_parameters(time_scale = 2.0)
+channel.set_configuration_parameters(time_scale = 1.0)
 
 env.reset()
 behavior_name = list(env.behavior_specs)[0]

@@ -12,16 +12,16 @@ public class RoboterAgent : Agent
     public GameObject ball;
     private bool Abwurfvorgang = false;
 
-    RoboterManagerV6 r_robot;
+    RoboterControllerV7 r_robot;
     Rigidbody r_target;
-    BallManager r_ball;
+    BallControllerV7 r_ball;
 
     // Start is called before the first frame update
     public override void Initialize()
     {
-        r_robot = roboter.GetComponent<RoboterManagerV6>();
+        r_robot = roboter.GetComponent<RoboterControllerV7>();
         r_target = target.GetComponent<Rigidbody>();
-        r_ball = ball.GetComponent<BallManager>();
+        r_ball = ball.GetComponent<BallControllerV7>();
     }
 
     public override void OnEpisodeBegin()

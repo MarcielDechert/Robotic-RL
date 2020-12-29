@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
 
 public class AchseV7 : MonoBehaviour
 {

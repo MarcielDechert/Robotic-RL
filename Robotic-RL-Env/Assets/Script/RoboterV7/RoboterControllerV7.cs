@@ -19,6 +19,7 @@ public class RoboterControllerV7 : MonoBehaviour
     [SerializeField] private int anzahlAchsen = 6;
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
+    public RoboterStatus RoboterStatus{ get => roboterStatus; set => roboterStatus = value; }
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
@@ -29,6 +30,7 @@ public class RoboterControllerV7 : MonoBehaviour
     public float AbwurfwinkelBall { get => abwurfwinkelBall; set => abwurfwinkelBall = value; }
 
     private AchseV7[] achse;
+    public AchseV7[] AchseV7{ get => achse; set => achse = value; }
 
     private List<AchseV7> achseV7s;
 
@@ -155,7 +157,7 @@ public class RoboterControllerV7 : MonoBehaviour
         // }
         for (int i = 0; i < anzahlAchsen; i++)
         {
-            sollRotation[i] = sollWinkel[i];
+            sollRotation[i] =  sollWinkel[i];
         }
     }
 
@@ -165,7 +167,7 @@ public class RoboterControllerV7 : MonoBehaviour
         {
             //achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
 
-            sollGeschwindigkeit[i] = sollRotaionsGeschwindigkeit[i];
+            sollGeschwindigkeit[i] =  sollRotaionsGeschwindigkeit[i];
         }
     }
 

@@ -42,10 +42,17 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private  GameObject roboter;
 
     [SerializeField] private  GameObject ball;
+
+    [SerializeField] private  LineRenderer flugbahn;
+
+    [SerializeField] private  int segmente = 10; 
     RoboterControllerV7 roboterManager;
 
     BallControllerV7 ballManager;
 
+
+    private Vector3 letzteBallposition = Vector3.zero;
+    private int count;
     private float[] startRotation;
     private float[] abwurfRotation;
     private float[] startGeschwindigkeit;
@@ -54,7 +61,7 @@ public class RoboterGUIV7 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        flugbahn = GetComponent<LineRenderer>();
         roboterManager = roboter.GetComponent<RoboterControllerV7>();
         ballManager = ball.GetComponent<BallControllerV7>();
 
@@ -76,6 +83,9 @@ public class RoboterGUIV7 : MonoBehaviour
         wurfgeschwindigkeitJ3.text = "500";         
         abwurfwinkelJ3.text = "-80";
 
+        flugbahn.positionCount = segmente;
+        count = 0;
+
         //inputJ1.onValueChanged.AddListener(SetzeTextfelder);
 
     }
@@ -83,18 +93,28 @@ public class RoboterGUIV7 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        abwurfwinkelBallText.text = "Abwurfwinkel: " + roboterManager.AbwurfwinkelBall + " Grad";
-        abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboterManager.Abwurfgeschwindigkeit + " ms";
-        einwurfwinkelText.text = "Einwurfwinkel: " + ballManager.Einwurfwinkel + " Grad";
-       
-        j1RotationText.text = "J1: "+ Mathf.Round(roboterManager.IstRotation[0]) + " Grad";
-        j2RotationText.text = "J2: "+ Mathf.Round(roboterManager.IstRotation[1]) + " Grad";
-        j3RotationText.text = "J3: "+ Mathf.Round(roboterManager.IstRotation[2]) + " Grad";
-        j4RotationText.text = "J4: "+ Mathf.Round(roboterManager.IstRotation[3]) + " Grad";
-        j5RotationText.text = "J5: "+ Mathf.Round(roboterManager.IstRotation[4]) + " Grad";
-       
-       
+        SetzeTextfelder();
+        FlugbahnZeichnen();
     }
+
+    private void FlugbahnZeichnen()
+    {
+
+        if(roboterManager.RoboterStatus == RoboterStatus.Wirft && count < segmente && ballManager.KollisionsStatus == KollisionsLayer.Roboter)
+        {
+            Debug.Log(count);
+            flugbahn.SetPosition(count, ball.transform.position);
+            letzteBallposition = ball.transform.position;
+            count++;
+        }
+        else if(roboterManager.RoboterStatus == RoboterStatus.Wirft && count < segmente && count > 0 )
+        {
+            flugbahn.SetPosition(count,letzteBallposition);
+            count++;
+        }
+
+    }
+    
     private void SetzeStartRotation()
     {
         startRotation[0] = float.Parse(inputJ1.text);
@@ -135,7 +155,18 @@ public class RoboterGUIV7 : MonoBehaviour
         abwurfGeschwindigkeit[5] = 500.0f;
     }
 
-    private void SetzeTextfelder(){
+    private void SetzeTextfelder()
+    {
+        
+        abwurfwinkelBallText.text = "Abwurfwinkel: " + roboterManager.AbwurfwinkelBall + " Grad";
+        abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboterManager.Abwurfgeschwindigkeit + " ms";
+        einwurfwinkelText.text = "Einwurfwinkel: " + ballManager.Einwurfwinkel + " Grad";
+       
+        j1RotationText.text = "J1: "+ Mathf.Round(roboterManager.AchseV7[0].AktuelleRotationDerAchse()) + " Grad";
+        j2RotationText.text = "J2: "+ Mathf.Round(roboterManager.AchseV7[1].AktuelleRotationDerAchse()) + " Grad";
+        j3RotationText.text = "J3: "+ Mathf.Round(roboterManager.AchseV7[2].AktuelleRotationDerAchse()) + " Grad";
+        j4RotationText.text = "J4: "+ Mathf.Round(roboterManager.AchseV7[3].AktuelleRotationDerAchse()) + " Grad";
+        j5RotationText.text = "J5: "+ Mathf.Round(roboterManager.AchseV7[4].AktuelleRotationDerAchse()) + " Grad";
 
     }
 
@@ -144,6 +175,7 @@ public class RoboterGUIV7 : MonoBehaviour
         SetzeStartRotation();
         SetzeStartGeschwindigkeit();
         roboterManager.InStartposition(startRotation,startGeschwindigkeit);
+        count = 0;
 
     }
 
@@ -157,5 +189,35 @@ public class RoboterGUIV7 : MonoBehaviour
     public void SetzeGeschwindikeitDerScene(float geschwindigkeit)
     {
         Time.timeScale = geschwindigkeit;
+    }
+
+    public void RotiereJ1(float winkel)
+    {
+        roboterManager.AchseV7[0].RotiereSofort(winkel);
+        inputJ1.text = ""+ winkel;
+    }
+
+    public void RotiereJ2(float winkel)
+    {
+        roboterManager.AchseV7[1].RotiereSofort(winkel);
+        inputJ2.text = ""+ winkel;
+    }
+
+    public void RotiereJ3(float winkel)
+    {
+        roboterManager.AchseV7[2].RotiereSofort(winkel);
+        inputJ3.text = ""+ winkel;
+    }
+
+    public void RotiereJ4(float winkel)
+    {
+        roboterManager.AchseV7[3].RotiereSofort(winkel);
+        inputJ4.text = ""+ winkel;
+    }
+
+    public void RotiereJ5(float winkel)
+    {
+        roboterManager.AchseV7[4].RotiereSofort(winkel);
+        inputJ5.text = ""+ winkel;
     }
 }

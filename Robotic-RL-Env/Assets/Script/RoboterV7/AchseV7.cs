@@ -65,6 +65,13 @@ public class AchseV7 : MonoBehaviour
         }
     }
 
+    public void RotiereSofort(float sollWinkel)
+    {
+        var drive = articulation.xDrive;
+        drive.target = sollWinkel;
+        articulation.xDrive = drive;
+    }
+
     // Rotiert um xx Grad um die x Achse
     public void RotiereAchseBis(float sollRotationsZiel, float sollRotaionsGeschwindigkeit)
     {

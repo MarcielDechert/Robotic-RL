@@ -5,6 +5,8 @@ public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Beche
 
 public class BallControllerV7 : MonoBehaviour
 {
+        
+    [SerializeField] private RoboterControllerV7 roboterManager;
     private bool kollidiert = false;
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
@@ -16,9 +18,17 @@ public class BallControllerV7 : MonoBehaviour
     private Vector3 ballgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
 
-    private float einwurfwinkel;
+    private float einwurfWinkel;
 
-    public float Einwurfwinkel { get => einwurfwinkel; set => einwurfwinkel = value; }
+    public float EinwurfWinkel { get => einwurfWinkel; set => einwurfWinkel = value; }
+
+    private float wurfweite;
+
+    public float Wurfweite { get => wurfweite; set => wurfweite = value; }
+
+    private void Start()
+    {
+    }
 
     private void FixedUpdate()
     {
@@ -35,11 +45,13 @@ public class BallControllerV7 : MonoBehaviour
             if (other.collider.gameObject.layer == 10)
             {
                 kollisionsStatus = KollisionsLayer.Wand;
+                wurfweite =  BerechneWurfweite();
                 Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
             }
             else if (other.collider.gameObject.layer == 11)
             {
                 kollisionsStatus = KollisionsLayer.Boden;
+                wurfweite =  BerechneWurfweite();
                 Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
             }
             else if (other.collider.gameObject.layer == 12)
@@ -55,11 +67,13 @@ public class BallControllerV7 : MonoBehaviour
             else if (other.collider.gameObject.layer == 14)
             {
                 kollisionsStatus = KollisionsLayer.Becherwand;
+                wurfweite =  BerechneWurfweite();
                 Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
             }
             else if (other.collider.gameObject.layer == 15)
             { 
                 kollisionsStatus = KollisionsLayer.Becherboden;
+                wurfweite =  BerechneWurfweite();
                 Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
             }
         }
@@ -71,7 +85,8 @@ public class BallControllerV7 : MonoBehaviour
 
         if (other.gameObject.layer == 16)
         {
-            einwurfwinkel = Mathf.Rad2Deg * Mathf.Acos(-ballgeschwindigkeit.y / ballgeschwindigkeit.magnitude);
+            einwurfWinkel = BerechneEinwurfwinkel();
+            wurfweite =  BerechneWurfweite();
             Debug.Log("Trigger erkannt");
         }
     }
@@ -82,6 +97,18 @@ public class BallControllerV7 : MonoBehaviour
         ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = this.transform.position;
         //Debug.Log(abwurfgeschwindigkeit);
+
+    }
+
+    private float BerechneEinwurfwinkel()
+    {
+        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(ballgeschwindigkeit.y) / ballgeschwindigkeit.magnitude);
+
+    }
+
+    private float BerechneWurfweite()
+    {
+        return Mathf.Abs(this.transform.position.x - roboterManager.AbwurfPunkt.x);
 
     }
 }

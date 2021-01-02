@@ -11,17 +11,18 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private Text abwurfwinkelBallText;
     [SerializeField] private Text abwurfwinkelJ3Text;
     [SerializeField] private Text einwurfwinkelText;
-    
+    [SerializeField] private Text wurfweiteText;
+
     [SerializeField] private Text j1RotationText;
-    
+
     [SerializeField] private Text j2RotationText;
-    
+
     [SerializeField] private Text j3RotationText;
-    
+
     [SerializeField] private Text j4RotationText;
-    
+
     [SerializeField] private Text j5RotationText;
-    
+
     [SerializeField] private Text j6RotationText;
 
     [SerializeField] private InputField inputJ1;
@@ -38,21 +39,21 @@ public class RoboterGUIV7 : MonoBehaviour
 
     [SerializeField] private InputField abwurfwinkelJ3;
 
+    [SerializeField] private Toggle toggleFlugbahn;
 
-    [SerializeField] private  GameObject roboter;
+    [SerializeField] private Dropdown dropdownModi;
 
-    [SerializeField] private  GameObject ball;
+    [SerializeField] private LineRenderer flugbahn;
 
-    [SerializeField] private  LineRenderer flugbahn;
+    [SerializeField] private int segmente = 10;
+    [SerializeField] private RoboterControllerV7 roboter;
 
-    [SerializeField] private  int segmente = 10; 
-    RoboterControllerV7 roboterManager;
-
-    BallControllerV7 ballManager;
+    [SerializeField] private BallControllerV7 ballRoboter;
 
 
     private Vector3 letzteBallposition = Vector3.zero;
     private int count;
+    private bool abwurfbereit;
     private float[] startRotation;
     private float[] abwurfRotation;
     private float[] startGeschwindigkeit;
@@ -61,9 +62,16 @@ public class RoboterGUIV7 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        flugbahn = GetComponent<LineRenderer>();
-        roboterManager = roboter.GetComponent<RoboterControllerV7>();
-        ballManager = ball.GetComponent<BallControllerV7>();
+
+        toggleFlugbahn.onValueChanged.AddListener(delegate
+        {
+            FlugbahnAktivieren(toggleFlugbahn);
+        });
+
+        dropdownModi.onValueChanged.AddListener(delegate
+        {
+            WechselModi(dropdownModi);
+        });
 
         startRotation = new float[6];
 
@@ -75,18 +83,20 @@ public class RoboterGUIV7 : MonoBehaviour
 
         StartfButton.onClick.AddListener(StartButtonGedrueckt);
         abwurfButton.onClick.AddListener(AbwurfButtonGedrueckt);
+
         inputJ1.text = "180";
         inputJ2.text = "0";
-        inputJ3.text = "80";         
-        inputJ4.text = "0";        
-        inputJ5.text = "60";          
-        wurfgeschwindigkeitJ3.text = "500";         
+        inputJ3.text = "80";
+        inputJ4.text = "0";
+        inputJ5.text = "60";
+        wurfgeschwindigkeitJ3.text = "500";
         abwurfwinkelJ3.text = "-80";
 
         flugbahn.positionCount = segmente;
+        flugbahn.enabled = false;
+        toggleFlugbahn.isOn = false;
+        abwurfbereit = false;
         count = 0;
-
-        //inputJ1.onValueChanged.AddListener(SetzeTextfelder);
 
     }
 
@@ -100,21 +110,25 @@ public class RoboterGUIV7 : MonoBehaviour
     private void FlugbahnZeichnen()
     {
 
-        if(roboterManager.RoboterStatus == RoboterStatus.Wirft && count < segmente && ballManager.KollisionsStatus == KollisionsLayer.Roboter)
+        if (roboter.RoboterStatus == RoboterStatus.Wirft && count < segmente && abwurfbereit)
         {
-            Debug.Log(count);
-            flugbahn.SetPosition(count, ball.transform.position);
-            letzteBallposition = ball.transform.position;
-            count++;
-        }
-        else if(roboterManager.RoboterStatus == RoboterStatus.Wirft && count < segmente && count > 0 )
-        {
-            flugbahn.SetPosition(count,letzteBallposition);
+            flugbahn.SetPosition(count, ballRoboter.transform.position);
+            letzteBallposition = ballRoboter.transform.position;
             count++;
         }
 
     }
-    
+
+    private void ResetFlugbahn()
+    {
+        for (int i = 0; i < segmente; i++)
+        {
+            flugbahn.SetPosition(i, Vector3.zero);
+        }
+        abwurfbereit = false;
+        count = 0;
+    }
+
     private void SetzeStartRotation()
     {
         startRotation[0] = float.Parse(inputJ1.text);
@@ -157,16 +171,17 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeTextfelder()
     {
-        
-        abwurfwinkelBallText.text = "Abwurfwinkel: " + roboterManager.AbwurfwinkelBall + " Grad";
-        abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboterManager.Abwurfgeschwindigkeit + " ms";
-        einwurfwinkelText.text = "Einwurfwinkel: " + ballManager.Einwurfwinkel + " Grad";
-       
-        j1RotationText.text = "J1: "+ Mathf.Round(roboterManager.AchseV7[0].AktuelleRotationDerAchse()) + " Grad";
-        j2RotationText.text = "J2: "+ Mathf.Round(roboterManager.AchseV7[1].AktuelleRotationDerAchse()) + " Grad";
-        j3RotationText.text = "J3: "+ Mathf.Round(roboterManager.AchseV7[2].AktuelleRotationDerAchse()) + " Grad";
-        j4RotationText.text = "J4: "+ Mathf.Round(roboterManager.AchseV7[3].AktuelleRotationDerAchse()) + " Grad";
-        j5RotationText.text = "J5: "+ Mathf.Round(roboterManager.AchseV7[4].AktuelleRotationDerAchse()) + " Grad";
+
+        abwurfwinkelBallText.text = "Abwurfwinkel: " + roboter.AbwurfwinkelBall + " Grad";
+        abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboter.Abwurfgeschwindigkeit + " ms";
+        einwurfwinkelText.text = "Einwurfwinkel: " + ballRoboter.EinwurfWinkel + " Grad";
+        wurfweiteText.text = "Wurfweite: " + ballRoboter.Wurfweite + " m";
+
+        j1RotationText.text = "J1: " + Mathf.Round(roboter.AchseV7[0].AktuelleRotationDerAchse()) + " Grad";
+        j2RotationText.text = "J2: " + Mathf.Round(roboter.AchseV7[1].AktuelleRotationDerAchse()) + " Grad";
+        j3RotationText.text = "J3: " + Mathf.Round(roboter.AchseV7[2].AktuelleRotationDerAchse()) + " Grad";
+        j4RotationText.text = "J4: " + Mathf.Round(roboter.AchseV7[3].AktuelleRotationDerAchse()) + " Grad";
+        j5RotationText.text = "J5: " + Mathf.Round(roboter.AchseV7[4].AktuelleRotationDerAchse()) + " Grad";
 
     }
 
@@ -174,8 +189,8 @@ public class RoboterGUIV7 : MonoBehaviour
     {
         SetzeStartRotation();
         SetzeStartGeschwindigkeit();
-        roboterManager.InStartposition(startRotation,startGeschwindigkeit);
-        count = 0;
+        roboter.InStartposition(startRotation, startGeschwindigkeit);
+        ResetFlugbahn();
 
     }
 
@@ -183,8 +198,39 @@ public class RoboterGUIV7 : MonoBehaviour
     {
         SetzeAbwurfRotation();
         SetzeAbwurfGeschwindigkeit();
-        roboterManager.StarteAbwurf(abwurfRotation,abwurfGeschwindigkeit);
+        roboter.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
+        abwurfbereit = true;
 
+    }
+
+    private void FlugbahnAktivieren(Toggle change)
+    {
+        if (change.isOn)
+        {
+            flugbahn.enabled = true;
+        }
+        else
+        {
+            flugbahn.enabled = false;
+        }
+
+    }
+
+    private void WechselModi(Dropdown change)
+    {
+        switch (change.value)
+        {
+            case 0:
+                Debug.Log("Manuell");
+                // Skripte ausschalten
+                break;
+            case 1:
+                Debug.Log("KI");
+                // Skripte einschalten
+                break;
+            default:
+                break;
+        }
     }
     public void SetzeGeschwindikeitDerScene(float geschwindigkeit)
     {
@@ -193,31 +239,31 @@ public class RoboterGUIV7 : MonoBehaviour
 
     public void RotiereJ1(float winkel)
     {
-        roboterManager.AchseV7[0].RotiereSofort(winkel);
-        inputJ1.text = ""+ winkel;
+        roboter.AchseV7[0].RotiereSofort(winkel);
+        inputJ1.text = "" + winkel;
     }
 
     public void RotiereJ2(float winkel)
     {
-        roboterManager.AchseV7[1].RotiereSofort(winkel);
-        inputJ2.text = ""+ winkel;
+        roboter.AchseV7[1].RotiereSofort(winkel);
+        inputJ2.text = "" + winkel;
     }
 
     public void RotiereJ3(float winkel)
     {
-        roboterManager.AchseV7[2].RotiereSofort(winkel);
-        inputJ3.text = ""+ winkel;
+        roboter.AchseV7[2].RotiereSofort(winkel);
+        inputJ3.text = "" + winkel;
     }
 
     public void RotiereJ4(float winkel)
     {
-        roboterManager.AchseV7[3].RotiereSofort(winkel);
-        inputJ4.text = ""+ winkel;
+        roboter.AchseV7[3].RotiereSofort(winkel);
+        inputJ4.text = "" + winkel;
     }
 
     public void RotiereJ5(float winkel)
     {
-        roboterManager.AchseV7[4].RotiereSofort(winkel);
-        inputJ5.text = ""+ winkel;
+        roboter.AchseV7[4].RotiereSofort(winkel);
+        inputJ5.text = "" + winkel;
     }
 }

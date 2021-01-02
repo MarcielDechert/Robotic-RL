@@ -23,6 +23,8 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
+    private Vector3 abwurfPunkt;
+    public Vector3 AbwurfPunkt { get => abwurfPunkt; set => abwurfPunkt = value; }
     private float abwurfgeschwindigkeit;
     public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
 
@@ -185,6 +187,7 @@ public class RoboterControllerV7 : MonoBehaviour
         ball.MovePosition(abwurfPosition.position);
         ball.useGravity = true;
         ball.velocity = (abwurfgeschwindigkeitVector3);
+        abwurfPunkt = abwurfPosition.position;
     }
     private void RotiereAlleAchsen()
     {
@@ -217,7 +220,7 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private float BerechneAbwurfwinkel()
     {
-        return Mathf.Rad2Deg * Mathf.Acos(-abwurfgeschwindigkeitVector3.x / abwurfgeschwindigkeitVector3.magnitude);
+        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(abwurfgeschwindigkeitVector3.y) / abwurfgeschwindigkeitVector3.magnitude);
     }
 
     public void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit)

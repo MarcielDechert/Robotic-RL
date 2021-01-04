@@ -5,8 +5,8 @@ public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
 
 public class AchseV7 : MonoBehaviour
 {
-    public float achsengeschwindigkeit = 30.0f; // Grad/Frame
-    private float sollRotations = 30.0f; // Grad/Frame
+    public float achsengeschwindigkeit = 30.0f; // Grad/Sekunde
+    private float sollRotation = 30.0f;
 
     public RotationsRichtung rotationState = RotationsRichtung.Neutral;
     private ArticulationBody articulation;
@@ -23,7 +23,7 @@ public class AchseV7 : MonoBehaviour
         {
             float rotationAenderung = (float)rotationState * achsengeschwindigkeit * Time.fixedDeltaTime;
             float rotationZiel = AktuelleRotationDerAchse() + rotationAenderung;
-            RotiereAchse(rotationZiel,sollRotations);
+            RotiereAchse(rotationZiel, sollRotation);
         }
 
     }
@@ -36,9 +36,9 @@ public class AchseV7 : MonoBehaviour
     // Rotiert um xx Grad um die x Achse
     private void RotiereAchse(float zielRotation, float sollRotation)
     {
-        if(rotationState == RotationsRichtung.Negativ)
+        if (rotationState == RotationsRichtung.Negativ)
         {
-            if(AktuelleRotationDerAchse() <= sollRotation)
+            if (AktuelleRotationDerAchse() <= sollRotation)
             {
                 rotationState = RotationsRichtung.Neutral;
             }
@@ -51,7 +51,7 @@ public class AchseV7 : MonoBehaviour
         }
         else
         {
-            if(AktuelleRotationDerAchse() >= sollRotation)
+            if (AktuelleRotationDerAchse() >= sollRotation)
             {
                 rotationState = RotationsRichtung.Neutral;
             }
@@ -65,12 +65,19 @@ public class AchseV7 : MonoBehaviour
         }
     }
 
+    public void RotiereSofort(float sollWinkel)
+    {
+        var drive = articulation.xDrive;
+        drive.target = sollWinkel;
+        articulation.xDrive = drive;
+    }
+
     // Rotiert um xx Grad um die x Achse
     public void RotiereAchseBis(float sollRotationsZiel, float sollRotaionsGeschwindigkeit)
     {
         achsengeschwindigkeit = sollRotaionsGeschwindigkeit;
-        sollRotations = sollRotationsZiel;
-        if( AktuelleRotationDerAchse() - sollRotationsZiel < 0)
+        sollRotation = sollRotationsZiel;
+        if (AktuelleRotationDerAchse() - sollRotationsZiel < 0)
         {
             rotationState = RotationsRichtung.Positiv;
         }
@@ -78,7 +85,7 @@ public class AchseV7 : MonoBehaviour
         {
             rotationState = RotationsRichtung.Negativ;
         }
-       
+
     }
 
     public Vector3 GetSpeed()

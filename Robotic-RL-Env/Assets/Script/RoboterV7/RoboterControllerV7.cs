@@ -19,10 +19,12 @@ public class RoboterControllerV7 : MonoBehaviour
     [SerializeField] private int anzahlAchsen = 6;
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
-    public RoboterStatus RoboterStatus { get => roboterStatus; }
+    public RoboterStatus RoboterStatus { get => roboterStatus; set => roboterStatus = value; }
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
+    private Vector3 abwurfPunkt;
+    public Vector3 AbwurfPunkt { get => abwurfPunkt; set => abwurfPunkt = value; }
     private float abwurfgeschwindigkeit;
     public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
 
@@ -30,6 +32,7 @@ public class RoboterControllerV7 : MonoBehaviour
     public float AbwurfwinkelBall { get => abwurfwinkelBall; set => abwurfwinkelBall = value; }
 
     private AchseV7[] achse;
+    public AchseV7[] AchseV7 { get => achse; set => achse = value; }
 
     private List<AchseV7> achseV7s;
 
@@ -39,8 +42,11 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private float[] istRotation;
     public float[] IstRotation { get => istRotation; set => istRotation = value; }
-
     private bool abwurfSignal;
+
+    private Vector3 letztePosition;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +58,14 @@ public class RoboterControllerV7 : MonoBehaviour
         sollRotation = new float[anzahlAchsen];
         istRotation = new float[anzahlAchsen];
         sollGeschwindigkeit = new float[anzahlAchsen];
+
+        // achseV7s = new List<AchseV7>();
+        // achseV7s.Add(j1);
+        // achseV7s.Add(j2);
+        // achseV7s.Add(j3);
+        // achseV7s.Add(j4);
+        // achseV7s.Add(j5);
+        // achseV7s.Add(j6);
 
         achse = new AchseV7[anzahlAchsen];
 
@@ -68,7 +82,7 @@ public class RoboterControllerV7 : MonoBehaviour
     private void FixedUpdate()
     {
 
-        switch (RoboterStatus)
+        switch (roboterStatus)
         {
 
             case RoboterStatus.Neutral:
@@ -140,6 +154,11 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private void SetzeSollrotation(float[] sollWinkel)
     {
+        // foreach (var item in achseV7s)
+        // {
+
+
+        // }
         for (int i = 0; i < anzahlAchsen; i++)
         {
             sollRotation[i] = sollWinkel[i];
@@ -150,6 +169,8 @@ public class RoboterControllerV7 : MonoBehaviour
     {
         for (int i = 0; i < anzahlAchsen; i++)
         {
+            //achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
+
             sollGeschwindigkeit[i] = sollRotaionsGeschwindigkeit[i];
         }
     }
@@ -157,9 +178,9 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private void BerechneAbwurfgeschwindigkeit()
     {
-
-        abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
-
+        abwurfgeschwindigkeitVector3 = (abwurfPosition.position - letztePosition) / Time.fixedDeltaTime;
+        letztePosition = abwurfPosition.position;
+        //abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
     }
 
     private void Abwurf()
@@ -168,6 +189,7 @@ public class RoboterControllerV7 : MonoBehaviour
         ball.MovePosition(abwurfPosition.position);
         ball.useGravity = true;
         ball.velocity = (abwurfgeschwindigkeitVector3);
+        abwurfPunkt = abwurfPosition.position;
     }
     private void RotiereAlleAchsen()
     {
@@ -195,9 +217,11 @@ public class RoboterControllerV7 : MonoBehaviour
         return sollIst;
     }
 
+
+
     private float BerechneAbwurfwinkel()
     {
-        return Mathf.Rad2Deg * Mathf.Acos(-abwurfgeschwindigkeitVector3.x / abwurfgeschwindigkeitVector3.magnitude);
+        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(abwurfgeschwindigkeitVector3.y) / abwurfgeschwindigkeitVector3.magnitude);
     }
 
     public void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit)

@@ -19,6 +19,7 @@ public class RoboterControllerV7 : MonoBehaviour
     [SerializeField] private int anzahlAchsen = 6;
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
+    public RoboterStatus RoboterStatus { get => roboterStatus; }
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
@@ -38,9 +39,8 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private float[] istRotation;
     public float[] IstRotation { get => istRotation; set => istRotation = value; }
+
     private bool abwurfSignal;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -52,14 +52,6 @@ public class RoboterControllerV7 : MonoBehaviour
         sollRotation = new float[anzahlAchsen];
         istRotation = new float[anzahlAchsen];
         sollGeschwindigkeit = new float[anzahlAchsen];
-
-        // achseV7s = new List<AchseV7>();
-        // achseV7s.Add(j1);
-        // achseV7s.Add(j2);
-        // achseV7s.Add(j3);
-        // achseV7s.Add(j4);
-        // achseV7s.Add(j5);
-        // achseV7s.Add(j6);
 
         achse = new AchseV7[anzahlAchsen];
 
@@ -76,7 +68,7 @@ public class RoboterControllerV7 : MonoBehaviour
     private void FixedUpdate()
     {
 
-        switch (roboterStatus)
+        switch (RoboterStatus)
         {
 
             case RoboterStatus.Neutral:
@@ -148,11 +140,6 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private void SetzeSollrotation(float[] sollWinkel)
     {
-        // foreach (var item in achseV7s)
-        // {
-
-
-        // }
         for (int i = 0; i < anzahlAchsen; i++)
         {
             sollRotation[i] = sollWinkel[i];
@@ -163,8 +150,6 @@ public class RoboterControllerV7 : MonoBehaviour
     {
         for (int i = 0; i < anzahlAchsen; i++)
         {
-            //achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
-
             sollGeschwindigkeit[i] = sollRotaionsGeschwindigkeit[i];
         }
     }
@@ -208,10 +193,7 @@ public class RoboterControllerV7 : MonoBehaviour
             sollIst = true;
         }
         return sollIst;
-
     }
-
-
 
     private float BerechneAbwurfwinkel()
     {

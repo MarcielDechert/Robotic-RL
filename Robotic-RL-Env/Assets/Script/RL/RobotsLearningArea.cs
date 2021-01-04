@@ -5,42 +5,36 @@ using UnityEngine;
 public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
-    public Transform roboter;
+    public GameObject roboter;
     public Rigidbody target;
     public Rigidbody ball;
-    public GameObject Agent;
 
-    public RoboterControllerV7 r_robot;
-    public Rigidbody r_target;
-    public BallControllerV7 r_ball;
+    private RoboterControllerV7 r_robot;
+    private BallControllerV7 r_ball;
+
+    public BallControllerV7 R_ball { get => r_ball; set => r_ball = value; }
 
 
     // Start is called before the first frame update
-
     void Start()
     {
         r_robot = roboter.GetComponent<RoboterControllerV7>();
-        r_target = target.GetComponent<Rigidbody>();
         r_ball = ball.GetComponent<BallControllerV7>();
-    }
-
-    void LateUpdate()
-    {
-        //Agent.GetComponent<RoboterAgent>().enabled = true;
     }
 
     public void Reset()
     {
-        r_target.transform.localPosition = new Vector3((float)(-1 * (Random.value + 0.3)), 0, 0);
+        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
         ball.transform.localPosition = new Vector3(0, 2f, 0);
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
         r_ball.Kollidiert = false;
+        r_ball.KollisionenListe.Clear();
     }
 
     public float DistanceToTarget()
     {
-        return Vector3.Distance(r_robot.transform.position, r_target.position);
+        return Vector3.Distance(r_robot.transform.position, target.position);
     }
 }

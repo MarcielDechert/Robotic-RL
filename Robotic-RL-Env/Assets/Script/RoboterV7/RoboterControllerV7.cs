@@ -4,11 +4,11 @@ using UnityEngine;
 public enum RoboterStatus { Neutral = 0, Abwurfbereit = 1, Wirft = 2, Faehrt = 3, Stopp = -1 };
 public enum Befehl { Neutral = 0, Abwurf = 1, Start = 2 };
 
-public class RoboterControllerV7 : MonoBehaviour
+public class RoboterControllerV7 : RoboterController
 {
-
-    [SerializeField] private Rigidbody ball;
     [SerializeField] private Transform abwurfPosition;
+    [SerializeField] private RobotsLearningArea area;
+    public Transform AbwurfPosition { get => abwurfPosition; set => abwurfPosition = value; }
 
     [SerializeField] private AchseV7 j1;
     [SerializeField] private AchseV7 j2;
@@ -23,8 +23,7 @@ public class RoboterControllerV7 : MonoBehaviour
 
     private Befehl befehl = Befehl.Neutral;
     private Vector3 abwurfgeschwindigkeitVector3;
-    private Vector3 abwurfPunkt;
-    public Vector3 AbwurfPunkt { get => abwurfPunkt; set => abwurfPunkt = value; }
+    public Vector3  AbwurfgeschwindigkeitVector3 { get => abwurfgeschwindigkeitVector3; set => abwurfgeschwindigkeitVector3 = value; }
     private float abwurfgeschwindigkeit;
     public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
 
@@ -79,7 +78,7 @@ public class RoboterControllerV7 : MonoBehaviour
         abwurfSignal = false;
     }
 
-    private void FixedUpdate()
+    public void Step()
     {
 
         switch (roboterStatus)
@@ -105,7 +104,7 @@ public class RoboterControllerV7 : MonoBehaviour
                     else
                     {
                         roboterStatus = RoboterStatus.Abwurfbereit;
-                        WerteZurueckSetzen();
+                        area.Reset();
                     }
                 }
                 else
@@ -134,16 +133,6 @@ public class RoboterControllerV7 : MonoBehaviour
                 }
                 break;
         }
-    }
-
-    private void WerteZurueckSetzen()
-    {
-        abwurfgeschwindigkeitVector3 = Vector3.zero;
-        abwurfgeschwindigkeit = 0.0f;
-        abwurfwinkelBall = 0.0f;
-        ball.velocity = Vector3.zero;
-        ball.angularVelocity = Vector3.zero;
-        ball.useGravity = false;
     }
 
     private void WerteSetzen()
@@ -183,13 +172,13 @@ public class RoboterControllerV7 : MonoBehaviour
         //abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
     }
 
-    private void Abwurf()
+    public override void Abwurf()
     {
         Debug.Log("Abwurf");
-        ball.MovePosition(abwurfPosition.position);
-        ball.useGravity = true;
-        ball.velocity = (abwurfgeschwindigkeitVector3);
-        abwurfPunkt = abwurfPosition.position;
+        area.R_ball.GetComponent<Rigidbody>().MovePosition(abwurfPosition.position);
+        area.R_ball.GetComponent<Rigidbody>().useGravity = true;
+        area.R_ball.GetComponent<Rigidbody>().velocity = (abwurfgeschwindigkeitVector3);
+        //abwurfPunkt = abwurfPosition.position;
     }
     private void RotiereAlleAchsen()
     {

@@ -5,8 +5,7 @@ public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Beche
 
 public class BallControllerV7 : MonoBehaviour
 {
-
-    [SerializeField] private RoboterControllerV7 roboterManager;
+    [SerializeField] private RobotsLearningArea area;
     private bool kollidiert = false;
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
@@ -14,19 +13,19 @@ public class BallControllerV7 : MonoBehaviour
     private KollisionsLayer kollisionsStatus = KollisionsLayer.Neutral;
     public KollisionsLayer KollisionsStatus { get => kollisionsStatus; set => kollisionsStatus = value; }
 
+    private IList<KollisionsLayer> kollisionsListe = new List<KollisionsLayer>();
+    public IList<KollisionsLayer> KollisionsListe { get => kollisionsListe; set => kollisionsListe = value; }
 
     private Vector3 ballgeschwindigkeit;
     private Vector3 letztePosition = Vector3.zero;
 
     private float einwurfWinkel;
-
     public float EinwurfWinkel { get => einwurfWinkel; set => einwurfWinkel = value; }
-
-    private float wurfweite;
-
-    public float Wurfweite { get => wurfweite; set => wurfweite = value; }
-
-    private void FixedUpdate()
+    private void Start()
+    {
+        
+    }
+    public void Step()
     {
         BerechneBallgeschwindigkeit();
     }
@@ -37,70 +36,55 @@ public class BallControllerV7 : MonoBehaviour
         if (other.gameObject.layer != 0)
         {
             kollidiert = true;
+            area.BerechneAbwurfhoehe();
+            area.BerechneWurfweite();
 
-            if (other.collider.gameObject.layer == 10)
+            if (other.collider.gameObject.layer == 10 && kollisionsListe.Contains(KollisionsLayer.Wand) == false)
             {
-                kollisionsStatus = KollisionsLayer.Wand;
-                wurfweite = BerechneWurfweite();
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Wand);
             }
-            else if (other.collider.gameObject.layer == 11)
+            else if (other.collider.gameObject.layer == 11 && kollisionsListe.Contains(KollisionsLayer.Boden) == false)
             {
-                kollisionsStatus = KollisionsLayer.Boden;
-                wurfweite = BerechneWurfweite();
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Boden);
             }
-            else if (other.collider.gameObject.layer == 12)
+            else if (other.collider.gameObject.layer == 12 && kollisionsListe.Contains(KollisionsLayer.Decke) == false)
             {
-                kollisionsStatus = KollisionsLayer.Decke;
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Decke);
             }
-            else if (other.collider.gameObject.layer == 13)
+            else if (other.collider.gameObject.layer == 13 && kollisionsListe.Contains(KollisionsLayer.Roboter) == false)
             {
-                kollisionsStatus = KollisionsLayer.Roboter;
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Roboter);
             }
-            else if (other.collider.gameObject.layer == 14)
+            else if (other.collider.gameObject.layer == 14 && kollisionsListe.Contains(KollisionsLayer.Becherwand) == false)
             {
-                kollisionsStatus = KollisionsLayer.Becherwand;
-                wurfweite = BerechneWurfweite();
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Becherwand);
             }
-            else if (other.collider.gameObject.layer == 15)
+            else if (other.collider.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
             {
-                kollisionsStatus = KollisionsLayer.Becherboden;
-                wurfweite = BerechneWurfweite();
-                Debug.Log("Kollision mit " + other.collider.gameObject.name + " erkannt");
+                kollisionsListe.Add(KollisionsLayer.Becherboden);
             }
         }
-
     }
 
     void OnTriggerEnter(Collider other)
     {
-
-        if (other.gameObject.layer == 16)
+        if (other.gameObject.layer == 16 && kollisionsListe.Contains(KollisionsLayer.Einwurfzone) == false)
         {
+            kollisionsListe.Add(KollisionsLayer.Einwurfzone);
             einwurfWinkel = BerechneEinwurfwinkel();
-            wurfweite = BerechneWurfweite();
-            Debug.Log("Trigger erkannt");
+            area.BerechneWurfweite();
+            area.BerechneAbwurfhoehe();
         }
     }
 
     private void BerechneBallgeschwindigkeit()
     {
-        // aktuelle Geschwindigkeit des Balls
         ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = this.transform.position;
     }
 
     private float BerechneEinwurfwinkel()
     {
-        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(ballgeschwindigkeit.y) / ballgeschwindigkeit.magnitude);
-    }
-
-    private float BerechneWurfweite()
-    {
-        return Mathf.Abs(this.transform.position.x - roboterManager.AbwurfPunkt.x);
+        return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(ballgeschwindigkeit.y) / ballgeschwindigkeit.magnitude));
     }
 }

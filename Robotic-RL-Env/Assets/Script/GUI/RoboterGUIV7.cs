@@ -12,6 +12,7 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private Text abwurfwinkelJ3Text;
     [SerializeField] private Text einwurfwinkelText;
     [SerializeField] private Text wurfweiteText;
+    [SerializeField] private Text abwurfhoeheText;
 
     [SerializeField] private Text j1RotationText;
 
@@ -57,12 +58,9 @@ public class RoboterGUIV7 : MonoBehaviour
 
     [SerializeField] private LineRenderer flugbahn;
 
-    [SerializeField] private int segmente = 10;
-    [SerializeField] private RoboterControllerV7 roboter;
+    [SerializeField] private int segmente = 100;
 
-    [SerializeField] private BallControllerV7 ballRoboter;
-
-
+    [SerializeField] private RobotsLearningArea area;
     private Vector3 letzteBallposition = Vector3.zero;
     private int count;
     private bool abwurfbereit;
@@ -70,6 +68,8 @@ public class RoboterGUIV7 : MonoBehaviour
     private float[] abwurfRotation;
     private float[] startGeschwindigkeit;
     private float[] abwurfGeschwindigkeit;
+
+    private AchseV7[] achsen;
 
     // Start is called before the first frame update
     void Start()
@@ -144,11 +144,13 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleFlugbahn.isOn = false;
         abwurfbereit = false;
         count = 0;
+        
+        achsen = area.R_robot.GetAchsen();
 
     }
 
     // Update is called once per frame
-    void Update()
+    public void Step()
     {
         SetzeTextfelder();
         FlugbahnZeichnen();
@@ -157,7 +159,7 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SliderAktivieren()
     {
-        if (roboter.RoboterStatus == RoboterStatus.Abwurfbereit)
+        if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
             sliderJ1.enabled = true;
             sliderJ2.enabled = true;
@@ -177,10 +179,10 @@ public class RoboterGUIV7 : MonoBehaviour
     private void FlugbahnZeichnen()
     {
 
-        if (roboter.RoboterStatus == RoboterStatus.Wirft && count < segmente && abwurfbereit)
+        if (area.R_robot.RoboterStatus == RoboterStatus.Wirft && count < segmente && abwurfbereit)
         {
-            flugbahn.SetPosition(count, ballRoboter.transform.position);
-            letzteBallposition = ballRoboter.transform.position;
+            flugbahn.SetPosition(count, area.R_ball.transform.position);
+            letzteBallposition = area.R_ball.transform.position;
             count++;
         }
 
@@ -238,26 +240,28 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeTextfelder()
     {
-        if (roboter.RoboterStatus == RoboterStatus.Abwurfbereit)
+        if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
 
             abwurfwinkelBallText.text = "Abwurfwinkel: 0.0 Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: 0.0 ms";
             einwurfwinkelText.text = "Einwurfwinkel: 0.0 Grad";
             wurfweiteText.text = "Wurfweite: 0.0 m";
+            abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
         }else
         {
-            abwurfwinkelBallText.text = "Abwurfwinkel: " + roboter.AbwurfwinkelBall + " Grad";
-            abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + roboter.Abwurfgeschwindigkeit + " ms";
-            einwurfwinkelText.text = "Einwurfwinkel: " + ballRoboter.EinwurfWinkel + " Grad";
-            wurfweiteText.text = "Wurfweite: " + ballRoboter.Wurfweite + " m";
+            abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfwinkelBall + " Grad";
+            abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.Abwurfgeschwindigkeit + " ms";
+            einwurfwinkelText.text = "Einwurfwinkel: " + area.R_ball.EinwurfWinkel + " Grad";
+            wurfweiteText.text = "Wurfweite: " + area.Wurfweite + " m";
+            abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
         }
 
-        j1RotationText.text = "J1: " + Mathf.Round(roboter.AchseV7[0].AktuelleRotationDerAchse()) + " Grad";
-        j2RotationText.text = "J2: " + Mathf.Round(roboter.AchseV7[1].AktuelleRotationDerAchse()) + " Grad";
-        j3RotationText.text = "J3: " + Mathf.Round(roboter.AchseV7[2].AktuelleRotationDerAchse()) + " Grad";
-        j4RotationText.text = "J4: " + Mathf.Round(roboter.AchseV7[3].AktuelleRotationDerAchse()) + " Grad";
-        j5RotationText.text = "J5: " + Mathf.Round(roboter.AchseV7[4].AktuelleRotationDerAchse()) + " Grad";
+        j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
+        j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
+        j3RotationText.text = "J3: " + Mathf.Round(achsen[2].AktuelleRotationDerAchse()) + " Grad";
+        j4RotationText.text = "J4: " + Mathf.Round(achsen[3].AktuelleRotationDerAchse()) + " Grad";
+        j5RotationText.text = "J5: " + Mathf.Round(achsen[4].AktuelleRotationDerAchse()) + " Grad";
 
     }
 
@@ -265,7 +269,7 @@ public class RoboterGUIV7 : MonoBehaviour
     {
         SetzeStartRotation();
         SetzeStartGeschwindigkeit();
-        roboter.InStartposition(startRotation, startGeschwindigkeit);
+        area.R_robot.InStartposition(startRotation, startGeschwindigkeit);
         ResetFlugbahn();
 
     }
@@ -274,7 +278,7 @@ public class RoboterGUIV7 : MonoBehaviour
     {
         SetzeAbwurfRotation();
         SetzeAbwurfGeschwindigkeit();
-        roboter.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
+        area.R_robot.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
         abwurfbereit = true;
 
     }
@@ -298,10 +302,12 @@ public class RoboterGUIV7 : MonoBehaviour
         {
             case 0:
                 Debug.Log("Manuell");
+                area.Agent.GetComponent<RoboterAgent>().enabled = false;
                 // Skripte ausschalten
                 break;
             case 1:
                 Debug.Log("KI");
+                area.Agent.GetComponent<RoboterAgent>().enabled = true;
                 // Skripte einschalten
                 break;
             default:
@@ -315,31 +321,31 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void RotiereJ1(Slider change)
     {
-        roboter.AchseV7[0].RotiereSofort(change.value);
+        achsen[0].RotiereSofort(change.value);
         inputJ1.text = "" + change.value;
     }
 
     private void RotiereJ2(Slider change)
     {
-        roboter.AchseV7[1].RotiereSofort(change.value);
+        achsen[1].RotiereSofort(change.value);
         inputJ2.text = "" + change.value;
     }
 
     private void RotiereJ3(Slider change)
     {
-        roboter.AchseV7[2].RotiereSofort(change.value);
+        achsen[2].RotiereSofort(change.value);
         inputJ3.text = "" + change.value;
     }
 
     private void RotiereJ4(Slider change)
     {
-        roboter.AchseV7[3].RotiereSofort(change.value);
+        achsen[3].RotiereSofort(change.value);
         inputJ4.text = "" + change.value;
     }
 
     private void RotiereJ5(Slider change)
     {
-        roboter.AchseV7[4].RotiereSofort(change.value);
+        achsen[4].RotiereSofort(change.value);
         inputJ5.text = "" + change.value;
     }
 }

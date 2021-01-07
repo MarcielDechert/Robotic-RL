@@ -5,7 +5,7 @@ public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Beche
 
 public class BallControllerV7 : MonoBehaviour
 {
-    [SerializeField] private RoboterControllerV7 roboterManager;
+    [SerializeField] private RobotsLearningArea area;
     private bool kollidiert = false;
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
@@ -21,13 +21,11 @@ public class BallControllerV7 : MonoBehaviour
 
     private float einwurfWinkel;
     public float EinwurfWinkel { get => einwurfWinkel; set => einwurfWinkel = value; }
-
-    private float wurfweite;
-
-    public float Wurfweite { get => wurfweite; set => wurfweite = value; }
-
-
-    private void FixedUpdate()
+    private void Start()
+    {
+        
+    }
+    public void Step()
     {
         BerechneBallgeschwindigkeit();
     }
@@ -38,16 +36,16 @@ public class BallControllerV7 : MonoBehaviour
         if (other.gameObject.layer != 0)
         {
             kollidiert = true;
+            area.BerechneAbwurfhoehe();
+            area.BerechneWurfweite();
 
             if (other.collider.gameObject.layer == 10 && kollisionsListe.Contains(KollisionsLayer.Wand) == false)
             {
                 kollisionsListe.Add(KollisionsLayer.Wand);
-                wurfweite = BerechneWurfweite();
             }
             else if (other.collider.gameObject.layer == 11 && kollisionsListe.Contains(KollisionsLayer.Boden) == false)
             {
                 kollisionsListe.Add(KollisionsLayer.Boden);
-                wurfweite = BerechneWurfweite();
             }
             else if (other.collider.gameObject.layer == 12 && kollisionsListe.Contains(KollisionsLayer.Decke) == false)
             {
@@ -60,9 +58,11 @@ public class BallControllerV7 : MonoBehaviour
             else if (other.collider.gameObject.layer == 14 && kollisionsListe.Contains(KollisionsLayer.Becherwand) == false)
             {
                 kollisionsListe.Add(KollisionsLayer.Becherwand);
-                wurfweite = BerechneWurfweite();
             }
-
+            else if (other.collider.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
+            {
+                kollisionsListe.Add(KollisionsLayer.Becherboden);
+            }
         }
     }
 
@@ -72,12 +72,8 @@ public class BallControllerV7 : MonoBehaviour
         {
             kollisionsListe.Add(KollisionsLayer.Einwurfzone);
             einwurfWinkel = BerechneEinwurfwinkel();
-            wurfweite = BerechneWurfweite();
-        }
-        else if (other.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
-        {
-            kollisionsListe.Add(KollisionsLayer.Becherboden);
-            wurfweite = BerechneWurfweite();
+            area.BerechneWurfweite();
+            area.BerechneAbwurfhoehe();
         }
     }
 
@@ -90,10 +86,5 @@ public class BallControllerV7 : MonoBehaviour
     private float BerechneEinwurfwinkel()
     {
         return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(ballgeschwindigkeit.y) / ballgeschwindigkeit.magnitude));
-    }
-
-    private float BerechneWurfweite()
-    {
-        return Mathf.Abs(this.transform.position.x - roboterManager.AbwurfPunkt.x);
     }
 }

@@ -6,9 +6,10 @@ public enum Befehl { Neutral = 0, Abwurf = 1, Start = 2 };
 
 public class RoboterControllerV7 : RoboterController
 {
-    [SerializeField] private Transform abwurfPosition;
     [SerializeField] private RobotsLearningArea area;
-    public Transform AbwurfPosition { get => abwurfPosition; set => abwurfPosition = value; }
+
+    private AchseV7[] achse;
+    public AchseV7[] AchseV7 { get => achse; set => achse = value; }
 
     [SerializeField] private AchseV7 j1;
     [SerializeField] private AchseV7 j2;
@@ -17,21 +18,6 @@ public class RoboterControllerV7 : RoboterController
     [SerializeField] private AchseV7 j5;
     [SerializeField] private AchseV7 j6;
     [SerializeField] private int anzahlAchsen = 6;
-
-    private RoboterStatus roboterStatus = RoboterStatus.Neutral;
-    public RoboterStatus RoboterStatus { get => roboterStatus; set => roboterStatus = value; }
-
-    private Befehl befehl = Befehl.Neutral;
-    private Vector3 abwurfgeschwindigkeitVector3;
-    public Vector3  AbwurfgeschwindigkeitVector3 { get => abwurfgeschwindigkeitVector3; set => abwurfgeschwindigkeitVector3 = value; }
-    private float abwurfgeschwindigkeit;
-    public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
-
-    private float abwurfwinkelBall;
-    public float AbwurfwinkelBall { get => abwurfwinkelBall; set => abwurfwinkelBall = value; }
-
-    private AchseV7[] achse;
-    public AchseV7[] AchseV7 { get => achse; set => achse = value; }
 
     private List<AchseV7> achseV7s;
 
@@ -52,6 +38,7 @@ public class RoboterControllerV7 : RoboterController
     {
         Init();
     }
+
     void Init()
     {
         sollRotation = new float[anzahlAchsen];
@@ -78,16 +65,16 @@ public class RoboterControllerV7 : RoboterController
         abwurfSignal = false;
     }
 
-    public void Step()
+    public override void Step()
     {
 
-        switch (roboterStatus)
+        switch (RoboterStatus)
         {
 
             case RoboterStatus.Neutral:
-                if (befehl == Befehl.Start)
+                if (Befehl == Befehl.Start)
                 {
-                    roboterStatus = RoboterStatus.Faehrt;
+                    RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
                 }
                 break;
@@ -97,13 +84,13 @@ public class RoboterControllerV7 : RoboterController
                 {
                     if (abwurfSignal)
                     {
-                        roboterStatus = RoboterStatus.Wirft;
+                        RoboterStatus = RoboterStatus.Wirft;
                         Abwurf();
                         WerteSetzen();
                     }
                     else
                     {
-                        roboterStatus = RoboterStatus.Abwurfbereit;
+                        RoboterStatus = RoboterStatus.Abwurfbereit;
                         area.Reset();
                     }
                 }
@@ -115,19 +102,19 @@ public class RoboterControllerV7 : RoboterController
 
             case RoboterStatus.Abwurfbereit:
                 abwurfSignal = true;
-                if (befehl == Befehl.Abwurf)
+                if (Befehl == Befehl.Abwurf)
                 {
                     //sollIst = false;
-                    roboterStatus = RoboterStatus.Faehrt;
+                    RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
                 }
                 break;
 
             case RoboterStatus.Wirft:
                 abwurfSignal = false;
-                if (befehl == Befehl.Start)
+                if (Befehl == Befehl.Start)
                 {
-                    roboterStatus = RoboterStatus.Faehrt;
+                    RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
                     //sollIst = false;
                 }
@@ -137,8 +124,8 @@ public class RoboterControllerV7 : RoboterController
 
     private void WerteSetzen()
     {
-        abwurfgeschwindigkeit = abwurfgeschwindigkeitVector3.magnitude;
-        abwurfwinkelBall = BerechneAbwurfwinkel();
+        Abwurfgeschwindigkeit = AbwurfgeschwindigkeitVector3.magnitude;
+        AbwurfwinkelBall = BerechneAbwurfwinkel();
     }
 
     private void SetzeSollrotation(float[] sollWinkel)
@@ -167,17 +154,17 @@ public class RoboterControllerV7 : RoboterController
 
     private void BerechneAbwurfgeschwindigkeit()
     {
-        abwurfgeschwindigkeitVector3 = (abwurfPosition.position - letztePosition) / Time.fixedDeltaTime;
-        letztePosition = abwurfPosition.position;
+        AbwurfgeschwindigkeitVector3 = (AbwurfPosition.position - letztePosition) / Time.fixedDeltaTime;
+        letztePosition = AbwurfPosition.position;
         //abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
     }
 
-    public override void Abwurf()
+    public void Abwurf()
     {
         Debug.Log("Abwurf");
-        area.R_ball.GetComponent<Rigidbody>().MovePosition(abwurfPosition.position);
+        area.R_ball.GetComponent<Rigidbody>().MovePosition(AbwurfPosition.position);
         area.R_ball.GetComponent<Rigidbody>().useGravity = true;
-        area.R_ball.GetComponent<Rigidbody>().velocity = (abwurfgeschwindigkeitVector3);
+        area.R_ball.GetComponent<Rigidbody>().velocity = (AbwurfgeschwindigkeitVector3);
         //abwurfPunkt = abwurfPosition.position;
     }
     private void RotiereAlleAchsen()
@@ -210,20 +197,25 @@ public class RoboterControllerV7 : RoboterController
 
     private float BerechneAbwurfwinkel()
     {
-        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(abwurfgeschwindigkeitVector3.y) / abwurfgeschwindigkeitVector3.magnitude);
+        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(AbwurfgeschwindigkeitVector3.y) / AbwurfgeschwindigkeitVector3.magnitude);
     }
 
-    public void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit)
+    public override void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit)
     {
         SetzeSollrotation(abwurfRotation);
         SetzeSollRotationsGeschwindigkeit(abwurfGeschwindigkeit);
-        befehl = Befehl.Abwurf;
+        Befehl = Befehl.Abwurf;
     }
 
-    public void InStartposition(float[] startRotation, float[] startGeschwindigkeit)
+    public override void InStartposition(float[] startRotation, float[] startGeschwindigkeit)
     {
         SetzeSollrotation(startRotation);
         SetzeSollRotationsGeschwindigkeit(startGeschwindigkeit);
-        befehl = Befehl.Start;
+        Befehl = Befehl.Start;
+    }
+
+    public override AchseV7[] GetAchsen()
+    {
+        return achse;
     }
 }

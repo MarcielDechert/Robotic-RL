@@ -69,6 +69,8 @@ public class RoboterGUIV7 : MonoBehaviour
     private float[] startGeschwindigkeit;
     private float[] abwurfGeschwindigkeit;
 
+    private AchseV7[] achsen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -142,6 +144,8 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleFlugbahn.isOn = false;
         abwurfbereit = false;
         count = 0;
+        
+        achsen = area.R_robot.GetAchsen();
 
     }
 
@@ -253,11 +257,11 @@ public class RoboterGUIV7 : MonoBehaviour
             abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
         }
 
-        j1RotationText.text = "J1: " + Mathf.Round(area.R_robot.AchseV7[0].AktuelleRotationDerAchse()) + " Grad";
-        j2RotationText.text = "J2: " + Mathf.Round(area.R_robot.AchseV7[1].AktuelleRotationDerAchse()) + " Grad";
-        j3RotationText.text = "J3: " + Mathf.Round(area.R_robot.AchseV7[2].AktuelleRotationDerAchse()) + " Grad";
-        j4RotationText.text = "J4: " + Mathf.Round(area.R_robot.AchseV7[3].AktuelleRotationDerAchse()) + " Grad";
-        j5RotationText.text = "J5: " + Mathf.Round(area.R_robot.AchseV7[4].AktuelleRotationDerAchse()) + " Grad";
+        j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
+        j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
+        j3RotationText.text = "J3: " + Mathf.Round(achsen[2].AktuelleRotationDerAchse()) + " Grad";
+        j4RotationText.text = "J4: " + Mathf.Round(achsen[3].AktuelleRotationDerAchse()) + " Grad";
+        j5RotationText.text = "J5: " + Mathf.Round(achsen[4].AktuelleRotationDerAchse()) + " Grad";
 
     }
 
@@ -298,10 +302,12 @@ public class RoboterGUIV7 : MonoBehaviour
         {
             case 0:
                 Debug.Log("Manuell");
+                area.Agent.GetComponent<RoboterAgent>().enabled = false;
                 // Skripte ausschalten
                 break;
             case 1:
                 Debug.Log("KI");
+                area.Agent.GetComponent<RoboterAgent>().enabled = true;
                 // Skripte einschalten
                 break;
             default:
@@ -315,31 +321,31 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void RotiereJ1(Slider change)
     {
-        area.R_robot.AchseV7[0].RotiereSofort(change.value);
+        achsen[0].RotiereSofort(change.value);
         inputJ1.text = "" + change.value;
     }
 
     private void RotiereJ2(Slider change)
     {
-        area.R_robot.AchseV7[1].RotiereSofort(change.value);
+        achsen[1].RotiereSofort(change.value);
         inputJ2.text = "" + change.value;
     }
 
     private void RotiereJ3(Slider change)
     {
-        area.R_robot.AchseV7[2].RotiereSofort(change.value);
+        achsen[2].RotiereSofort(change.value);
         inputJ3.text = "" + change.value;
     }
 
     private void RotiereJ4(Slider change)
     {
-        area.R_robot.AchseV7[3].RotiereSofort(change.value);
+        achsen[3].RotiereSofort(change.value);
         inputJ4.text = "" + change.value;
     }
 
     private void RotiereJ5(Slider change)
     {
-        area.R_robot.AchseV7[4].RotiereSofort(change.value);
+        achsen[4].RotiereSofort(change.value);
         inputJ5.text = "" + change.value;
     }
 }

@@ -3413,7 +3413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6452a6817a3acaf42903ea7784adb608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roboter: {fileID: 1057232815}
+  r_robot: {fileID: 1057232816}
   target: {fileID: 255153762}
   ball: {fileID: 2104463417}
   agent: {fileID: 661294415}

@@ -5,13 +5,13 @@ using UnityEngine;
 public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
-    [SerializeField] private GameObject roboter;
+    [SerializeField] public RoboterController r_robot;
+    public RoboterController R_robot { get => r_robot; }
     [SerializeField] private Rigidbody target;
     [SerializeField] private Rigidbody ball;
     [SerializeField] private RoboterAgent agent;
+    public RoboterAgent Agent { get => agent; set => agent = value; }
     [SerializeField] private RoboterGUIV7 gui;
-    private RoboterControllerV7 r_robot;
-    public RoboterControllerV7 R_robot { get => r_robot; set => r_robot = value; }
     private BallControllerV7 r_ball;
     public BallControllerV7 R_ball { get => r_ball; set => r_ball = value; }
 
@@ -28,7 +28,6 @@ public class RobotsLearningArea : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        r_robot = roboter.GetComponent<RoboterControllerV7>();
         r_ball = ball.GetComponent<BallControllerV7>();
 
     }
@@ -63,7 +62,7 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void BerechneWurfweite()
     {
-        wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.AbwurfPosition.position.x);
+        wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.transform.position.x);
     }
 
     public void BerechneAbwurfhoehe()

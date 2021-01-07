@@ -6,7 +6,7 @@ public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
     public GameObject roboter;
-    public Rigidbody target;
+    public GameObject target;
     public Rigidbody ball;
 
     private RoboterControllerV7 r_robot;
@@ -24,17 +24,28 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void Reset()
     {
-        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
+        target.transform.localPosition = new Vector3((float)((-0.25 * Random.value) - 0.5), 0, 0);
         ball.transform.localPosition = new Vector3(0, 2f, 0);
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
         r_ball.Kollidiert = false;
-        r_ball.KollisionenListe.Clear();
+        r_ball.KollisionsListe.Clear();
     }
 
-    public float DistanceToTarget()
+    public List<float> DistanceToTarget()
     {
-        return Vector3.Distance(r_robot.transform.position, target.position);
+        List<float> temp = new List<float>();
+        temp.Add(Vector3.Distance(r_robot.transform.position, target.transform.position));
+        for (int i = 0; i < target.transform.childCount; i++)
+        {
+            temp.Add(Vector3.Distance(r_robot.transform.position, target.transform.GetChild(i).transform.position));
+        }
+        return temp;
+    }
+
+    public float DistanceBallToTarget()
+    {
+        return Vector3.Distance(r_ball.transform.position, target.transform.position);
     }
 }

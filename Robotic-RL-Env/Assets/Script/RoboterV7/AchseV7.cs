@@ -61,7 +61,6 @@ public class AchseV7 : MonoBehaviour
                 drive.target = zielRotation;
                 articulation.xDrive = drive;
             }
-
         }
     }
 

@@ -25,6 +25,7 @@ public class RoboterControllerV7 : MonoBehaviour
     private Vector3 abwurfgeschwindigkeitVector3;
     private Vector3 abwurfPunkt;
     public Vector3 AbwurfPunkt { get => abwurfPunkt; set => abwurfPunkt = value; }
+    
     private float abwurfgeschwindigkeit;
     public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
 
@@ -34,7 +35,7 @@ public class RoboterControllerV7 : MonoBehaviour
     private AchseV7[] achse;
     public AchseV7[] AchseV7 { get => achse; set => achse = value; }
 
-    private List<AchseV7> achseV7s;
+    private IList<AchseV7> achseV7s;
 
     private float[] sollRotation;
 
@@ -45,8 +46,6 @@ public class RoboterControllerV7 : MonoBehaviour
     private bool abwurfSignal;
 
     private Vector3 letztePosition;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -216,8 +215,6 @@ public class RoboterControllerV7 : MonoBehaviour
         }
         return sollIst;
     }
-
-
 
     private float BerechneAbwurfwinkel()
     {

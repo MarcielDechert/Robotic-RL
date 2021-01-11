@@ -6,15 +6,14 @@ public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
     [SerializeField] public RoboterController r_robot;
-    public RoboterController R_robot { get => r_robot; }
+    public RoboterController R_robot { get => r_robot;}
+    [SerializeField] private BallController r_ball;
+    public BallController R_ball { get => r_ball;}
+
     [SerializeField] private Rigidbody target;
     [SerializeField] private Rigidbody ball;
     [SerializeField] private RoboterAgent agent;
-    public RoboterAgent Agent { get => agent; set => agent = value; }
-    [SerializeField] private RoboterGUIV7 gui;
-    private BallControllerV7 r_ball;
-    public BallControllerV7 R_ball { get => r_ball; set => r_ball = value; }
-
+    public RoboterAgent Agent { get => agent;}
     private float wurfweite;
 
     public float Wurfweite { get => wurfweite; set => wurfweite = value; }
@@ -62,18 +61,20 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void BerechneWurfweite()
     {
-        wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.transform.position.x);
+        wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.AbwurfPosition.transform.position.x);
     }
 
     public void BerechneAbwurfhoehe()
     {
-        abwurfhoehe = Mathf.Abs(r_robot.AbwurfPosition.position.y);
+        abwurfhoehe = Mathf.Abs(r_robot.AbwurfPosition.position.y)+ r_robot.transform.position.y;
     }
 
     private void FixedUpdate()
     {
         r_robot.Step();
-        r_ball.Step();
-        gui.Step();
+        if(r_robot.RoboterStatus == RoboterStatus.Wirft)
+        {
+            r_ball.Step();
+        }
     }
 }

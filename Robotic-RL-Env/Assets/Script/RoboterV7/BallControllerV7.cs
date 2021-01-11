@@ -3,88 +3,66 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Becherwand = 4, Becherboden = 5, Einwurfzone = 6, Roboter = 7 };
 
-public class BallControllerV7 : MonoBehaviour
+public class BallControllerV7 : BallController
 {
-    [SerializeField] private RobotsLearningArea area;
-    private bool kollidiert = false;
+    private float luftwiderstand;
+    private float flaeche;
+    private float reynoldzahl;
+    private float cw;
+    private float ballDurchmesser;
+    private float luftDichte = 1.2041f;
+    private float viskoseLuft = 0.0000182f;
 
-    public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
-
-    private KollisionsLayer kollisionsStatus = KollisionsLayer.Neutral;
-    public KollisionsLayer KollisionsStatus { get => kollisionsStatus; set => kollisionsStatus = value; }
-
-    private IList<KollisionsLayer> kollisionsListe = new List<KollisionsLayer>();
-    public IList<KollisionsLayer> KollisionsListe { get => kollisionsListe; set => kollisionsListe = value; }
-
-    private Vector3 ballgeschwindigkeit;
-    private Vector3 letztePosition = Vector3.zero;
-
-    private float einwurfWinkel;
-    public float EinwurfWinkel { get => einwurfWinkel; set => einwurfWinkel = value; }
     private void Start()
     {
-        
+        flaeche = BerechneBallFlaeche(transform.localScale.y);
+        ballDurchmesser = transform.localScale.y;
     }
-    public void Step()
+    public override void Step()
     {
         BerechneBallgeschwindigkeit();
+        SetzeLuftwidertand();
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void SetzeLuftwidertand()
     {
-
-        if (other.gameObject.layer != 0)
+        if(LuftwiderstandAktiv)
         {
-            kollidiert = true;
-            area.BerechneAbwurfhoehe();
-            area.BerechneWurfweite();
+            reynoldzahl = BerechneReynoldszahl(luftDichte,Ballgeschwindigkeit.magnitude,ballDurchmesser, viskoseLuft);
+            cw = BerechneCwWert(reynoldzahl);
+            luftwiderstand = BerechneLuftwiderstand(cw,flaeche,luftDichte,Ballgeschwindigkeit.magnitude);
 
-            if (other.collider.gameObject.layer == 10 && kollisionsListe.Contains(KollisionsLayer.Wand) == false)
+            if(luftwiderstand < 10.0f && area.r_robot.RoboterStatus == RoboterStatus.Wirft)
             {
-                kollisionsListe.Add(KollisionsLayer.Wand);
+                area.R_ball.GetComponent<Rigidbody>().drag = luftwiderstand;
+                Debug.Log(luftwiderstand);
             }
-            else if (other.collider.gameObject.layer == 11 && kollisionsListe.Contains(KollisionsLayer.Boden) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Boden);
-            }
-            else if (other.collider.gameObject.layer == 12 && kollisionsListe.Contains(KollisionsLayer.Decke) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Decke);
-            }
-            else if (other.collider.gameObject.layer == 13 && kollisionsListe.Contains(KollisionsLayer.Roboter) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Roboter);
-            }
-            else if (other.collider.gameObject.layer == 14 && kollisionsListe.Contains(KollisionsLayer.Becherwand) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Becherwand);
-            }
-            else if (other.collider.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Becherboden);
-            }
+        }
+        else
+        {
+            area.R_ball.GetComponent<Rigidbody>().drag = 0.0f;
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private float BerechneLuftwiderstand(float _cw, float _flaeche, float _luftDichte, float _geschwindigkeit)
     {
-        if (other.gameObject.layer == 16 && kollisionsListe.Contains(KollisionsLayer.Einwurfzone) == false)
-        {
-            kollisionsListe.Add(KollisionsLayer.Einwurfzone);
-            einwurfWinkel = BerechneEinwurfwinkel();
-            area.BerechneWurfweite();
-            area.BerechneAbwurfhoehe();
-        }
+        return 0.5f * _cw * _flaeche * _luftDichte * Mathf.Pow(_geschwindigkeit,2) * 1000;
     }
 
-    private void BerechneBallgeschwindigkeit()
+    private float BerechneBallFlaeche(float _durchmesser)
     {
-        ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
-        letztePosition = this.transform.position;
+        return Mathf.Pow(_durchmesser,2) / 4* Mathf.PI;
     }
 
-    private float BerechneEinwurfwinkel()
+    private float BerechneReynoldszahl(float _luftDichte, float _geschwindigkeit,float _durchmesser, float _viskoseLuft)
     {
-        return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(ballgeschwindigkeit.y) / ballgeschwindigkeit.magnitude));
+        return _luftDichte * _geschwindigkeit * _durchmesser / _viskoseLuft ;
     }
+
+    private float BerechneCwWert(float _reynoldzahl)
+    {
+        return 24/_reynoldzahl + 4/Mathf.Sqrt(_reynoldzahl) + 0.4f  ;
+    }
+    
+
 }

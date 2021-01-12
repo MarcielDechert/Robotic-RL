@@ -247,6 +247,7 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeTextfelder()
     {
+        achsen = area.R_robot.GetAchsen();
         if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
 
@@ -264,7 +265,6 @@ public class RoboterGUIV7 : MonoBehaviour
             abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
             radiusJ3TCP.text = "Radius J3-TCP: " + BerechneRadiusJ3TCP() + " m";
         }        
-        achsen = area.R_robot.GetAchsen();
 
         j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
         j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
@@ -319,7 +319,7 @@ public class RoboterGUIV7 : MonoBehaviour
     }
     private float BerechneRadiusJ3TCP()
     {
-        return Mathf.Sqrt(Mathf.Pow(Mathf.Abs( area.R_robot.GetAchsen()[2].transform.position.x - area.R_robot.AbwurfPosition.position.x ),2) + Mathf.Pow(area.R_robot.AbwurfPosition.position.y - area.R_robot.GetAchsen()[2].transform.position.y,2));
+        return Vector3.Distance(achsen[2].transform.GetChild(0).transform.position,achsen[5].transform.GetChild(1).transform.position);
     }
 
     private void WechselModi(Dropdown change)

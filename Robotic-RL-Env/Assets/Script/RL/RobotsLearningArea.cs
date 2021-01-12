@@ -27,6 +27,7 @@ public class RobotsLearningArea : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(transform.position.y);
         r_ball = ball.GetComponent<BallControllerV7>();
 
     }

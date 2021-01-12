@@ -41,8 +41,12 @@ public abstract class BallController : MonoBehaviour, IStep
         if (other.gameObject.layer != 0)
         {
             Kollidiert = true;
-            area.BerechneAbwurfhoehe();
-            area.BerechneWurfweite();
+            Debug.Log(KollisionsListe.Count);
+            if(KollisionsListe.Count == 0)
+            {
+                area.BerechneAbwurfhoehe();
+                area.BerechneWurfweite();
+            }
 
             if (other.collider.gameObject.layer == 10 && KollisionsListe.Contains(KollisionsLayer.Wand) == false)
             {
@@ -73,8 +77,11 @@ public abstract class BallController : MonoBehaviour, IStep
         {
             KollisionsListe.Add(KollisionsLayer.Einwurfzone);
             einwurfWinkel = BerechneEinwurfwinkel();
-            area.BerechneWurfweite();
-            area.BerechneAbwurfhoehe();
+            if(KollisionsListe.Count == 0)
+            {
+                area.BerechneAbwurfhoehe();
+                area.BerechneWurfweite();
+            }
         }
         else if (other.gameObject.layer == 15 && KollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
         {

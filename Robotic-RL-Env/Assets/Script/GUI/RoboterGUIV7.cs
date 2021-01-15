@@ -144,13 +144,10 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleFlugbahn.isOn = false;
         abwurfbereit = false;
         count = 0;
-        
-        achsen = area.R_robot.GetAchsen();
-
     }
 
     // Update is called once per frame
-    public void Step()
+    public void LateUpdate()
     {
         SetzeTextfelder();
         FlugbahnZeichnen();
@@ -247,16 +244,17 @@ public class RoboterGUIV7 : MonoBehaviour
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: 0.0 ms";
             einwurfwinkelText.text = "Einwurfwinkel: 0.0 Grad";
             wurfweiteText.text = "Wurfweite: 0.0 m";
-            abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
+            //abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
         }else
         {
             abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfwinkelBall + " Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.Abwurfgeschwindigkeit + " ms";
             einwurfwinkelText.text = "Einwurfwinkel: " + area.R_ball.EinwurfWinkel + " Grad";
             wurfweiteText.text = "Wurfweite: " + area.Wurfweite + " m";
-            abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
+            //abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
         }
 
+        achsen = area.R_robot.GetAchsen();
         j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
         j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
         j3RotationText.text = "J3: " + Mathf.Round(achsen[2].AktuelleRotationDerAchse()) + " Grad";
@@ -280,7 +278,6 @@ public class RoboterGUIV7 : MonoBehaviour
         SetzeAbwurfGeschwindigkeit();
         area.R_robot.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
         abwurfbereit = true;
-
     }
 
     private void FlugbahnAktivieren(Toggle change)
@@ -321,31 +318,31 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void RotiereJ1(Slider change)
     {
-        achsen[0].RotiereSofort(change.value);
+        area.R_robot.GetAchsen()[0].RotiereSofort(change.value);
         inputJ1.text = "" + change.value;
     }
 
     private void RotiereJ2(Slider change)
     {
-        achsen[1].RotiereSofort(change.value);
+        area.R_robot.GetAchsen()[1].RotiereSofort(change.value);
         inputJ2.text = "" + change.value;
     }
 
     private void RotiereJ3(Slider change)
     {
-        achsen[2].RotiereSofort(change.value);
+        area.R_robot.GetAchsen()[2].RotiereSofort(change.value);
         inputJ3.text = "" + change.value;
     }
 
     private void RotiereJ4(Slider change)
     {
-        achsen[3].RotiereSofort(change.value);
+        area.R_robot.GetAchsen()[3].RotiereSofort(change.value);
         inputJ4.text = "" + change.value;
     }
 
     private void RotiereJ5(Slider change)
     {
-        achsen[4].RotiereSofort(change.value);
+        area.R_robot.GetAchsen()[4].RotiereSofort(change.value);
         inputJ5.text = "" + change.value;
     }
 }

@@ -91,7 +91,7 @@ public class RoboterControllerV7 : RoboterController
                     else
                     {
                         RoboterStatus = RoboterStatus.Abwurfbereit;
-                        area.Reset();
+                        area.ResetBall();
                     }
                 }
                 else

@@ -11,7 +11,6 @@ public class RobotsLearningArea : MonoBehaviour
     [SerializeField] private Rigidbody ball;
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent; set => agent = value; }
-    [SerializeField] private RoboterGUIV7 gui;
     private BallControllerV7 r_ball;
     public BallControllerV7 R_ball { get => r_ball; set => r_ball = value; }
 
@@ -34,18 +33,18 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void Reset()
     {
-        if( agent.GetComponent<RoboterAgent>().enabled == true)
-        {
-            target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
-            ball.transform.localPosition = new Vector3(0, 2f, 0);
-        }
+        target.transform.localPosition = new Vector3((float)(-0.5 * Random.value - 0.25), 0, 0);
+        ball.transform.localPosition = new Vector3(0, 2f, 0);
+    }
 
+    public void ResetBall()
+    {
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
 
         r_robot.AbwurfgeschwindigkeitVector3 = Vector3.zero;
-        r_robot.Abwurfgeschwindigkeit= 0.0f;
+        r_robot.Abwurfgeschwindigkeit = 0.0f;
         r_robot.AbwurfwinkelBall = 0.0f;
 
         r_ball.Kollidiert = false;
@@ -57,7 +56,19 @@ public class RobotsLearningArea : MonoBehaviour
 
     public float DistanceToTarget()
     {
-        return Vector3.Distance(r_robot.transform.position, target.position);
+        //List<float> temp = new List<float>();
+        //temp.Add(Vector3.Distance(r_robot.transform.position, target.transform.position));
+        //for (int i = 0; i < target.transform.childCount; i++)
+        //{
+        //    temp.Add(Vector3.Distance(r_robot.transform.position, target.transform.GetChild(i).transform.position));
+        //}
+        //return temp;
+        return Vector3.Distance(r_robot.transform.position, target.transform.position);
+    }
+
+    public float DistanceBallToTarget()
+    {
+        return Vector3.Distance(r_ball.transform.position, target.position);
     }
 
     public void BerechneWurfweite()
@@ -74,6 +85,6 @@ public class RobotsLearningArea : MonoBehaviour
     {
         r_robot.Step();
         r_ball.Step();
-        gui.Step();
+        agent.Step();
     }
 }

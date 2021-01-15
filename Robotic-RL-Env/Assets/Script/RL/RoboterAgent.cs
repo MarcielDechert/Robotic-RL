@@ -8,19 +8,9 @@ using System;
 
 public class RoboterAgent : Agent
 {
-    public GameObject g_roboter;
-    public GameObject g_area;
+    public RobotsLearningArea area;
     private bool Abwurfvorgang = false;
-
-    RoboterControllerV7 robot;
-    RobotsLearningArea area;
-
-    // Start is called before the first frame update
-    public override void Initialize()
-    {
-        robot = g_roboter.GetComponent<RoboterControllerV7>();
-        area = g_area.GetComponent<RobotsLearningArea>();
-    }
+    private float elapsedTime;
 
     public override void OnEpisodeBegin()
     {
@@ -29,13 +19,12 @@ public class RoboterAgent : Agent
 
         float[] sollgeschwindigkeit = new float[] { 100f, 100f, 100f, 100f, 100f, 100f };
         float[] sollwinkel = new float[] { 180f, 0, 80f, 0, 60f, 0 };
-        robot.InStartposition(sollwinkel, sollgeschwindigkeit);
+        area.R_robot.InStartposition(sollwinkel, sollgeschwindigkeit);
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(area.DistanceToTarget());
-        sensor.AddObservation(robot.IstRotation);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -43,19 +32,21 @@ public class RoboterAgent : Agent
         var continuousActions = actionBuffers.ContinuousActions;
         continuousActions[0] = (float)((continuousActions[0] / 2) + 0.5);
         continuousActions[1] = (float)((continuousActions[1] / 2) + 0.5);
-        float kigeschwindigkeit = Mathf.Lerp(150f, 500f, continuousActions[0]);
-        float kiwinkel = Mathf.Lerp(-120f, 80f, continuousActions[1]);
+        float kigeschwindigkeit = Mathf.Lerp(50f, 500f, continuousActions[0]);
+        float kiwinkel = Mathf.Lerp(70, -110f, continuousActions[1]);
         Debug.Log("KI Übergabe: " + continuousActions[0] + " und Winkel: " + continuousActions[1]);
 
         float[] geschwindigkeit = new float[] {0.05f, 0.05f, kigeschwindigkeit, 0.05f, 0.05f, 0.05f };
         float[] winkel = new float[] { 180f, 0f, kiwinkel, 0f, 60f, 0f };
-        robot.StarteAbwurf(winkel, geschwindigkeit);
+        area.R_robot.StarteAbwurf(winkel, geschwindigkeit);
         Debug.Log("Befehl in StartAbwurf mit Geschwindigkeit: " + kigeschwindigkeit + " und Winkel: " + kiwinkel);
     }
 
-    public void FixedUpdate()
+    public void Step()
     {
-        if(Abwurfvorgang == false && robot.RoboterStatus == RoboterStatus.Abwurfbereit)
+        elapsedTime += Time.deltaTime;
+
+        if (Abwurfvorgang == false && area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
             RequestDecision();
             Abwurfvorgang = true;
@@ -70,37 +61,38 @@ public class RoboterAgent : Agent
                 {
                     if(area.R_ball.EinwurfWinkel >= 60)
                     {
-                        Debug.Log("Reward= " + 0.5f + " mit einem Einwurfwinkel von über 45 Grad = " + area.R_ball.EinwurfWinkel);
-                        AddReward(0.5f);
+                        Debug.Log("Reward= " + 1f + " mit einem Einwurfwinkel von über 45 Grad = " + area.R_ball.EinwurfWinkel);
+                        SetReward(1f);
+                        EndEpisode();
                     }
                     else
                     {
-                        Debug.Log("Reward= " + area.R_ball.EinwurfWinkel / 120 + " mit einem Einwurfwinkel von " + area.R_ball.EinwurfWinkel);
-                        AddReward(area.R_ball.EinwurfWinkel / 120);
+                        Debug.Log("Reward= " + 0.5f + area.R_ball.EinwurfWinkel / 120 + " mit einem Einwurfwinkel von " + area.R_ball.EinwurfWinkel);
+                        SetReward(0.5f + area.R_ball.EinwurfWinkel / 120);
+                        EndEpisode();
                     }
                 }
-
-                Debug.Log("Reward= " + 0.5f );
-                AddReward(0.5f);
-                EndEpisode();
             }
             else if (area.R_ball.KollisionsListe.Contains(KollisionsLayer.Boden) || area.R_ball.KollisionsListe.Contains(KollisionsLayer.Roboter) ||
                 area.R_ball.KollisionsListe.Contains(KollisionsLayer.Decke) || area.R_ball.KollisionsListe.Contains(KollisionsLayer.Wand))
             {
                 if (area.R_ball.KollisionsListe.Contains(KollisionsLayer.Becherwand))
                 {
-                    Debug.Log("Reward= " + 0.25f);
-                    AddReward(0.25f);
+                    var distanceBallToTarget = area.DistanceBallToTarget();
+                    Debug.Log("Reward= " + 0.25 + 1 / (4 + distanceBallToTarget));
+                    AddReward(0.25f + 1 / (4 + distanceBallToTarget));
+                    EndEpisode();
                 }
-
-                var distanceBallToTarget = area.DistanceBallToTarget();
-                Debug.Log("Reward= " + 1 / (4 + distanceBallToTarget));
-                AddReward(1 / (4 + distanceBallToTarget));
-                EndEpisode();
+                else
+                {
+                    var distanceBallToTarget = area.DistanceBallToTarget();
+                    Debug.Log("Reward= " + 1 / (4 + distanceBallToTarget));
+                    SetReward(1 / (4 + distanceBallToTarget));
+                    EndEpisode();
+                }
             }
             area.R_ball.Kollidiert = false;
         }
-        AddReward(0f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

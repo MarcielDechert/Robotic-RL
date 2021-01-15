@@ -59,10 +59,6 @@ public class BallControllerV7 : MonoBehaviour
             {
                 kollisionsListe.Add(KollisionsLayer.Becherwand);
             }
-            else if (other.collider.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
-            {
-                kollisionsListe.Add(KollisionsLayer.Becherboden);
-            }
         }
     }
 
@@ -74,6 +70,10 @@ public class BallControllerV7 : MonoBehaviour
             einwurfWinkel = BerechneEinwurfwinkel();
             area.BerechneWurfweite();
             area.BerechneAbwurfhoehe();
+        }
+        else if (other.gameObject.layer == 15 && kollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
+        {
+            kollisionsListe.Add(KollisionsLayer.Becherboden);
         }
     }
 

@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RobotArticulation.unity
     guid: 514b592a20519ef43b220bf897cd1995
+  - enabled: 0
+    path: Assets/Scenes/RobotArticulationMulti.unity
+    guid: 69fe557a92448c34f8244eeef908ce07
   m_configObjects: {}

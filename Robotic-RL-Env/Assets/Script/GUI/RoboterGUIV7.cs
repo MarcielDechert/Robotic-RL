@@ -13,6 +13,7 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private Text einwurfwinkelText;
     [SerializeField] private Text wurfweiteText;
     [SerializeField] private Text abwurfhoeheText;
+    [SerializeField] private Text radiusJ3TCP;
 
     [SerializeField] private Text j1RotationText;
 
@@ -54,6 +55,9 @@ public class RoboterGUIV7 : MonoBehaviour
 
     [SerializeField] private Toggle toggleFlugbahn;
 
+    [SerializeField] private Toggle toggleLuftwidertand;
+
+
     [SerializeField] private Dropdown dropdownModi;
 
     [SerializeField] private LineRenderer flugbahn;
@@ -83,6 +87,11 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleFlugbahn.onValueChanged.AddListener(delegate
         {
             FlugbahnAktivieren(toggleFlugbahn);
+        });
+
+        toggleLuftwidertand.onValueChanged.AddListener(delegate
+        {
+            LuftwiderstandAktivieren(toggleLuftwidertand);
         });
 
         dropdownModi.onValueChanged.AddListener(delegate
@@ -135,15 +144,16 @@ public class RoboterGUIV7 : MonoBehaviour
         inputJ2.text = "0";
         inputJ3.text = "80";
         inputJ4.text = "0";
-        inputJ5.text = "60";
-        wurfgeschwindigkeitJ3.text = "500";
-        abwurfwinkelJ3.text = "-80";
+        inputJ5.text = "40";
+        wurfgeschwindigkeitJ3.text = "180";
+        abwurfwinkelJ3.text = "-60";
 
         flugbahn.positionCount = segmente;
         flugbahn.enabled = false;
         toggleFlugbahn.isOn = false;
         abwurfbereit = false;
         count = 0;
+
     }
 
     // Update is called once per frame
@@ -207,12 +217,12 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeStartGeschwindigkeit()
     {
-        startGeschwindigkeit[0] = 500.0f;
-        startGeschwindigkeit[1] = 500.0f;
-        startGeschwindigkeit[2] = 500.0f;
-        startGeschwindigkeit[3] = 500.0f;
-        startGeschwindigkeit[4] = 500.0f;
-        startGeschwindigkeit[5] = 500.0f;
+        startGeschwindigkeit[0] = 180.0f;
+        startGeschwindigkeit[1] = 180.0f;
+        startGeschwindigkeit[2] = 180.0f;
+        startGeschwindigkeit[3] = 180.0f;
+        startGeschwindigkeit[4] = 180.0f;
+        startGeschwindigkeit[5] = 180.0f;
 
     }
     private void SetzeAbwurfRotation()
@@ -227,16 +237,17 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeAbwurfGeschwindigkeit()
     {
-        abwurfGeschwindigkeit[0] = 500.0f;
-        abwurfGeschwindigkeit[1] = 500.0f;
+        abwurfGeschwindigkeit[0] = 180.0f;
+        abwurfGeschwindigkeit[1] = 180.0f;
         abwurfGeschwindigkeit[2] = float.Parse(wurfgeschwindigkeitJ3.text);
-        abwurfGeschwindigkeit[3] = 500.0f;
-        abwurfGeschwindigkeit[4] = 500.0f;
-        abwurfGeschwindigkeit[5] = 500.0f;
+        abwurfGeschwindigkeit[3] = 180.0f;
+        abwurfGeschwindigkeit[4] = 180.0f;
+        abwurfGeschwindigkeit[5] = 180.0f;
     }
 
     private void SetzeTextfelder()
     {
+        achsen = area.R_robot.GetAchsen();
         if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
 
@@ -244,17 +255,17 @@ public class RoboterGUIV7 : MonoBehaviour
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: 0.0 ms";
             einwurfwinkelText.text = "Einwurfwinkel: 0.0 Grad";
             wurfweiteText.text = "Wurfweite: 0.0 m";
-            //abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
+            abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
         }else
         {
             abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfwinkelBall + " Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.Abwurfgeschwindigkeit + " ms";
             einwurfwinkelText.text = "Einwurfwinkel: " + area.R_ball.EinwurfWinkel + " Grad";
             wurfweiteText.text = "Wurfweite: " + area.Wurfweite + " m";
-            //abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
-        }
+            abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
+            radiusJ3TCP.text = "Radius J3-TCP: " + BerechneRadiusJ3TCP() + " m";
+        }        
 
-        achsen = area.R_robot.GetAchsen();
         j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
         j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
         j3RotationText.text = "J3: " + Mathf.Round(achsen[2].AktuelleRotationDerAchse()) + " Grad";
@@ -278,6 +289,7 @@ public class RoboterGUIV7 : MonoBehaviour
         SetzeAbwurfGeschwindigkeit();
         area.R_robot.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
         abwurfbereit = true;
+
     }
 
     private void FlugbahnAktivieren(Toggle change)
@@ -291,6 +303,23 @@ public class RoboterGUIV7 : MonoBehaviour
             flugbahn.enabled = false;
         }
 
+    }
+
+    private void LuftwiderstandAktivieren(Toggle change)
+    {
+        if (change.isOn)
+        {
+            area.R_ball.LuftwiderstandAktiv = true;
+        }
+        else
+        {
+            area.R_ball.LuftwiderstandAktiv = false;
+        }
+
+    }
+    private float BerechneRadiusJ3TCP()
+    {
+        return Vector3.Distance(achsen[2].transform.GetChild(0).transform.position,achsen[5].transform.GetChild(1).transform.position);
     }
 
     private void WechselModi(Dropdown change)
@@ -341,7 +370,8 @@ public class RoboterGUIV7 : MonoBehaviour
     }
 
     private void RotiereJ5(Slider change)
-    {
+    {   
+        
         area.R_robot.GetAchsen()[4].RotiereSofort(change.value);
         inputJ5.text = "" + change.value;
     }

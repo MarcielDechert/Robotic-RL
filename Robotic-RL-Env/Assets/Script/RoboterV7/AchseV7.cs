@@ -30,6 +30,10 @@ public class AchseV7 : MonoBehaviour
 
     public float AktuelleRotationDerAchse()
     {
+        
+        // float currentRotationRads = articulation.jointPosition[0];
+        // float currentRotation = Mathf.Rad2Deg * currentRotationRads;
+        // return currentRotation;
         return articulation.xDrive.target;
     }
 

@@ -29,8 +29,6 @@ public class RoboterControllerV7 : RoboterController
     public float[] IstRotation { get => istRotation; set => istRotation = value; }
     private bool abwurfSignal;
 
-    private Vector3 letztePosition;
-
 
 
     // Start is called before the first frame update
@@ -85,13 +83,13 @@ public class RoboterControllerV7 : RoboterController
                     if (abwurfSignal)
                     {
                         RoboterStatus = RoboterStatus.Wirft;
-                        Abwurf();
+                        area.R_ball.Abwurf(AbwurfPosition.position,AbwurfgeschwindigkeitVector3);
                         WerteSetzen();
                     }
                     else
                     {
                         RoboterStatus = RoboterStatus.Abwurfbereit;
-                        area.ResetBall();
+                        area.BallReset();
                     }
                 }
                 else
@@ -150,23 +148,6 @@ public class RoboterControllerV7 : RoboterController
             sollGeschwindigkeit[i] = sollRotaionsGeschwindigkeit[i];
         }
     }
-
-
-    private void BerechneAbwurfgeschwindigkeit()
-    {
-        AbwurfgeschwindigkeitVector3 = (AbwurfPosition.position - letztePosition) / Time.fixedDeltaTime;
-        letztePosition = AbwurfPosition.position;
-        //abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
-    }
-
-    public void Abwurf()
-    {
-        Debug.Log("Abwurf");
-        area.R_ball.GetComponent<Rigidbody>().MovePosition(AbwurfPosition.position);
-        area.R_ball.GetComponent<Rigidbody>().useGravity = true;
-        area.R_ball.GetComponent<Rigidbody>().velocity = (AbwurfgeschwindigkeitVector3);
-        //abwurfPunkt = abwurfPosition.position;
-    }
     private void RotiereAlleAchsen()
     {
         for (int i = 0; i < anzahlAchsen; i++)
@@ -191,13 +172,6 @@ public class RoboterControllerV7 : RoboterController
             sollIst = true;
         }
         return sollIst;
-    }
-
-
-
-    private float BerechneAbwurfwinkel()
-    {
-        return Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(AbwurfgeschwindigkeitVector3.y) / AbwurfgeschwindigkeitVector3.magnitude);
     }
 
     public override void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit)

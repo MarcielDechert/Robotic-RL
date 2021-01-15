@@ -21,7 +21,7 @@ public class BallControllerV7 : BallController
     public override void Step()
     {
         BerechneBallgeschwindigkeit();
-        SetzeLuftwidertand();
+        //SetzeLuftwidertand();
     }
 
     private void SetzeLuftwidertand()

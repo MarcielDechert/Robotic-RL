@@ -29,11 +29,9 @@ public abstract class BallController : MonoBehaviour, IStep
 
     public void Abwurf(Vector3 position, Vector3 geschwindigkeit)
     {
-        Debug.Log("Abwurf");
         this.GetComponent<Rigidbody>().MovePosition(position);
         this.GetComponent<Rigidbody>().useGravity = true;
         this.GetComponent<Rigidbody>().velocity = (geschwindigkeit);
-        //abwurfPunkt = abwurfPosition.position;
     }
     protected void OnCollisionEnter(Collision other)
     {

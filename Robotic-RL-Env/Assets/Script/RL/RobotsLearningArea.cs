@@ -34,11 +34,12 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void Reset()
     {
-        if( agent.GetComponent<RoboterAgent>().enabled == true)
-        {
-            target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
-            ball.transform.localPosition = new Vector3(0, 2f, 0);
-        }
+        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
+        ball.transform.localPosition = new Vector3(0, 2f, 0);
+
+    }
+    public void BallReset()
+    {
 
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
@@ -53,6 +54,8 @@ public class RobotsLearningArea : MonoBehaviour
 
         wurfweite = 0.0f;
         abwurfhoehe = 0.0f;
+        r_ball.EinwurfWinkel = 0.0f;
+
     }
 
     public float DistanceToTarget()

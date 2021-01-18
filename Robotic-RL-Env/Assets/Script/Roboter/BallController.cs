@@ -39,7 +39,6 @@ public abstract class BallController : MonoBehaviour, IStep
         if (other.gameObject.layer != 0)
         {
             Kollidiert = true;
-            Debug.Log(KollisionsListe.Count);
             if(KollisionsListe.Count == 0)
             {
                 area.BerechneAbwurfhoehe();

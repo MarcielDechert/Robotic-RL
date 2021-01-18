@@ -21,7 +21,7 @@ public class BallControllerV7 : BallController
     public override void Step()
     {
         BerechneBallgeschwindigkeit();
-        //SetzeLuftwidertand();
+        SetzeLuftwidertand();
     }
 
     private void SetzeLuftwidertand()
@@ -35,7 +35,6 @@ public class BallControllerV7 : BallController
             if(luftwiderstand < 10.0f && area.r_robot.RoboterStatus == RoboterStatus.Wirft)
             {
                 area.R_ball.GetComponent<Rigidbody>().drag = luftwiderstand;
-                //Debug.Log(luftwiderstand);
             }
         }
         else

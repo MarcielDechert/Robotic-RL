@@ -36,6 +36,9 @@ class ModelCritic(nn.Module):
             nn.Linear(HID_SIZE, 1)
         )
 
+    def forward(self, x):
+        return self.value(x)
+
 
 class AgentA2C(ptan.agent.BaseAgent):
     def __init__(self, net, device="cpu"):

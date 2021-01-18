@@ -25,7 +25,6 @@ public class AchseV7 : MonoBehaviour
             float rotationZiel = AktuelleRotationDerAchse() + rotationAenderung;
             RotiereAchse(rotationZiel, sollRotation);
         }
-
     }
 
     public float AktuelleRotationDerAchse()

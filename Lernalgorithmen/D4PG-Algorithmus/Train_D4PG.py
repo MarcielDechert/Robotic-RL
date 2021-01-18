@@ -21,11 +21,11 @@ ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
 BATCH_SIZE = 64
 LEARNING_RATE = 1e-4
-REPLAY_SIZE = 100000
-REPLAY_INITIAL = 10000
+REPLAY_SIZE = 10000
+REPLAY_INITIAL = 1000
 REWARD_STEPS = 5
 
-TEST_ITERS = 1000
+TEST_ITERS = 1028
 
 Vmax = 10
 Vmin = -10
@@ -33,7 +33,7 @@ N_ATOMS = 51
 DELTA_Z = (Vmax - Vmin) / (N_ATOMS - 1)
 
 
-def test_net(net, env, count=10, device="cpu"):
+def test_net(net, env, count=128, device="cpu"):
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -107,10 +107,10 @@ if __name__ == "__main__":
 
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=20.0)
+    channel.set_configuration_parameters(time_scale=25.0)
     env = UnityToGymWrapper(unity_env)
 
-    act_net = model.DDPGActor(env.observation_space.shape[0], env.action_space.shape[0]).to(device)
+    act_net = model.D4PGActor(env.observation_space.shape[0], env.action_space.shape[0]).to(device)
     crt_net = model.D4PGCritic(env.observation_space.shape[0], env.action_space.shape[0], N_ATOMS, Vmin, Vmax).to(device)
     print(act_net)
     print(crt_net)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     tgt_crt_net = ptan.agent.TargetNet(crt_net)
 
     writer = SummaryWriter(comment="-d4pg_" + args.name)
-    agent = model.AgentDDPG(act_net, device=device)
+    agent = model.AgentD4PG(act_net, device=device)
     exp_source = ptan.experience.ExperienceSourceFirstLast(env, agent, gamma=GAMMA, steps_count=REWARD_STEPS)
     buffer = ptan.experience.ExperienceReplayBuffer(exp_source, buffer_size=REPLAY_SIZE)
     act_opt = optim.Adam(act_net.parameters(), lr=LEARNING_RATE)

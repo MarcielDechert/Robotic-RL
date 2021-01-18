@@ -30,10 +30,10 @@ PPO_EPS = 0.2
 PPO_EPOCHES = 10
 PPO_BATCH_SIZE = 64
 
-TEST_ITERS = 100000
+TEST_ITERS = 1000
 
 
-def test_net(net, env, count=10, device="cpu"):
+def test_net(net, env, count=100, device="cpu"):
     rewards = 0.0
     steps = 0
     for _ in range(count):

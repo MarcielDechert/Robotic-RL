@@ -25,7 +25,7 @@ BATCH_SIZE = 32
 LEARNING_RATE = 5e-5
 ENTROPY_BETA = 1e-4
 
-TEST_ITERS = 2052
+TEST_ITERS = 2056
 
 
 def test_net(net, env, count=128, device="cpu"):
@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=10.0)
+    channel.set_configuration_parameters(time_scale=25.0)
     env = UnityToGymWrapper(unity_env)
 
     net = model.ModelA2C(env.observation_space.shape[0], env.action_space.shape[0]).to(device)

@@ -68,7 +68,6 @@ public class RoboterControllerV7 : RoboterController
 
         switch (RoboterStatus)
         {
-
             case RoboterStatus.Neutral:
                 if (Befehl == Befehl.Start)
                 {
@@ -102,7 +101,6 @@ public class RoboterControllerV7 : RoboterController
                 abwurfSignal = true;
                 if (Befehl == Befehl.Abwurf)
                 {
-                    //sollIst = false;
                     RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
                 }
@@ -114,7 +112,6 @@ public class RoboterControllerV7 : RoboterController
                 {
                     RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
-                    //sollIst = false;
                 }
                 break;
         }
@@ -128,11 +125,6 @@ public class RoboterControllerV7 : RoboterController
 
     private void SetzeSollrotation(float[] sollWinkel)
     {
-        // foreach (var item in achseV7s)
-        // {
-
-
-        // }
         for (int i = 0; i < anzahlAchsen; i++)
         {
             sollRotation[i] = sollWinkel[i];
@@ -143,8 +135,6 @@ public class RoboterControllerV7 : RoboterController
     {
         for (int i = 0; i < anzahlAchsen; i++)
         {
-            //achse[i].achsengeschwindigkeit = sollRotaionsGeschwindigkeit[i];
-
             sollGeschwindigkeit[i] = sollRotaionsGeschwindigkeit[i];
         }
     }

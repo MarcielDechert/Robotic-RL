@@ -12,13 +12,13 @@ public class RoboterAgent : Agent
     public GameObject g_area;
     private bool Abwurfvorgang = false;
 
-    private RoboterControllerV7 robot;
+    private Achsen6RoboterController robot;
     private RobotsLearningArea area;
 
     // Start is called before the first frame update
     public override void Initialize()
     {
-        robot = g_roboter.GetComponent<RoboterControllerV7>();
+        robot = g_roboter.GetComponent<Achsen6RoboterController>();
         area = g_area.GetComponent<RobotsLearningArea>();
     }
 

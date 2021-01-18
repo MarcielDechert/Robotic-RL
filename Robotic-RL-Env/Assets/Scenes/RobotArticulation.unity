@@ -3562,7 +3562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   r_robot: {fileID: 934337688}
-  r_ball: {fileID: 0}
+  r_ball: {fileID: 2104463421}
   target: {fileID: 255153762}
   ball: {fileID: 2104463417}
   agent: {fileID: 661294415}
@@ -3616,7 +3616,7 @@ PrefabInstance:
     - target: {fileID: 6896967782938909344, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
       propertyPath: m_Name
-      value: BecherV7
+      value: Becher
       objectReference: {fileID: 0}
     - target: {fileID: 6896967782938909344, guid: 6d3bb336f2400a34c82a3d36fa718ed9,
         type: 3}
@@ -4967,7 +4967,7 @@ PrefabInstance:
     - target: {fileID: 8440832421116878894, guid: 5f330791b601e494990f05468a33b13e,
         type: 3}
       propertyPath: m_Name
-      value: BallRoboter
+      value: TTBall
       objectReference: {fileID: 0}
     - target: {fileID: 8440832421116878894, guid: 5f330791b601e494990f05468a33b13e,
         type: 3}
@@ -10872,6 +10872,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ParentAnchorRotation.w
       value: -0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 5005950843558337258, guid: 0efd27959c2f42b4e8f9296ceed52f6b,
+        type: 3}
+      propertyPath: m_ParentAnchorPosition.y
+      value: 0.24999999
       objectReference: {fileID: 0}
     - target: {fileID: 5005950844246900542, guid: 0efd27959c2f42b4e8f9296ceed52f6b,
         type: 3}

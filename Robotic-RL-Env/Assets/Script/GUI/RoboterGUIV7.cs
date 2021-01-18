@@ -73,7 +73,7 @@ public class RoboterGUIV7 : MonoBehaviour
     private float[] startGeschwindigkeit;
     private float[] abwurfGeschwindigkeit;
 
-    private AchseV7[] achsen;
+    private RotationsAchse[] achsen;
 
     // Start is called before the first frame update
     void Start()
@@ -237,12 +237,12 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void SetzeAbwurfGeschwindigkeit()
     {
-        abwurfGeschwindigkeit[0] = 180.0f;
-        abwurfGeschwindigkeit[1] = 180.0f;
+        abwurfGeschwindigkeit[0] = 80.0f;
+        abwurfGeschwindigkeit[1] = 80.0f;
         abwurfGeschwindigkeit[2] = float.Parse(wurfgeschwindigkeitJ3.text);
-        abwurfGeschwindigkeit[3] = 180.0f;
-        abwurfGeschwindigkeit[4] = 180.0f;
-        abwurfGeschwindigkeit[5] = 180.0f;
+        abwurfGeschwindigkeit[3] = 80.0f;
+        abwurfGeschwindigkeit[4] = 80.0f;
+        abwurfGeschwindigkeit[5] = 80.0f;
     }
 
     private void SetzeTextfelder()

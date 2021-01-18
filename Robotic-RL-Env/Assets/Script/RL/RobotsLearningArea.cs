@@ -28,7 +28,7 @@ public class RobotsLearningArea : MonoBehaviour
     void Start()
     {
         Debug.Log(transform.position.y);
-        r_ball = ball.GetComponent<BallControllerV7>();
+        r_ball = ball.GetComponent<TTBallController>();
 
     }
 
@@ -63,6 +63,11 @@ public class RobotsLearningArea : MonoBehaviour
         return Vector3.Distance(r_robot.transform.position, target.position);
     }
 
+    public float DistanceBallToTarget() 
+    {
+        return Vector3.Distance(r_ball.transform.position, target.position);
+    }
+
     public void BerechneWurfweite()
     {
         wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.AbwurfPosition.transform.position.x);
@@ -80,5 +85,6 @@ public class RobotsLearningArea : MonoBehaviour
         {
             r_ball.Step();
         }
+        
     }
 }

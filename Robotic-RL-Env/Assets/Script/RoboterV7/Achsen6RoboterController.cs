@@ -4,22 +4,22 @@ using UnityEngine;
 public enum RoboterStatus { Neutral = 0, Abwurfbereit = 1, Wirft = 2, Faehrt = 3, Stopp = -1 };
 public enum Befehl { Neutral = 0, Abwurf = 1, Start = 2 };
 
-public class RoboterControllerV7 : RoboterController
+public class Achsen6RoboterController : RoboterController
 {
     [SerializeField] private RobotsLearningArea area;
 
-    private AchseV7[] achse;
-    public AchseV7[] AchseV7 { get => achse; set => achse = value; }
+    private RotationsAchse[] achse;
+    public RotationsAchse[] RotationsAchse { get => achse; set => achse = value; }
 
-    [SerializeField] private AchseV7 j1;
-    [SerializeField] private AchseV7 j2;
-    [SerializeField] private AchseV7 j3;
-    [SerializeField] private AchseV7 j4;
-    [SerializeField] private AchseV7 j5;
-    [SerializeField] private AchseV7 j6;
+    [SerializeField] private RotationsAchse j1;
+    [SerializeField] private RotationsAchse j2;
+    [SerializeField] private RotationsAchse j3;
+    [SerializeField] private RotationsAchse j4;
+    [SerializeField] private RotationsAchse j5;
+    [SerializeField] private RotationsAchse j6;
     [SerializeField] private int anzahlAchsen = 6;
 
-    private List<AchseV7> achseV7s;
+    private List<RotationsAchse> achseV7s;
 
     private float[] sollRotation;
 
@@ -43,7 +43,7 @@ public class RoboterControllerV7 : RoboterController
         istRotation = new float[anzahlAchsen];
         sollGeschwindigkeit = new float[anzahlAchsen];
 
-        // achseV7s = new List<AchseV7>();
+        // achseV7s = new List<RotationsAchse>();
         // achseV7s.Add(j1);
         // achseV7s.Add(j2);
         // achseV7s.Add(j3);
@@ -51,7 +51,7 @@ public class RoboterControllerV7 : RoboterController
         // achseV7s.Add(j5);
         // achseV7s.Add(j6);
 
-        achse = new AchseV7[anzahlAchsen];
+        achse = new RotationsAchse[anzahlAchsen];
 
         achse[0] = j1;
         achse[1] = j2;
@@ -103,6 +103,7 @@ public class RoboterControllerV7 : RoboterController
                 if (Befehl == Befehl.Abwurf)
                 {
                     //sollIst = false;
+                    j3.Wirft = true;
                     RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
                 }
@@ -110,6 +111,7 @@ public class RoboterControllerV7 : RoboterController
 
             case RoboterStatus.Wirft:
                 abwurfSignal = false;
+                j3.Wirft = false;
                 if (Befehl == Befehl.Start)
                 {
                     RoboterStatus = RoboterStatus.Faehrt;
@@ -188,7 +190,7 @@ public class RoboterControllerV7 : RoboterController
         Befehl = Befehl.Start;
     }
 
-    public override AchseV7[] GetAchsen()
+    public override RotationsAchse[] GetAchsen()
     {
         return achse;
     }

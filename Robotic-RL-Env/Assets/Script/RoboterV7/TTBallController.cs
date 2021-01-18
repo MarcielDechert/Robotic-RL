@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Becherwand = 4, Becherboden = 5, Einwurfzone = 6, Roboter = 7 };
 
-public class BallControllerV7 : BallController
+public class TTBallController : BallController
 {
     private float luftwiderstand;
     private float flaeche;
@@ -21,7 +21,7 @@ public class BallControllerV7 : BallController
     public override void Step()
     {
         BerechneBallgeschwindigkeit();
-        //SetzeLuftwidertand();
+        SetzeLuftwidertand();
     }
 
     private void SetzeLuftwidertand()

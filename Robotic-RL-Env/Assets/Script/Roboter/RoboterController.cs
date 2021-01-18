@@ -27,7 +27,7 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 
     public abstract void InStartposition(float[] startRotation, float[] startGeschwindigkeit);
 
-    public abstract AchseV7[] GetAchsen();
+    public abstract RotationsAchse[] GetAchsen();
 
 
     protected void BerechneAbwurfgeschwindigkeit()

@@ -27,13 +27,16 @@ public class RobotsLearningArea : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        r_ball = ball.GetComponent<BallControllerV7>();
+        Debug.Log(transform.position.y);
+        r_ball = ball.GetComponent<TTBallController>();
+
     }
 
     public void Reset()
     {
-        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 0.75)), 0.07f, 0);
-        ball.transform.localPosition = new Vector3(0.6f, 0.2f, 0);
+        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
+        ball.transform.localPosition = new Vector3(0, 2f, 0);
+
     }
     public void BallReset()
     {
@@ -52,6 +55,7 @@ public class RobotsLearningArea : MonoBehaviour
         wurfweite = 0.0f;
         abwurfhoehe = 0.0f;
         r_ball.EinwurfWinkel = 0.0f;
+
     }
 
     public float DistanceToTarget()
@@ -81,6 +85,6 @@ public class RobotsLearningArea : MonoBehaviour
         {
             r_ball.Step();
         }
-        agent.Step();
+        
     }
 }

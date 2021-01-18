@@ -1,0 +1,54 @@
+{
+    "RobotArticulationMulti": {
+        "checkpoints": [
+            {
+                "steps": 9999,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-9999.nn",
+                "reward": 0.3303956834029178,
+                "creation_time": 1610024925.5187438
+            },
+            {
+                "steps": 19999,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-19999.nn",
+                "reward": 0.43344010046221376,
+                "creation_time": 1610025395.1968634
+            },
+            {
+                "steps": 29999,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-29999.nn",
+                "reward": 0.4563298284749448,
+                "creation_time": 1610025919.9960413
+            },
+            {
+                "steps": 39999,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-39999.nn",
+                "reward": 0.46223366533148563,
+                "creation_time": 1610026412.786654
+            },
+            {
+                "steps": 49999,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-49999.nn",
+                "reward": 0.4646064674989744,
+                "creation_time": 1610026912.9691615
+            },
+            {
+                "steps": 55188,
+                "file_path": "results\\V4\\RobotArticulationMulti\\RobotArticulationMulti-55188.nn",
+                "reward": 0.46303351938939696,
+                "creation_time": 1610027171.3558512
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 55188,
+            "file_path": "results\\V4\\RobotArticulationMulti.nn",
+            "reward": 0.46303351938939696,
+            "creation_time": 1610027171.3558512
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cu110",
+        "tensorflow_version": "2.2.0"
+    }
+}

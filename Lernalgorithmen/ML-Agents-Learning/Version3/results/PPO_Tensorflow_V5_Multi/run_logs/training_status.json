@@ -1,0 +1,78 @@
+{
+    "RobotArticulationMulti": {
+        "checkpoints": [
+            {
+                "steps": 169999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-169999.nn",
+                "reward": 0.8260391267487802,
+                "creation_time": 1609889177.4449384
+            },
+            {
+                "steps": 179999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-179999.nn",
+                "reward": 0.798628847112519,
+                "creation_time": 1609889829.6387358
+            },
+            {
+                "steps": 189999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-189999.nn",
+                "reward": 0.7976270808449274,
+                "creation_time": 1609890490.7775676
+            },
+            {
+                "steps": 199999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-199999.nn",
+                "reward": 0.8080203258715697,
+                "creation_time": 1609891155.6338122
+            },
+            {
+                "steps": 209999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-209999.nn",
+                "reward": 0.8262847626732813,
+                "creation_time": 1609891794.4192545
+            },
+            {
+                "steps": 219999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-219999.nn",
+                "reward": 0.8174249607324601,
+                "creation_time": 1609892371.2239604
+            },
+            {
+                "steps": 229999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-229999.nn",
+                "reward": 0.8436841394590295,
+                "creation_time": 1609892951.0025907
+            },
+            {
+                "steps": 239999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-239999.nn",
+                "reward": 0.7973387953861207,
+                "creation_time": 1609893535.7832596
+            },
+            {
+                "steps": 249999,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-249999.nn",
+                "reward": 0.8285422670887783,
+                "creation_time": 1609894126.4462001
+            },
+            {
+                "steps": 250010,
+                "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti\\RobotArticulationMulti-250010.nn",
+                "reward": 0.8220164997757767,
+                "creation_time": 1609894128.8096163
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 250010,
+            "file_path": "results\\PPO_Tensorflow_V5_Multi\\RobotArticulationMulti.nn",
+            "reward": 0.8220164997757767,
+            "creation_time": 1609894128.8096163
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.6.0",
+        "tensorflow_version": "2.3.0"
+    }
+}

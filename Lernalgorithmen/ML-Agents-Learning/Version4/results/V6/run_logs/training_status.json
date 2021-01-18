@@ -1,0 +1,78 @@
+{
+    "RobotArticulationMulti": {
+        "checkpoints": [
+            {
+                "steps": 169999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-169999.nn",
+                "reward": 0.893864499926567,
+                "creation_time": 1610039410.324825
+            },
+            {
+                "steps": 179999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-179999.nn",
+                "reward": 0.8771872097446073,
+                "creation_time": 1610039831.0577095
+            },
+            {
+                "steps": 189999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-189999.nn",
+                "reward": 0.8481615351901638,
+                "creation_time": 1610040251.7462475
+            },
+            {
+                "steps": 199999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-199999.nn",
+                "reward": 0.8745326141235454,
+                "creation_time": 1610040671.912655
+            },
+            {
+                "steps": 209999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-209999.nn",
+                "reward": 0.8814146408970042,
+                "creation_time": 1610041092.8778062
+            },
+            {
+                "steps": 219999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-219999.nn",
+                "reward": 0.8822697904792045,
+                "creation_time": 1610041511.7807424
+            },
+            {
+                "steps": 229999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-229999.nn",
+                "reward": 0.9016879083228713,
+                "creation_time": 1610041932.747321
+            },
+            {
+                "steps": 239999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-239999.nn",
+                "reward": 0.8734844011725277,
+                "creation_time": 1610042352.6302888
+            },
+            {
+                "steps": 249999,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-249999.nn",
+                "reward": 0.8652139041911472,
+                "creation_time": 1610042773.169622
+            },
+            {
+                "steps": 250007,
+                "file_path": "results\\V6\\RobotArticulationMulti\\RobotArticulationMulti-250007.nn",
+                "reward": 0.8633938614847296,
+                "creation_time": 1610042773.7044728
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 250007,
+            "file_path": "results\\V6\\RobotArticulationMulti.nn",
+            "reward": 0.8633938614847296,
+            "creation_time": 1610042773.7044728
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cu110",
+        "tensorflow_version": "2.2.0"
+    }
+}

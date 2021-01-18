@@ -1,0 +1,60 @@
+{
+    "RobotArticulationMulti": {
+        "checkpoints": [
+            {
+                "steps": 9999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-9999.nn",
+                "reward": 0.32184911401025834,
+                "creation_time": 1610027763.7737749
+            },
+            {
+                "steps": 19999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-19999.nn",
+                "reward": 0.42599002165453775,
+                "creation_time": 1610028357.561407
+            },
+            {
+                "steps": 29999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-29999.nn",
+                "reward": 0.45460306807064715,
+                "creation_time": 1610029003.9793766
+            },
+            {
+                "steps": 39999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-39999.nn",
+                "reward": 0.46464356455591416,
+                "creation_time": 1610029654.2122371
+            },
+            {
+                "steps": 49999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-49999.nn",
+                "reward": 0.47370950941619955,
+                "creation_time": 1610030307.9149983
+            },
+            {
+                "steps": 59999,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-59999.nn",
+                "reward": 0.469079450729224,
+                "creation_time": 1610030965.0013103
+            },
+            {
+                "steps": 67070,
+                "file_path": "results\\V5\\RobotArticulationMulti\\RobotArticulationMulti-67070.nn",
+                "reward": 0.4735019792231821,
+                "creation_time": 1610031450.3506007
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 67070,
+            "file_path": "results\\V5\\RobotArticulationMulti.nn",
+            "reward": 0.4735019792231821,
+            "creation_time": 1610031450.3506007
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cu110",
+        "tensorflow_version": "2.2.0"
+    }
+}

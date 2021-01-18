@@ -34,8 +34,8 @@ public class RobotsLearningArea : MonoBehaviour
 
     public void Reset()
     {
-        target.transform.localPosition = new Vector3((float)(-0.5 * (Random.value + 1)), 0, 0);
-        ball.transform.localPosition = new Vector3(0, 2f, 0);
+        target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
+        ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
 
     }
     public void BallReset()
@@ -85,6 +85,6 @@ public class RobotsLearningArea : MonoBehaviour
         {
             r_ball.Step();
         }
-        
+        agent.Step();
     }
 }

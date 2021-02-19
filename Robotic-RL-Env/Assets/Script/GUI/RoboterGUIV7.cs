@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RoboterGUIV7 : MonoBehaviour
 {
     [SerializeField] private Button abwurfButton;
-    [SerializeField] private Button StartfButton;
+    [SerializeField] private Button startButton;
     [SerializeField] private Text abwurfgeschwindigkeitText;
     [SerializeField] private Text abwurfwinkelBallText;
     [SerializeField] private Text abwurfwinkelJ3Text;
@@ -57,14 +58,20 @@ public class RoboterGUIV7 : MonoBehaviour
 
     [SerializeField] private Toggle toggleLuftwidertand;
 
+    [SerializeField] private Toggle toggleMenue;
+
+
+    [SerializeField] private GameObject panel;
+
 
     [SerializeField] private Dropdown dropdownModi;
 
     [SerializeField] private LineRenderer flugbahn;
 
-    [SerializeField] private int segmente = 100;
+    [SerializeField] private int segmente = 1000;
 
     [SerializeField] private RobotsLearningArea area;
+
     private Vector3 letzteBallposition = Vector3.zero;
     private int count;
     private bool abwurfbereit;
@@ -92,6 +99,11 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleLuftwidertand.onValueChanged.AddListener(delegate
         {
             LuftwiderstandAktivieren(toggleLuftwidertand);
+        });
+
+        toggleMenue.onValueChanged.AddListener(delegate
+        {
+            MenueEinblenden(toggleMenue);
         });
 
         dropdownModi.onValueChanged.AddListener(delegate
@@ -137,16 +149,16 @@ public class RoboterGUIV7 : MonoBehaviour
 
         abwurfGeschwindigkeit = new float[6];
 
-        StartfButton.onClick.AddListener(StartButtonGedrueckt);
+        startButton.onClick.AddListener(StartButtonGedrueckt);
         abwurfButton.onClick.AddListener(AbwurfButtonGedrueckt);
 
         inputJ1.text = "180";
-        inputJ2.text = "0";
-        inputJ3.text = "80";
+        inputJ2.text = "60";
+        inputJ3.text = "0";
         inputJ4.text = "0";
-        inputJ5.text = "40";
+        inputJ5.text = "0";
         wurfgeschwindigkeitJ3.text = "180";
-        abwurfwinkelJ3.text = "-60";
+        abwurfwinkelJ3.text = "-150";
 
         flugbahn.positionCount = segmente;
         flugbahn.enabled = false;
@@ -319,7 +331,7 @@ public class RoboterGUIV7 : MonoBehaviour
     }
     private float BerechneRadiusJ3TCP()
     {
-        return Vector3.Distance(achsen[2].transform.GetChild(0).transform.position,achsen[5].transform.GetChild(1).transform.position);
+        return Vector3.Distance(achsen[2].transform.GetChild(0).GetChild(0).transform.position,achsen[5].transform.GetChild(1).transform.position);
     }
 
     private void WechselModi(Dropdown change)
@@ -339,6 +351,19 @@ public class RoboterGUIV7 : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void MenueEinblenden(Toggle change)
+    {
+        if (change.isOn)
+        {
+            panel.SetActive(true);
+        }
+        else
+        {
+            panel.SetActive(false);
+        }
+
     }
     private void SetzeGeschwindikeitDerScene(Slider change)
     {

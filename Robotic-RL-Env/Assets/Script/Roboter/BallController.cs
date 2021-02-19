@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class BallController : MonoBehaviour, IStep
 {
     [SerializeField] protected RobotsLearningArea area;
+
     private bool kollidiert = false;
 
     public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
@@ -23,18 +24,18 @@ public abstract class BallController : MonoBehaviour, IStep
     private Vector3 ballgeschwindigkeit;
 
     public Vector3 Ballgeschwindigkeit { get => ballgeschwindigkeit; set => ballgeschwindigkeit = value; }
-    private Vector3 letztePosition = Vector3.zero;
 
     public abstract void Step();
 
-    public void Abwurf(Vector3 position, Vector3 geschwindigkeit)
+    public void Abwurf(Vector3 _position, Vector3 _geschwindigkeit)
     {
-        this.GetComponent<Rigidbody>().MovePosition(position);
+        this.GetComponent<Rigidbody>().MovePosition(_position);
         this.GetComponent<Rigidbody>().useGravity = true;
-        this.GetComponent<Rigidbody>().velocity = (geschwindigkeit);
+        this.GetComponent<Rigidbody>().velocity = (_geschwindigkeit);
     }
     protected void OnCollisionEnter(Collision other)
     {
+        
 
         if (other.gameObject.layer != 0)
         {
@@ -57,13 +58,17 @@ public abstract class BallController : MonoBehaviour, IStep
             {
                 KollisionsListe.Add(KollisionsLayer.Decke);
             }
-            else if (other.collider.gameObject.layer == 13 && KollisionsListe.Contains(KollisionsLayer.Roboter) == false)
+            else if (other.collider.gameObject.layer == 13 && KollisionsListe.Contains(KollisionsLayer.Roboter) == false )
             {
-                KollisionsListe.Add(KollisionsLayer.Roboter);
+                KollisionsListe.Add(KollisionsLayer.Roboter);;
             }
             else if (other.collider.gameObject.layer == 14 && KollisionsListe.Contains(KollisionsLayer.Becherwand) == false)
             {
                 KollisionsListe.Add(KollisionsLayer.Becherwand);
+            }
+            else if (other.collider.gameObject.layer == 16 && KollisionsListe.Contains(KollisionsLayer.TCP) == false )
+            {
+                KollisionsListe.Add(KollisionsLayer.TCP);
             }
         }
     }
@@ -89,8 +94,7 @@ public abstract class BallController : MonoBehaviour, IStep
 
     protected void BerechneBallgeschwindigkeit()
     {
-        Ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
-        letztePosition = this.transform.position;
+        Ballgeschwindigkeit = area.R_ball.GetComponent<Rigidbody>().velocity;
     }
 
     protected float BerechneEinwurfwinkel()

@@ -3,17 +3,17 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+HID_SIZE = 256
+
 
 class DDPGActor(nn.Module):
     def __init__(self, obs_size, act_size):
         super(DDPGActor, self).__init__()
 
         self.net = nn.Sequential(
-            nn.Linear(obs_size, 400),
+            nn.Linear(obs_size, HID_SIZE),
             nn.ReLU(),
-            nn.Linear(400, 300),
-            nn.ReLU(),
-            nn.Linear(300, act_size),
+            nn.Linear(HID_SIZE, act_size),
             nn.Tanh()
         )
 
@@ -26,14 +26,14 @@ class DDPGCritic(nn.Module):
         super(DDPGCritic, self).__init__()
 
         self.obs_net = nn.Sequential(
-            nn.Linear(obs_size, 400),
+            nn.Linear(obs_size, HID_SIZE),
             nn.ReLU(),
         )
 
         self.out_net = nn.Sequential(
-            nn.Linear(400 + act_size, 300),
+            nn.Linear(HID_SIZE + act_size, HID_SIZE),
             nn.ReLU(),
-            nn.Linear(300, 1)
+            nn.Linear(HID_SIZE, 1)
         )
 
     def forward(self, x, a):

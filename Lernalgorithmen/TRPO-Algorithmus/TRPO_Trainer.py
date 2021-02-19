@@ -20,18 +20,18 @@ from gym_unity.envs import UnityToGymWrapper
 
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
-GAE_LAMBDA = 0.95
+GAE_LAMBDA = 0.99
 
-TRAJECTORY_SIZE = 256
-LEARNING_RATE_CRITIC = 1e-3
+TRAJECTORY_SIZE = 512
+LEARNING_RATE_CRITIC = 5e-4
 
 TRPO_MAX_KL = 0.01
-TRPO_DAMPING = 0.1
+TRPO_DAMPING = 0.05
 
-TEST_ITERS = 1000
+TEST_ITERS = 500
 
 
-def test_net(net, env, count=100, device="cpu"):
+def test_net(net, env, count=250, device="cpu"):
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=10.0)
+    channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
     net_act = model.ModelActor(env.observation_space.shape[0], env.action_space.shape[0]).to(device)

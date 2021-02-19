@@ -11,10 +11,11 @@ import torch
 
 
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
+MODEL = "saves/a2c-LinearToleranzHideSize512Eta1e4/best_+1.000_22000.dat"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--model", required=True, help="Model file to load")
+    parser.add_argument("-m", "--model", default=MODEL, help="Model file to load" + MODEL)
     parser.add_argument("-e", "--env", default=ENV_ID, help="Environment name to use, default=" + ENV_ID)
     args = parser.parse_args()
 

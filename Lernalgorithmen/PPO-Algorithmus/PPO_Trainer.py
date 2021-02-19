@@ -20,20 +20,20 @@ from gym_unity.envs import UnityToGymWrapper
 
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
-GAE_LAMBDA = 0.95
+GAE_LAMBDA = 0.99
 
-TRAJECTORY_SIZE = 2049
-LEARNING_RATE_ACTOR = 1e-5
+TRAJECTORY_SIZE = 1025
+LEARNING_RATE_ACTOR = 1e-4
 LEARNING_RATE_CRITIC = 1e-4
 
-PPO_EPS = 0.2
+PPO_EPS = 0.05
 PPO_EPOCHES = 10
-PPO_BATCH_SIZE = 64
+PPO_BATCH_SIZE = 32
 
-TEST_ITERS = 1000
+TEST_ITERS = 500
 
 
-def test_net(net, env, count=100, device="cpu"):
+def test_net(net, env, count=128, device="cpu"):
     rewards = 0.0
     steps = 0
     for _ in range(count):

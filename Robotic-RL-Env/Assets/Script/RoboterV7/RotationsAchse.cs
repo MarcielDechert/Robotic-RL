@@ -6,7 +6,7 @@ public enum RotationsRichtung { Neutral = 0, Positiv = 1, Negativ = -1 };
 public class RotationsAchse : MonoBehaviour
 {
     public float achsengeschwindigkeit = 30.0f; // Grad/Sekunde
-    private float sollRotation = 30.0f;
+    private float sollRotation;
     private float toleranz = 5.0f;
     private bool wirft = false;
     public bool Wirft { get => wirft; set => wirft = value; }
@@ -20,13 +20,13 @@ public class RotationsAchse : MonoBehaviour
         articulation = GetComponent<ArticulationBody>();
     }
 
-    public void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (rotationState != RotationsRichtung.Neutral)
         {
             float rotationAenderung = (float)rotationState * achsengeschwindigkeit * Time.fixedDeltaTime;
-            float rotationZiel = AktuelleRotationDerAchse() + rotationAenderung;
-            RotiereAchse(rotationZiel, sollRotation);
+            float aktuellesRotationziel = AktuelleRotationDerAchse() + rotationAenderung;
+            RotiereAchse(aktuellesRotationziel, sollRotation);
         }
     }
 
@@ -40,7 +40,7 @@ public class RotationsAchse : MonoBehaviour
     }
 
     // Rotiert um xx Grad um die x Achse
-    private void RotiereAchse(float zielRotation, float sollRotation)
+    private void RotiereAchse(float aktuellesZiel, float sollRotation)
     {
 
         if (rotationState == RotationsRichtung.Negativ)
@@ -56,7 +56,7 @@ public class RotationsAchse : MonoBehaviour
             }
             if (AktuelleRotationDerAchse() <= sollRotation)
             {
-                Time.fixedDeltaTime = 0.02f;
+                Time.fixedDeltaTime = 0.01f;
                 rotationState = RotationsRichtung.Neutral;
                 var drive = articulation.xDrive;
                 drive.target = sollRotation;
@@ -65,7 +65,7 @@ public class RotationsAchse : MonoBehaviour
             else
             {
                 var drive = articulation.xDrive;
-                drive.target = zielRotation;
+                drive.target = aktuellesZiel;
                 articulation.xDrive = drive;
             }
         }
@@ -82,7 +82,7 @@ public class RotationsAchse : MonoBehaviour
             }
             if (AktuelleRotationDerAchse() >= sollRotation)
             {
-                Time.fixedDeltaTime = 0.02f;
+                Time.fixedDeltaTime = 0.01f;
                 rotationState = RotationsRichtung.Neutral;
                 var drive = articulation.xDrive;
                 drive.target = sollRotation;
@@ -91,7 +91,7 @@ public class RotationsAchse : MonoBehaviour
             else
             {
                 var drive = articulation.xDrive;
-                drive.target = zielRotation;
+                drive.target = aktuellesZiel;
                 articulation.xDrive = drive;
             }
         }
@@ -118,10 +118,5 @@ public class RotationsAchse : MonoBehaviour
             rotationState = RotationsRichtung.Negativ;
         }
 
-    }
-
-    public Vector3 GetSpeed()
-    {
-        return articulation.velocity;
     }
 }

@@ -17,8 +17,7 @@ public class RoboterAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        area.Reset();
-        area.BallReset();
+        area.AreaReset();
         Abwurfvorgang = false;
 
         float[] sollgeschwindigkeit = new float[] { 100f, 100f, 100f, 25f, 25f, 25f };

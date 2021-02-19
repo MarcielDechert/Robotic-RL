@@ -19,14 +19,14 @@ public class Achsen6RoboterController : RoboterController
     [SerializeField] private RotationsAchse j6;
     [SerializeField] private int anzahlAchsen = 6;
 
-    private List<RotationsAchse> achseV7s;
-
     private float[] sollRotation;
 
     private float[] sollGeschwindigkeit;
 
     private float[] istRotation;
     public float[] IstRotation { get => istRotation; set => istRotation = value; }
+
+
     private bool abwurfSignal;
 
 
@@ -70,7 +70,7 @@ public class Achsen6RoboterController : RoboterController
         {
 
             case RoboterStatus.Neutral:
-                if (Befehl == Befehl.Start)
+                if (RoboterBefehl == Befehl.Start)
                 {
                     RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
@@ -78,29 +78,33 @@ public class Achsen6RoboterController : RoboterController
                 break;
 
             case RoboterStatus.Faehrt:
-                if (sollIstErreicht())
+                if (SollIstErreicht())
                 {
                     if (abwurfSignal)
                     {
-                        RoboterStatus = RoboterStatus.Wirft;
                         area.R_ball.Abwurf(AbwurfPosition.position,AbwurfgeschwindigkeitVector3);
                         WerteSetzen();
+                        RoboterStatus = RoboterStatus.Wirft;
                     }
                     else
                     {
                         RoboterStatus = RoboterStatus.Abwurfbereit;
-                        area.BallReset();
+                        area.AreaReset();
                     }
                 }
                 else
                 {
+                    if (abwurfSignal)
+                    {
+                    area.R_ball.GetComponent<Rigidbody>().MovePosition(AbwurfPosition.position); 
+                    }
                     BerechneAbwurfgeschwindigkeit();
                 }
                 break;
 
             case RoboterStatus.Abwurfbereit:
                 abwurfSignal = true;
-                if (Befehl == Befehl.Abwurf)
+                if (RoboterBefehl == Befehl.Abwurf)
                 {
                     //sollIst = false;
                     j3.Wirft = true;
@@ -112,7 +116,7 @@ public class Achsen6RoboterController : RoboterController
             case RoboterStatus.Wirft:
                 abwurfSignal = false;
                 j3.Wirft = false;
-                if (Befehl == Befehl.Start)
+                if (RoboterBefehl == Befehl.Start)
                 {
                     RoboterStatus = RoboterStatus.Faehrt;
                     RotiereAlleAchsen();
@@ -158,7 +162,7 @@ public class Achsen6RoboterController : RoboterController
         }
     }
 
-    private bool sollIstErreicht()
+    private bool SollIstErreicht()
     {
         bool sollIst = false;
         bool fix = true;
@@ -180,14 +184,14 @@ public class Achsen6RoboterController : RoboterController
     {
         SetzeSollrotation(abwurfRotation);
         SetzeSollRotationsGeschwindigkeit(abwurfGeschwindigkeit);
-        Befehl = Befehl.Abwurf;
+        RoboterBefehl = Befehl.Abwurf;
     }
 
     public override void InStartposition(float[] startRotation, float[] startGeschwindigkeit)
     {
         SetzeSollrotation(startRotation);
         SetzeSollRotationsGeschwindigkeit(startGeschwindigkeit);
-        Befehl = Befehl.Start;
+        RoboterBefehl = Befehl.Start;
     }
 
     public override RotationsAchse[] GetAchsen()

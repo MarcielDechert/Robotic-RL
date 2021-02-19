@@ -7,19 +7,24 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
     public RoboterStatus RoboterStatus { get => roboterStatus; set => roboterStatus = value; }
+
     [SerializeField] protected Transform abwurfPosition;
     public Transform AbwurfPosition { get => abwurfPosition; set => abwurfPosition = value; }
 
     private Befehl befehl = Befehl.Neutral;
-    public Befehl Befehl  { get => befehl; set => befehl = value; }
+    public Befehl RoboterBefehl  { get => befehl; set => befehl = value; }
+
     private Vector3 abwurfgeschwindigkeitVector3;
     public Vector3  AbwurfgeschwindigkeitVector3 { get => abwurfgeschwindigkeitVector3; set => abwurfgeschwindigkeitVector3 = value; }
-    private Vector3 letztePosition;
+   
+
     private float abwurfgeschwindigkeit;
     public float Abwurfgeschwindigkeit { get => abwurfgeschwindigkeit; set => abwurfgeschwindigkeit = value; }
 
     private float abwurfwinkelBall;
     public float AbwurfwinkelBall { get => abwurfwinkelBall; set => abwurfwinkelBall = value; }
+
+    private Vector3 letztePosition;
 
     public abstract void Step();
 
@@ -28,7 +33,6 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
     public abstract void InStartposition(float[] startRotation, float[] startGeschwindigkeit);
 
     public abstract RotationsAchse[] GetAchsen();
-
 
     protected void BerechneAbwurfgeschwindigkeit()
     {

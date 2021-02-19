@@ -7,39 +7,45 @@ public class RobotsLearningArea : MonoBehaviour
     [Header("Learning Parts")]
     [SerializeField] public RoboterController r_robot;
     public RoboterController R_robot { get => r_robot;}
+
     [SerializeField] private BallController r_ball;
     public BallController R_ball { get => r_ball;}
 
-    [SerializeField] private Rigidbody target;
-    [SerializeField] private Rigidbody ball;
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent;}
-    private float wurfweite;
 
+    [SerializeField] private Rigidbody target;
+    [SerializeField] private Rigidbody ball;
+
+    private float wurfweite;
     public float Wurfweite { get => wurfweite; set => wurfweite = value; }
 
     private float abwurfhoehe;
-
     public float Abwurfhoehe { get => abwurfhoehe; set => abwurfhoehe = value; }
+
+    private float stopZeit = 0.0f;
+
+    public float StopZeit { get => stopZeit; set => stopZeit = value; }
 
 
 
     // Start is called before the first frame update
-    void Start()
+   private void Start()
     {
-        Debug.Log(transform.position.y);
         r_ball = ball.GetComponent<TTBallController>();
-
     }
-
-    public void Reset()
+    public void AreaReset()
     {
-        target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
-        ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
-
-    }
-    public void BallReset()
-    {
+        if(agent.enabled)
+        {
+            target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
+            ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
+        }
+        else
+        {
+            ball.transform.position = r_robot.AbwurfPosition.position;
+        }
+        //
 
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
@@ -55,9 +61,12 @@ public class RobotsLearningArea : MonoBehaviour
         wurfweite = 0.0f;
         abwurfhoehe = 0.0f;
         r_ball.EinwurfWinkel = 0.0f;
+        stopZeit = 0.0f;
 
     }
-
+    public void ResetZeit()
+    {
+    }
     public float DistanceToTarget()
     {
         return Vector3.Distance(r_robot.transform.position, target.position);
@@ -84,7 +93,15 @@ public class RobotsLearningArea : MonoBehaviour
         if(r_robot.RoboterStatus == RoboterStatus.Wirft)
         {
             r_ball.Step();
+            //Debug.Log(r_ball.Ballgeschwindigkeit.magnitude);
+           // Debug.Log(stopZeit);
+            //stopZeit += Time.fixedDeltaTime;
+            //Debug.Log(stopZeit);
         }
-        agent.Step();
+
+        if (agent.enabled)
+        {
+            agent.Step();
+        }
     }
 }

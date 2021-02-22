@@ -14,8 +14,8 @@ public class RobotsLearningArea : MonoBehaviour
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent;}
 
-    [SerializeField] private Rigidbody target;
-    [SerializeField] private Rigidbody ball;
+    [SerializeField] public Rigidbody target;
+    [SerializeField] public Rigidbody ball;
 
     private float wurfweite;
     public float Wurfweite { get => wurfweite; set => wurfweite = value; }
@@ -36,16 +36,7 @@ public class RobotsLearningArea : MonoBehaviour
     }
     public void AreaReset()
     {
-        if(agent.enabled)
-        {
-            target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
-            ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
-        }
-        else
-        {
-            ball.transform.position = r_robot.AbwurfPosition.position;
-        }
-        //
+        ball.transform.position = r_robot.AbwurfPosition.position;
 
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;

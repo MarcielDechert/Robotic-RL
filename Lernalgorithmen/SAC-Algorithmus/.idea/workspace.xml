@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="32210c15-2f35-4bc7-b42e-e6a3095804bc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../DDPG-Algorithmus/DDPG_Player.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PPO-Algorithmus/PPO_Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../A2C-Algorithmus/A2C_Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/../A2C-Algorithmus/A2C_Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../A2C-Algorithmus/A2C_Ptan.py" beforeDir="false" afterPath="$PROJECT_DIR$/../A2C-Algorithmus/A2C_Ptan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../D4PG-Algorithmus/Train_D4PG.py" beforeDir="false" afterPath="$PROJECT_DIR$/../D4PG-Algorithmus/Train_D4PG.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../D4PG-Algorithmus/lib/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/../D4PG-Algorithmus/lib/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DDPG-Algorithmus/DDPG_Trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../DDPG-Algorithmus/DDPG_Trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DDPG-Algorithmus/lib/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/../DDPG-Algorithmus/lib/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PPO-Algorithmus/PPO_Trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PPO-Algorithmus/PPO_Trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC_Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC_Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC_Trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC_Trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TRPO-Algorithmus/TRPO_Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/../TRPO-Algorithmus/TRPO_Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TRPO-Algorithmus/TRPO_Trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../TRPO-Algorithmus/TRPO_Trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulation_timers.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulation_timers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Gelb.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Gelb.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/SchwarzMatt.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/SchwarzMatt.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Transparnet.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Transparnet.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Wand 1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Wand 1.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Wand.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Wand.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Weismatt.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/Weismatt.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/blau.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/blau.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/grau.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/grau.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/grün.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/grün.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/rot.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Materials/rot.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Scenes/RobotArticulation.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Scenes/RobotArticulation.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RL/RoboterAgent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RL/RoboterAgent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RL/RobotsLearningArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RL/RobotsLearningArea.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RoboterV7/Achsen6RoboterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Script/RoboterV7/Achsen6RoboterController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/QualitySettings.asset" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1nNaWboQg5tMFoFhYCe2ffGpMRE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager" selected="Python.SAC_Player">
+    <configuration name="SAC_Player" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TRPO-Algorithmus" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/SAC_Player.py" />
+      <option name="PARAMETERS" value="-m saves\sac-SAC-FinalStand\best_+1.000_2500.dat" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SAC_Trainer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="TRPO-Algorithmus" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Dechert\.conda\envs\pytorch-ptan\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/SAC_Trainer.py" />
+      <option name="PARAMETERS" value="--cuda -n SAC-FinalStand" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.SAC_Trainer" />
+      <item itemvalue="Python.SAC_Player" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.SAC_Player" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="32210c15-2f35-4bc7-b42e-e6a3095804bc" name="Default Changelist" comment="" />
+      <created>1611233034369</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611233034369</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SAC_Player.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

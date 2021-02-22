@@ -8,7 +8,7 @@ using System;
 
 public enum Belohnungssystem { Linear = 0, LinearMitToleranz = 1, LinearMitNegativ = 2, LinearNegativToleranz = 3};
 
-public class RoboterAgent : Agent
+public class RoboterAgent : Agent, IStep
 {
     public RobotsLearningArea area;
     private bool Abwurfvorgang = false;
@@ -18,10 +18,11 @@ public class RoboterAgent : Agent
     public override void OnEpisodeBegin()
     {
         area.AreaReset();
+        area.target.transform.localPosition = new Vector3((float)(-0.25 * UnityEngine.Random.value - 0.5f), 0.06f, 0);
         Abwurfvorgang = false;
 
         float[] sollgeschwindigkeit = new float[] { 100f, 100f, 100f, 25f, 25f, 25f };
-        float[] sollwinkel = new float[] { 180f, 0, 80f, 0, 60f, 0 };
+        float[] sollwinkel = new float[] { 180f, 60f, 0, 0, 0, 0 };
         area.R_robot.InStartposition(sollwinkel, sollgeschwindigkeit);
     }
 
@@ -36,11 +37,11 @@ public class RoboterAgent : Agent
         continuousActions[0] = (float)((continuousActions[0] / 2) + 0.5);
         continuousActions[1] = (float)((continuousActions[1] / 2) + 0.5);
         float kigeschwindigkeit = Mathf.Lerp(10f, 500f, continuousActions[0]);
-        float kiwinkel = Mathf.Lerp(0f, 70f, continuousActions[1]);
+        float kiwinkel = Mathf.Lerp(-150f, 0, continuousActions[1]);
         Debug.Log("KI Übergabe: " + continuousActions[0] + " und Winkel: " + continuousActions[1]);
 
         float[] geschwindigkeit = new float[] {0.01f, 0.01f, kigeschwindigkeit, 0.01f, 0.01f, 0.01f };
-        float[] winkel = new float[] { 180f, 0f, kiwinkel, 0f, 60f, 0f };
+        float[] winkel = new float[] { 180f, 60f, kiwinkel, 0f, 0f, 0f };
         area.R_robot.StarteAbwurf(winkel, geschwindigkeit);
         Debug.Log("Befehl in StartAbwurf mit Geschwindigkeit: " + kigeschwindigkeit + " und Winkel: " + kiwinkel);
     }

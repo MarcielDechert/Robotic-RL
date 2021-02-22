@@ -34,6 +34,12 @@ DELTA_Z = (Vmax - Vmin) / (N_ATOMS - 1)
 
 
 def test_net(net, env, count=100, device="cpu"):
+    """
+        net: Modell welches optimiert werden soll
+        env: Umgebung in der das Modell optimiert werden soll
+        count: Anzahl an Testwürfen
+        device: Gerät auf denen die Berechnungen durchgeführt werden sollen
+    """
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -53,6 +59,10 @@ def test_net(net, env, count=100, device="cpu"):
 
 def distr_projection(next_distr_v, rewards_v, dones_mask_t,
                      gamma, device="cpu"):
+    """
+        Berechnen der Verteilung der Vorhersage der Klassen bzw. der Atome in der der Aktionswert eingeordnet wird.
+        Daher für jedes Atom die neue Wahrscheinlichkeit berechnen.
+    """
     next_distr = next_distr_v.data.cpu().numpy()
     rewards = rewards_v.data.cpu().numpy()
     dones_mask = dones_mask_t.cpu().numpy().astype(np.bool)
@@ -96,6 +106,7 @@ def distr_projection(next_distr_v, rewards_v, dones_mask_t,
 
 
 if __name__ == "__main__":
+    # Parsen der Parameterwerte bei Start des Programms
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -105,11 +116,13 @@ if __name__ == "__main__":
     save_path = os.path.join("saves", "d4pg-" + args.name)
     os.makedirs(save_path, exist_ok=True)
 
+    # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
     channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
+    # Erstellen des Modells nach der D4PG-Architektur
     act_net = model.D4PGActor(env.observation_space.shape[0], env.action_space.shape[0]).to(device)
     crt_net = model.D4PGCritic(env.observation_space.shape[0], env.action_space.shape[0], N_ATOMS, Vmin, Vmax).to(device)
     print(act_net)
@@ -117,6 +130,7 @@ if __name__ == "__main__":
     tgt_act_net = ptan.agent.TargetNet(act_net)
     tgt_crt_net = ptan.agent.TargetNet(crt_net)
 
+    # Erstellen des Agenten mit der PTAN-Bibliothek und des Buffers
     writer = SummaryWriter(comment="-d4pg_" + args.name)
     agent = model.AgentD4PG(act_net, device=device)
     exp_source = ptan.experience.ExperienceSourceFirstLast(env, agent, gamma=GAMMA, steps_count=REWARD_STEPS)
@@ -140,12 +154,13 @@ if __name__ == "__main__":
                 if len(buffer) < REPLAY_INITIAL:
                     continue
 
+                # Entnahme einer Stichprobe aus dem Buffer
                 batch = buffer.sample(BATCH_SIZE)
                 states_v, actions_v, rewards_v, \
                 dones_mask, last_states_v = \
                     common.unpack_batch_ddqn(batch, device)
 
-                # train critic
+                # Optimieren des Critic-Netzes
                 crt_opt.zero_grad()
                 crt_distr_v = crt_net(states_v, actions_v)
                 last_act_v = tgt_act_net.target_model(
@@ -158,15 +173,17 @@ if __name__ == "__main__":
                     gamma=GAMMA**REWARD_STEPS, device=device)
                 prob_dist_v = -F.log_softmax(
                     crt_distr_v, dim=1) * proj_distr_v
+                # Berechnen der Verlustfunktion des Critic-Netzes
                 critic_loss_v = prob_dist_v.sum(dim=1).mean()
                 critic_loss_v.backward()
                 crt_opt.step()
                 tb_tracker.track("loss_critic", critic_loss_v, frame_idx)
 
-                # train actor
+                # Optimieren des Actor-Netzes
                 act_opt.zero_grad()
                 cur_actions_v = act_net(states_v)
                 crt_distr_v = crt_net(states_v, cur_actions_v)
+                # Berechnen der Verlustfunktion des Actors-Netzes
                 actor_loss_v = -crt_net.distr_to_q(crt_distr_v)
                 actor_loss_v = actor_loss_v.mean()
                 actor_loss_v.backward()
@@ -177,6 +194,7 @@ if __name__ == "__main__":
                 tgt_act_net.alpha_sync(alpha=1 - 1e-3)
                 tgt_crt_net.alpha_sync(alpha=1 - 1e-3)
 
+                # Ausführen der Testwürfe nach 500 Würfe
                 if frame_idx % TEST_ITERS == 0:
                     ts = time.time()
                     rewards, steps = test_net(act_net, env, device=device)

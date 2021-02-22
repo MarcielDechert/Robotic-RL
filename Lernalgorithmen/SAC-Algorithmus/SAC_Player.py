@@ -39,7 +39,8 @@ if __name__ == "__main__":
         total_reward += reward
         total_steps += 1
 
-        action = action/2 + 0.5
-        action.data[0] = (action.data[0]*10) + ((1 - action.data[0]) * 500)
-        action.data[1] = (action.data[1]*-110) + ((1 - action.data[1]) * 70)
+        action.data[0] = action.data[0] / 2 + 0.5
+        action.data[1] = action.data[1] / 2 + 0.5
+        action.data[0] = 10 + action.data[0] * 500
+        action.data[1] = (action.data[1]*-150)
         print("The Target ist %.3f away and with the Actions %.3f and %.3f, we get %.3f Points" % (obs_v, action.data[0], action.data[1], reward))

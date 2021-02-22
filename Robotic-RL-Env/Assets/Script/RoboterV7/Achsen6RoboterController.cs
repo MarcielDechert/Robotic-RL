@@ -89,7 +89,7 @@ public class Achsen6RoboterController : RoboterController
                     else
                     {
                         RoboterStatus = RoboterStatus.Abwurfbereit;
-                        area.AreaReset();
+                        //area.AreaReset();
                     }
                 }
                 else

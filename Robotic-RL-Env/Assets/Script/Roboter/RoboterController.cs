@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Abstarkte Klasse die die allgmeinen Attribute und Methoden für den Roboter bereitstellt
+/// </summary>
 public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 {
 
@@ -34,12 +37,20 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 
     public abstract RotationsAchse[] GetAchsen();
 
+    /// <summary>
+    /// Berechnet die Abwurfgeschwindikeit des TCPs
+    /// </summary>
     protected void BerechneAbwurfgeschwindigkeit()
     {
         AbwurfgeschwindigkeitVector3 = (AbwurfPosition.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = AbwurfPosition.position;
         //abwurfgeschwindigkeitVector3 = achse[anzahlAchsen - 1].GetSpeed();
     }
+
+    /// <summary>
+    /// Berechnet den Abwurfwinkel anhand den Geschwindigkeitsvektors 
+    /// </summary>
+    /// <returns> Abwurfwinkel in Grad</returns>
     protected float BerechneAbwurfwinkel()
     {
         return Mathf.Rad2Deg * Mathf.Asin((AbwurfgeschwindigkeitVector3.y) / AbwurfgeschwindigkeitVector3.magnitude);

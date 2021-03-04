@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Entält Methoden und Komponeten zu Steuerung der Simulation
+/// </summary>
 public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
@@ -29,32 +32,39 @@ public class RobotsLearningArea : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-   private void Start()
+    /// <summary>
+    /// Wird beim Start einmalig aufgerufen. Initialisiert Attribute
+    /// </summary>
+    private void Start()
     {
         r_ball = ball.GetComponent<TTBallController>();
     }
+
+    /// <summary>
+    /// Setzt Werte von Attribute zurück
+    /// </summary>
     public void AreaReset()
     {
+        // wenn der Agent der KI aktiv ist
         if(agent.enabled)
         {
+            // Versetzt den Becher auf ein begrenzten Zufallswert in x richtung
             target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
-            ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
         }
-        else
-        {
-            ball.transform.position = r_robot.AbwurfPosition.position;
-        }
-        //
+        // Setzt die Position des Balls zurück
+        ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
 
+        // Setzt Eigenschaften des Balls zurück
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
 
+        // Setzt Abwurfparameter des Roboters zurück
         r_robot.AbwurfgeschwindigkeitVector3 = Vector3.zero;
         r_robot.Abwurfgeschwindigkeit= 0.0f;
         r_robot.AbwurfwinkelBall = 0.0f;
 
+        // Löscht den Inhalt der Kollisionsliste
         r_ball.Kollidiert = false;
         r_ball.KollisionsListe.Clear();
 
@@ -64,41 +74,57 @@ public class RobotsLearningArea : MonoBehaviour
         stopZeit = 0.0f;
 
     }
-    public void ResetZeit()
-    {
-    }
+
+    /// <summary>
+    /// Berechnet die Distanz zwischen Roboter und Becher
+    /// </summary>
+    /// <returns> absolute Distanz als Float</returns>
     public float DistanceToTarget()
     {
         return Vector3.Distance(r_robot.transform.position, target.position);
     }
 
+    /// <summary>
+    /// Berechnet die Distanz zwischen Ball und Becher
+    /// </summary>
+    /// <returns></returns>
     public float DistanceBallToTarget() 
     {
         return Vector3.Distance(r_ball.transform.position, target.position);
     }
 
+    /// <summary>
+    /// Berechnet absolute Wurfweite in x Richtung
+    /// </summary>
     public void BerechneWurfweite()
     {
         wurfweite = Mathf.Abs(r_ball.transform.position.x - r_robot.AbwurfPosition.transform.position.x);
     }
 
+    /// <summary>
+    /// Berechnet absolute Abwurfhöhe in y Richtung
+    /// </summary>
     public void BerechneAbwurfhoehe()
     {
         abwurfhoehe = Mathf.Abs(r_robot.AbwurfPosition.position.y)+ r_robot.transform.position.y;
     }
 
+    /// <summary>
+    /// Steuert die Schritte der Komonenten Roboter Ball und Agent
+    /// </summary>
     private void FixedUpdate()
     {
         r_robot.Step();
+
+        // Wenn der Roboter den Status wirft hat
         if(r_robot.RoboterStatus == RoboterStatus.Wirft)
         {
             r_ball.Step();
-            //Debug.Log(r_ball.Ballgeschwindigkeit.magnitude);
-           // Debug.Log(stopZeit);
             //stopZeit += Time.fixedDeltaTime;
             //Debug.Log(stopZeit);
         }
 
+        // wenn das Agent-Skript aktiv ist
         if (agent.enabled)
         {
             agent.Step();

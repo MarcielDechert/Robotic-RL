@@ -1,6 +1,0 @@
-model_checkpoint_path: "RobotArticulation-100006.ckpt"
-all_model_checkpoint_paths: "RobotArticulation-69999.ckpt"
-all_model_checkpoint_paths: "RobotArticulation-79999.ckpt"
-all_model_checkpoint_paths: "RobotArticulation-89999.ckpt"
-all_model_checkpoint_paths: "RobotArticulation-99999.ckpt"
-all_model_checkpoint_paths: "RobotArticulation-100006.ckpt"

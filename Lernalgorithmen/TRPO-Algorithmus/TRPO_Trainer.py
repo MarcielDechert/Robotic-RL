@@ -20,18 +20,25 @@ from gym_unity.envs import UnityToGymWrapper
 
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
-GAE_LAMBDA = 0.95
+GAE_LAMBDA = 0.99
 
-TRAJECTORY_SIZE = 256
-LEARNING_RATE_CRITIC = 1e-3
+TRAJECTORY_SIZE = 512
+LEARNING_RATE_CRITIC = 5e-4
 
 TRPO_MAX_KL = 0.01
-TRPO_DAMPING = 0.1
+TRPO_DAMPING = 0.05
 
-TEST_ITERS = 1000
+TEST_ITERS = 500
 
 
-def test_net(net, env, count=100, device="cpu"):
+def test_net(net, env, count=250, device="cpu"):
+    """
+         :param net: Modell welches optimiert werden soll
+         :param env: Umgebung in der das Modell optimiert werden soll
+         :param count: Anzahl an Testwürfen
+         :param device: Gerät auf denen die Berechnungen durchgeführt werden sollen
+         :return Tupel von Belohnungen
+    """
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -50,6 +57,10 @@ def test_net(net, env, count=100, device="cpu"):
 
 
 def calc_logprob(mu_v, logstd_v, actions_v):
+    """
+        Berechnung der LogProb-Funktion zur Berechnung der neuen
+        Policy-Verlustfunktion
+    """
     p1 = - ((mu_v - actions_v) ** 2) / (2*torch.exp(logstd_v).clamp(min=1e-3))
     p2 = - torch.log(torch.sqrt(2 * math.pi * torch.exp(logstd_v)))
     return p1 + p2
@@ -57,10 +68,11 @@ def calc_logprob(mu_v, logstd_v, actions_v):
 
 def calc_adv_ref(trajectory, net_crt, states_v, device="cpu"):
     """
-    By trajectory calculate advantage and 1-step ref value
-    :param trajectory: list of Experience objects
-    :param net_crt: critic network
-    :return: tuple with advantage numpy array and reference values
+        By trajectory calculate advantage and 1-step ref value
+        :param trajectory: Trajectorenliste
+        :param net_crt: Critic-Netz, Netz zur Vorhersage des Zustandwertes
+        :param states_v: Tensor mit gespeicherten Zuständen
+        :return: Tupel von Advantagewerten bezogen auf die Zustandswerte
     """
     values_v = net_crt(states_v)
     values = values_v.squeeze().data.cpu().numpy()
@@ -85,6 +97,7 @@ def calc_adv_ref(trajectory, net_crt, states_v, device="cpu"):
 
 
 if __name__ == "__main__":
+    # Parsen der Parameterwerte bei Start des Programms
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -97,16 +110,19 @@ if __name__ == "__main__":
     save_path = os.path.join("saves", "trpo-" + args.name)
     os.makedirs(save_path, exist_ok=True)
 
+    # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=10.0)
+    channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
+    # Erstellen des Modells nach der TRPO-Architektur
     net_act = model.ModelActor(env.observation_space.shape[0], env.action_space.shape[0]).to(device)
     net_crt = model.ModelCritic(env.observation_space.shape[0]).to(device)
     print(net_act)
     print(net_crt)
 
+    # Erstellen des Agenten mit der PTAN-Bibliothek
     writer = SummaryWriter(comment="-trpo_" + args.name)
     agent = model.AgentA2C(net_act, device=device)
     exp_source = ptan.experience.ExperienceSource(env, agent, steps_count=1)
@@ -123,6 +139,7 @@ if __name__ == "__main__":
                 writer.add_scalar("episode_steps", np.mean(steps), step_idx)
                 tracker.reward(np.mean(rewards), step_idx)
 
+            # Nach jedem Durchlaufen der 500 Würfe wird die Testfunktion aufgerufen
             if step_idx % TEST_ITERS == 0:
                 ts = time.time()
                 rewards, steps = test_net(net_act, env, device=device)
@@ -130,7 +147,8 @@ if __name__ == "__main__":
                     time.time() - ts, rewards, steps))
                 writer.add_scalar("test_reward", rewards, step_idx)
                 writer.add_scalar("test_steps", steps, step_idx)
-                if best_reward is None or best_reward < rewards:
+                # Bei besserer Belohnung das neue Speichern.
+                if best_reward is None or best_reward <= rewards:
                     if best_reward is not None:
                         print("Best reward updated: %.3f -> %.3f" % (best_reward, rewards))
                         name = "best_%+.3f_%d.dat" % (rewards, step_idx)
@@ -150,10 +168,10 @@ if __name__ == "__main__":
             mu_v = net_act(traj_states_v)
             old_logprob_v = calc_logprob(mu_v, net_act.logstd, traj_actions_v)
 
-            # normalize advantages
+            # Normalisieren der Advantagewerte
             traj_adv_v = (traj_adv_v - torch.mean(traj_adv_v)) / torch.std(traj_adv_v)
 
-            # drop last entry from the trajectory, an our adv and ref value calculated without it
+            # Herausnahme des letzten Eintrages der Trajectory und berechne den neuen ohne ihn
             trajectory = trajectory[:-1]
             old_logprob_v = old_logprob_v[:-1].detach()
             traj_states_v = traj_states_v[:-1]
@@ -162,7 +180,7 @@ if __name__ == "__main__":
             sum_loss_policy = 0.0
             count_steps = 0
 
-            # critic step
+            # Optimieren des Critic-Netzes
             opt_crt.zero_grad()
             value_v = net_crt(traj_states_v)
             loss_value_v = F.mse_loss(
@@ -170,8 +188,10 @@ if __name__ == "__main__":
             loss_value_v.backward()
             opt_crt.step()
 
-            # actor step
             def get_loss():
+                """
+                    Berechnen der Verlustfunktion der Policy / des Actor Netzes
+                """
                 mu_v = net_act(traj_states_v)
                 logprob_v = calc_logprob(
                     mu_v, net_act.logstd, traj_actions_v)
@@ -180,6 +200,9 @@ if __name__ == "__main__":
                 return action_loss_v.mean()
 
             def get_kl():
+                """
+                    Berechnen des Clippingwertes
+                """
                 mu_v = net_act(traj_states_v)
                 logstd_v = net_act.logstd
                 mu0_v = mu_v.detach()
@@ -191,6 +214,7 @@ if __name__ == "__main__":
                 kl = logstd_v - logstd0_v + v - 0.5
                 return kl.sum(1, keepdim=True)
 
+            # Optimieren der Policy
             trpo.trpo_step(net_act, get_loss, get_kl, args.maxkl,
                            TRPO_DAMPING, device=device)
 

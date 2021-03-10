@@ -38,4 +38,11 @@ if __name__ == "__main__":
         obs, reward, done, _ = env.step(action)
         total_reward += reward
         total_steps += 1
-        print("The Target ist %.3f away and with the Actions %.3f and %.3f, we get %.3f Points" % (obs.data[0], action.data[0], action.data[1], reward))
+        if done:
+            break
+    action.data[0] = action.data[0] / 2 + 0.5
+    action.data[1] = action.data[1] / 2 + 0.5
+    action.data[0] = 10 + action.data[0] * 500
+    action.data[1] = (action.data[1] * -150)
+    print("The Target ist %.3f away and with the Actions %.3f and %.3f, we get %.3f Points" % (
+        obs_v, action.data[0], action.data[1], reward))

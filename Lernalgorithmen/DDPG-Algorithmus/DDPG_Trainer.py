@@ -20,14 +20,20 @@ from gym_unity.envs import UnityToGymWrapper
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
 BATCH_SIZE = 32
-LEARNING_RATE = 1e-4
-REPLAY_SIZE = 100000
-REPLAY_INITIAL = 10000
+LEARNING_RATE = 5e-5
+REPLAY_SIZE = 1000
+REPLAY_INITIAL = 100
 
-TEST_ITERS = 2056
+TEST_ITERS = 500
 
 
-def test_net(net, env, count=128, device="cpu"):
+def test_net(net, env, count=100, device="cpu"):
+    """
+    net: Modell welches optimiert werden soll
+    env: Umgebung in der das Modell optimiert werden soll
+    count: Anzahl an Testwürfen
+    device: Gerät auf denen die Berechnungen durchgeführt werden sollen
+    """
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -46,6 +52,7 @@ def test_net(net, env, count=128, device="cpu"):
 
 
 if __name__ == "__main__":
+    # Parsen der Parameterwerte bei Start des Programms
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -55,11 +62,13 @@ if __name__ == "__main__":
     save_path = os.path.join("saves", "ddpg-" + args.name)
     os.makedirs(save_path, exist_ok=True)
 
+    # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=25.0)
+    channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
+    # Erstellen des Modells nach der DDPG-Architektur
     act_net = model.DDPGActor(
         env.observation_space.shape[0],
         env.action_space.shape[0]).to(device)
@@ -71,6 +80,7 @@ if __name__ == "__main__":
     tgt_act_net = ptan.agent.TargetNet(act_net)
     tgt_crt_net = ptan.agent.TargetNet(crt_net)
 
+    # Erstellung des Buffers so wie des Batches
     writer = SummaryWriter(comment="-ddpg_" + args.name)
     agent = model.AgentDDPG(act_net, device=device)
     exp_source = ptan.experience.ExperienceSourceFirstLast(
@@ -94,15 +104,17 @@ if __name__ == "__main__":
                     tb_tracker.track("episode_steps", steps[0], frame_idx)
                     tracker.reward(rewards[0], frame_idx)
 
+                # Zu Beginn zufällige Aktionen ausführen bis die minimale Buffergröße erreicht ist
                 if len(buffer) < REPLAY_INITIAL:
                     continue
 
+                # Entnahme einer Stichprobe aus dem Buffer
                 batch = buffer.sample(BATCH_SIZE)
                 states_v, actions_v, rewards_v, \
                 dones_mask, last_states_v = \
                     common.unpack_batch_ddqn(batch, device)
 
-                # train critic
+                # Trainieren des Critic-Netzes
                 crt_opt.zero_grad()
                 q_v = crt_net(states_v, actions_v)
                 last_act_v = tgt_act_net.target_model(
@@ -112,6 +124,7 @@ if __name__ == "__main__":
                 q_last_v[dones_mask] = 0.0
                 q_ref_v = rewards_v.unsqueeze(dim=-1) + \
                           q_last_v * GAMMA
+                # Berechnen der Critic-Verlustfunktion
                 critic_loss_v = F.mse_loss(q_v, q_ref_v.detach())
                 critic_loss_v.backward()
                 crt_opt.step()
@@ -120,7 +133,7 @@ if __name__ == "__main__":
                 tb_tracker.track("critic_ref",
                                  q_ref_v.mean(), frame_idx)
 
-                # train actor
+                # Optimieren des Actor-Netzes
                 act_opt.zero_grad()
                 cur_actions_v = act_net(states_v)
                 actor_loss_v = -crt_net(states_v, cur_actions_v)
@@ -133,6 +146,7 @@ if __name__ == "__main__":
                 tgt_act_net.alpha_sync(alpha=1 - 1e-3)
                 tgt_crt_net.alpha_sync(alpha=1 - 1e-3)
 
+                # Ausführen der Testwürfe nach 500 Würfen in der Umgebung
                 if frame_idx % TEST_ITERS == 0:
                     ts = time.time()
                     rewards, steps = test_net(act_net, env, device=device)

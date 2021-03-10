@@ -22,13 +22,20 @@ ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
 REWARD_STEPS = 2
 BATCH_SIZE = 32
-LEARNING_RATE = 5e-5
+LEARNING_RATE = 5e-3
 ENTROPY_BETA = 1e-4
 
-TEST_ITERS = 2056
+TEST_ITERS = 500
 
 
 def test_net(net, env, count=128, device="cpu"):
+    """
+        :param net: Modell welches optimiert werden soll
+        :param env: Umgebung in der das Modell optimiert werden soll
+        :param count: Anzahl an Testwürfen
+        :param device: Gerät auf denen die Berechnungen durchgeführt werden sollen
+        :return Tupel von Belohnungen
+    """
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -48,12 +55,17 @@ def test_net(net, env, count=128, device="cpu"):
 
 
 def calc_logprob(mu_v, var_v, actions_v):
+    """
+    Berechnung der LogProb-Funktion zur Berechnung der neuen
+    Policy-Verlustfunktion
+    """
     p1 = - ((mu_v - actions_v) ** 2) / (2*var_v.clamp(min=1e-3))
     p2 = - torch.log(torch.sqrt(2 * math.pi * var_v))
     return p1 + p2
 
 
 if __name__ == "__main__":
+    # Parsen der Parameterwerte bei Start des Programms
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -63,14 +75,17 @@ if __name__ == "__main__":
     save_path = os.path.join("saves", "a2c-" + args.name)
     os.makedirs(save_path, exist_ok=True)
 
+    # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
-    channel.set_configuration_parameters(time_scale=25.0)
+    channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
+    # Erstellen des Modells nach der A2C-Architektur
     net = model.ModelA2C(env.observation_space.shape[0], env.action_space.shape[0]).to(device)
     print(net)
 
+    # Erstellen des Agenten mit der PTAN-Bibliothek
     writer = SummaryWriter(comment="-a2c_" + args.name)
     agent = model.AgentA2C(net, device=device)
     exp_source = ptan.experience.ExperienceSourceFirstLast(env, agent, GAMMA, steps_count=REWARD_STEPS)
@@ -88,6 +103,7 @@ if __name__ == "__main__":
                     tb_tracker.track("episode_steps", steps[0], step_idx)
                     tracker.reward(rewards[0], step_idx)
 
+                # Nach jedem Durchlaufen der 500 Würfe wird die Testfunktion aufgerufen
                 if step_idx % TEST_ITERS == 0:
                     ts = time.time()
                     rewards, steps = test_net(net, env, device=device)
@@ -95,7 +111,8 @@ if __name__ == "__main__":
                         time.time() - ts, rewards, steps))
                     writer.add_scalar("test_reward", rewards, step_idx)
                     writer.add_scalar("test_steps", steps, step_idx)
-                    if best_reward is None or best_reward < rewards:
+                    # Bei besserer Belohnung das neue Speichern.
+                    if best_reward is None or best_reward <= rewards:
                         if best_reward is not None:
                             print("Best reward updated: %.3f -> %.3f" % (best_reward, rewards))
                             name = "best_%+.3f_%d.dat" % (rewards, step_idx)
@@ -107,26 +124,32 @@ if __name__ == "__main__":
                 if len(batch) < BATCH_SIZE:
                     continue
 
+                # Entnahme der Zustandswerte und Aktionen aus dem gespeicherten Batch
                 states_v, actions_v, vals_ref_v = \
                     common.unpack_batch_a2c(
                         batch, net, device=device,
                         last_val_gamma=GAMMA ** REWARD_STEPS)
                 batch.clear()
 
+                # Vorhersage des aktuellen Zustandwertes mit dem aktuellen Modell
                 optimizer.zero_grad()
                 mu_v, var_v, value_v = net(states_v)
 
+                # Berechnen der Verlustfunktion für den Zustandswert
                 loss_value_v = F.mse_loss(
                     value_v.squeeze(-1), vals_ref_v)
 
+                # Berechnen des Advantagewertes
                 adv_v = vals_ref_v.unsqueeze(dim=-1) - \
                         value_v.detach()
                 log_prob_v = adv_v * calc_logprob(
                     mu_v, var_v, actions_v)
+                # Berechnen der Verlustfunktion der Policy
                 loss_policy_v = -log_prob_v.mean()
                 ent_v = -(torch.log(2*math.pi*var_v) + 1)/2
                 entropy_loss_v = ENTROPY_BETA * ent_v.mean()
 
+                # Berechnen der Gesamtverlustfunktion
                 loss_v = loss_policy_v + entropy_loss_v + \
                          loss_value_v
                 loss_v.backward()

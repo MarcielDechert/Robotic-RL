@@ -3,17 +3,17 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+HID_SIZE = 256
 
+# Erstellung des Actor-Modells für das DDPG-Verfahren
 class DDPGActor(nn.Module):
     def __init__(self, obs_size, act_size):
         super(DDPGActor, self).__init__()
 
         self.net = nn.Sequential(
-            nn.Linear(obs_size, 400),
+            nn.Linear(obs_size, HID_SIZE),
             nn.ReLU(),
-            nn.Linear(400, 300),
-            nn.ReLU(),
-            nn.Linear(300, act_size),
+            nn.Linear(HID_SIZE, act_size),
             nn.Tanh()
         )
 
@@ -21,19 +21,20 @@ class DDPGActor(nn.Module):
         return self.net(x)
 
 
+# Erstellung des Critic-Netzes für das DDPG-Verfahren
 class DDPGCritic(nn.Module):
     def __init__(self, obs_size, act_size):
         super(DDPGCritic, self).__init__()
 
         self.obs_net = nn.Sequential(
-            nn.Linear(obs_size, 400),
+            nn.Linear(obs_size, HID_SIZE),
             nn.ReLU(),
         )
 
         self.out_net = nn.Sequential(
-            nn.Linear(400 + act_size, 300),
+            nn.Linear(HID_SIZE + act_size, HID_SIZE),
             nn.ReLU(),
-            nn.Linear(300, 1)
+            nn.Linear(HID_SIZE, 1)
         )
 
     def forward(self, x, a):
@@ -41,6 +42,7 @@ class DDPGCritic(nn.Module):
         return self.out_net(torch.cat([obs, a], dim=1))
 
 
+# Agenten Klasse des DDPG-Verfahren mit dem PTAN-Modul
 class AgentDDPG(ptan.agent.BaseAgent):
     def __init__(self, net, device="cpu", ou_enabled=True,
                  ou_mu=0.0, ou_teta=0.15, ou_sigma=0.2,
@@ -56,6 +58,7 @@ class AgentDDPG(ptan.agent.BaseAgent):
     def initial_state(self):
         return None
 
+    # Berechnen des neuen Zustandwertes mit den oben definierten Modellen
     def __call__(self, states, agent_states):
         states_v = ptan.agent.float32_preprocessor(states)
         states_v = states_v.to(self.device)

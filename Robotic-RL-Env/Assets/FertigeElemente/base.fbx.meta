@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Robotic-RL-Env/Assets/FertigeElemente/Roboter_Import_von_Blender/Fertiger_Roboterarm_zum_Import_in_unity.fbx.meta
 guid: 661e86af88a52fd418b6a298dd8d09d7
+=======
+guid: cd9258c42ab1dfa4cbf2923843ffae52
+>>>>>>> parent of c56189ba (Aufräumarbeiten):Robotic-RL-Env/Assets/FertigeElemente/base.fbx.meta
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []

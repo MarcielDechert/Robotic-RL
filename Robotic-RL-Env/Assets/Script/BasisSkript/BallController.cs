@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///  Abstrakte Klasse die die allgemeinen Attribute und Methoden für das Verhalten des Balls bereitstellt 
+/// </summary>
 public abstract class BallController : MonoBehaviour, IStep
 {
     [SerializeField] protected RobotsLearningArea area;
-<<<<<<< Updated upstream
-    private bool kollidiert = false;
-=======
 
     private bool isKollidiert = false;
->>>>>>> Stashed changes
 
     public bool IsKollidiert { get => isKollidiert; set => isKollidiert = value; }
 
@@ -28,39 +27,41 @@ public abstract class BallController : MonoBehaviour, IStep
 
     private Vector3 ballGeschwindigkeit;
 
-<<<<<<< Updated upstream
-    public Vector3 Ballgeschwindigkeit { get => ballgeschwindigkeit; set => ballgeschwindigkeit = value; }
-    private Vector3 letztePosition = Vector3.zero;
-=======
     public Vector3 BallGeschwindigkeit { get => ballGeschwindigkeit; set => ballGeschwindigkeit = value; }
->>>>>>> Stashed changes
 
     public abstract void Step();
 
-    public void Abwurf(Vector3 position, Vector3 geschwindigkeit)
+    /// <summary>
+    /// Positioniert den Ball an vorgegebner Stelle und gibt ihn eine vorgegeben Anfangsgeschwindigkeit für den Abwurf
+    /// </summary>
+    /// <param name="_position"> Position des Abwurfs als Vektor3</param>
+    /// <param name="_geschwindigkeit"> Startgeschwindigkeit als Vektor3</param>
+    public void Abwurf(Vector3 _position, Vector3 _geschwindigkeit)
     {
-        this.GetComponent<Rigidbody>().MovePosition(position);
+        this.GetComponent<Rigidbody>().MovePosition(_position);
         this.GetComponent<Rigidbody>().useGravity = true;
-        this.GetComponent<Rigidbody>().velocity = (geschwindigkeit);
+        this.GetComponent<Rigidbody>().velocity = (_geschwindigkeit);
     }
-    protected void OnCollisionEnter(Collision other)
-    {
 
+    /// <summary>
+    /// Verarbeitet Kollisionen mit andern Objekten
+    /// </summary>
+    /// <param name="other"> Andere GameObjects</param>
+    protected void OnCollisionEnter(Collision other)
+    {   
+        //wenn der Layer des GameObjects ungleich 0 isz
         if (other.gameObject.layer != 0)
         {
-<<<<<<< Updated upstream
-            Kollidiert = true;
-            Debug.Log(KollisionsListe.Count);
-=======
             IsKollidiert = true;
 
             //wenn die KollisonsListe leer ist
->>>>>>> Stashed changes
             if(KollisionsListe.Count == 0)
             {
                 area.BerechneAbwurfhoehe();
                 area.BerechneWurfweite();
             }
+
+            //wenn das Objekt mit Layer x getroffen wird er zur KollisionsListe hinzugefügt
 
             if (other.collider.gameObject.layer == 10 && KollisionsListe.Contains(KollisionsLayer.Wand) == false)
             {
@@ -74,46 +75,59 @@ public abstract class BallController : MonoBehaviour, IStep
             {
                 KollisionsListe.Add(KollisionsLayer.Decke);
             }
-            else if (other.collider.gameObject.layer == 13 && KollisionsListe.Contains(KollisionsLayer.Roboter) == false)
+            else if (other.collider.gameObject.layer == 13 && KollisionsListe.Contains(KollisionsLayer.Roboter) == false )
             {
-                KollisionsListe.Add(KollisionsLayer.Roboter);
+                KollisionsListe.Add(KollisionsLayer.Roboter);;
             }
             else if (other.collider.gameObject.layer == 14 && KollisionsListe.Contains(KollisionsLayer.Becherwand) == false)
             {
                 KollisionsListe.Add(KollisionsLayer.Becherwand);
             }
+            else if (other.collider.gameObject.layer == 16 && KollisionsListe.Contains(KollisionsLayer.TCP) == false )
+            {
+                KollisionsListe.Add(KollisionsLayer.TCP);
+            }
         }
     }
 
+    /// <summary>
+    /// Verarbeitet Kollisionen mit Objekten die die Eigenschaft "Is Trigger" hat
+    /// </summary>
+    /// <param name="other"></param>
     protected void OnTriggerEnter(Collider other)
     {
+        // wenn der getroffene Layer Einwurfzone ist und noch nicht in der Kollisionsliste ist
         if (other.gameObject.layer == 16 && KollisionsListe.Contains(KollisionsLayer.Einwurfzone) == false)
         {
             KollisionsListe.Add(KollisionsLayer.Einwurfzone);
             einwurfWinkel = BerechneEinwurfwinkel();
-            if(KollisionsListe.Count == 0)
+
+            //wenn die KollisonsListe leer ist
+            if (KollisionsListe.Count == 0)
             {
                 area.BerechneAbwurfhoehe();
                 area.BerechneWurfweite();
             }
         }
+        // wenn der getroffene Layer Becherboden ist und noch nicht in der Kollisionsliste ist
         else if (other.gameObject.layer == 15 && KollisionsListe.Contains(KollisionsLayer.Becherboden) == false)
         {
             KollisionsListe.Add(KollisionsLayer.Becherboden);
         }
     }
 
-
+    /// <summary>
+    /// Berechnet die aktuelle Ballgeschwindigkeit
+    /// </summary>
     protected void BerechneBallgeschwindigkeit()
     {
-<<<<<<< Updated upstream
-        Ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
-        letztePosition = this.transform.position;
-=======
         BallGeschwindigkeit = area.R_ball.GetComponent<Rigidbody>().velocity;
->>>>>>> Stashed changes
     }
 
+    /// <summary>
+    /// Berechnet den Einwurfwinkel anhand des Geschwindigkeitsvektors
+    /// </summary>
+    /// <returns> Winkel in Grad</returns>
     protected float BerechneEinwurfwinkel()
     {
         return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(BallGeschwindigkeit.y) / BallGeschwindigkeit.magnitude));

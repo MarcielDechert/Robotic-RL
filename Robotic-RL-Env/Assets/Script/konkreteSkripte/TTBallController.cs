@@ -1,20 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Becherwand = 4, Becherboden = 5, Einwurfzone = 6, Roboter = 7 };
+using UnityEditor;
+using System.IO;
 
+// Globaler Zustand für die Kollisions Layer
+public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Becherwand = 4, Becherboden = 5, Einwurfzone = 6, Roboter = 7, TCP = 8};
+
+/// <summary>
+/// Steuert das Verhalten des Balls. Erbt von der Klasse BallController
+/// </summary>
 public class TTBallController : BallController
 {
-<<<<<<< Updated upstream
-    private float luftwiderstand;
-    private float flaeche;
-    private float reynoldzahl;
-    private float cw;
-    private float ballDurchmesser;
-    private float luftDichte = 1.2041f;
-    private float viskoseLuft = 0.0000182f;
-
-=======
     private const double  luftDichte = 1.2041;          // Luftdruck in kg/m^3 bei 20°C Umgebungstemp.
     private const double  luftViskositaet = 0.0000182;  // Viskosität der Luft in Pa*s
     private const double  reynoldzahlKrit = 3692.0;     // kritische Reynoldszahl: Laminar --> Turbulent
@@ -36,27 +33,21 @@ public class TTBallController : BallController
     /// <summary>
     /// Wird beim Start einmalig aufgerufen. Initialisiert Attribute
     /// </summary>
->>>>>>> Stashed changes
     private void Start()
     {
         flaeche = BerechneBallFlaeche(transform.localScale.y);
         ballDurchmesser = transform.localScale.y;
     }
+
+    /// <summary>
+    /// Führt das Verhalten des Balls aus. Ersetzt die FixedUpdate() Methode
+    /// </summary>
     public override void Step()
     {
         BerechneBallgeschwindigkeit();
         SetLuftwidertand();
     }
 
-<<<<<<< Updated upstream
-    private void SetzeLuftwidertand()
-    {
-        if(LuftwiderstandAktiv)
-        {
-            reynoldzahl = BerechneReynoldszahl(luftDichte,Ballgeschwindigkeit.magnitude,ballDurchmesser, viskoseLuft);
-            cw = BerechneCwWert(reynoldzahl);
-            luftwiderstand = BerechneLuftwiderstand(cw,flaeche,luftDichte,Ballgeschwindigkeit.magnitude);
-=======
     /// <summary>
     /// Lässt ein Luftwidertand dem Ball entgegenwirken
     /// </summary>
@@ -107,25 +98,21 @@ public class TTBallController : BallController
 
                     //Write some text to the test.txt file
                     //
->>>>>>> Stashed changes
 
-            if(luftwiderstand < 10.0f && area.r_robot.RoboterStatus == RoboterStatus.Wirft)
-            {
-                area.R_ball.GetComponent<Rigidbody>().drag = luftwiderstand;
-                //Debug.Log(luftwiderstand);
+                    //Re-import the file to update the reference in the editor
+                    //AssetDatabase.ImportAsset(path);
+                    // TextAsset asset = (TextAsset)Resources.Load("test");
+
+                    //Print the text from the file
+                    //Debug.Log(asset.text);
+
+                }
+                
+                */
             }
-        }
-        else
-        {
-            area.R_ball.GetComponent<Rigidbody>().drag = 0.0f;
         }
     }
 
-<<<<<<< Updated upstream
-    private float BerechneLuftwiderstand(float _cw, float _flaeche, float _luftDichte, float _geschwindigkeit)
-    {
-        return 0.5f * _cw * _flaeche * _luftDichte * Mathf.Pow(_geschwindigkeit,2) * 1000;
-=======
     /// <summary>
     /// Berechnet den Luftwiderstand für turbulente Strömung
     /// </summary>
@@ -149,17 +136,18 @@ public class TTBallController : BallController
     private double BerechneLuftwiderstandLaminar( double _ballDurchmesser, double _geschwindigkeit)
     {
         return 6.0 * Mathf.PI * luftViskositaet * _ballDurchmesser / 2 * _geschwindigkeit;
->>>>>>> Stashed changes
     }
 
-    private float BerechneBallFlaeche(float _durchmesser)
+    /// <summary>
+    /// Berechnet die Querschnittsfläche des Balls
+    /// </summary>
+    /// <param name="_durchmesser"> Durchmesser des Balls</param>
+    /// <returns> Fläche in m² als Double</returns>
+    private double BerechneBallFlaeche(double _durchmesser)
     {
-        return Mathf.Pow(_durchmesser,2) / 4* Mathf.PI;
+        return  Mathf.PI * Mathf.Pow( (float) _durchmesser,2) / 4 ;
     }
 
-<<<<<<< Updated upstream
-    private float BerechneReynoldszahl(float _luftDichte, float _geschwindigkeit,float _durchmesser, float _viskoseLuft)
-=======
     /// <summary>
     /// Berechnet die Reynoldszahl
     /// </summary>
@@ -169,14 +157,18 @@ public class TTBallController : BallController
     /// <param name="_viskoseLuft"> Viskosität des Balls</param>
     /// <returns> Reynoldszahl als Double</returns>
     private double BerechneReynoldszahl( double _geschwindigkeit, double _durchmesser)
->>>>>>> Stashed changes
     {
         return luftDichte * _geschwindigkeit * _durchmesser / luftViskositaet ;
     }
 
-    private float BerechneCwWert(float _reynoldzahl)
+    /// <summary>
+    /// Berechnet den Widerstandsbeiwert
+    /// </summary>
+    /// <param name="_reynoldzahl"> Reynoldszahl</param>
+    /// <returns> Widerstandbeiwert als Double</returns>
+    private double BerechneCwWert(double _reynoldzahl)
     {
-        return 24/_reynoldzahl + 4/Mathf.Sqrt(_reynoldzahl) + 0.4f  ;
+        return 24/_reynoldzahl + 4/Mathf.Sqrt( (float) _reynoldzahl) + 0.4  ;
     }
     
 

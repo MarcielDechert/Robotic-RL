@@ -1,11 +1,15 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Robotic-RL-Env/Assets/FertigeElemente/cup1.fbx.meta
 <<<<<<< HEAD:Robotic-RL-Env/Assets/FertigeElemente/Roboter_Import_von_Blender/mitsubishiNullStellung.fbx.meta
 guid: d50bfc1a974b8554ebc8a8cdaf8a3981
 =======
 guid: f0f72bbec7119a147a6aa14bea064fb4
 >>>>>>> parent of c56189ba (Aufräumarbeiten):Robotic-RL-Env/Assets/FertigeElemente/cup1.fbx.meta
+=======
+guid: 4ab5076b4b82bf440b2694ca566978e8
+>>>>>>> parent of 37458720 (Aufräumen):Robotic-RL-Env/Assets/FertigeElemente/Roboter_Import_von_Blender/mitsubishiNullStellung.fbx.meta
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20100
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -47,7 +51,6 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1

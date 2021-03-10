@@ -17,7 +17,7 @@ public class RobotsLearningArea : MonoBehaviour
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent;}
 
-    [SerializeField] public Rigidbody target;
+    [SerializeField] private Rigidbody target;
     [SerializeField] private Rigidbody ball;
 
     private float wurfweite;

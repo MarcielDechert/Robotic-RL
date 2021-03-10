@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Robotic-RL-Env/Assets/Scenes/RobotArticulationMulti.unity.meta
 guid: 9b5e51e07c48a894a8e9bb269d66253e
+DefaultImporter:
+=======
+guid: 0efd27959c2f42b4e8f9296ceed52f6b
 PrefabImporter:
+>>>>>>> Unity-Env:Robotic-RL-Env/Assets/FertigeElemente/RoboterV8/RoboterV8.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

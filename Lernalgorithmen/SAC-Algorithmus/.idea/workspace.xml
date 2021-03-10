@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32210c15-2f35-4bc7-b42e-e6a3095804bc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ClassDiagram1.cd.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC_Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC_Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulationMulti_timers.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulationMulti_timers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulation_timers.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/ML-Agents/Timers/RobotArticulation_timers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Scenes/RobotArticulation.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Assets/Scenes/RobotArticulation.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robotic-RL-Env/ProjectSettings/QualitySettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +27,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../A2C-Algorithmus" />
   </component>
   <component name="RunManager" selected="Python.SAC_Player">
     <configuration name="SAC_Player" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -88,7 +95,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/SAC_Player.py</url>
-          <line>43</line>
+          <line>42</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

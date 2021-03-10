@@ -5,7 +5,6 @@ from mlagents_envs.side_channel.engine_configuration_channel import EngineConfig
 from gym_unity.envs import UnityToGymWrapper
 
 from lib import model
-from PIL import Image
 
 import numpy as np
 import torch

@@ -22,7 +22,7 @@ public class RoboterAgent : Agent, IStep
         Abwurfvorgang = false;
 
         float[] sollgeschwindigkeit = new float[] { 100f, 100f, 100f, 25f, 25f, 25f };
-        float[] sollwinkel = new float[] { 180f, 60f, 0, 0, 0, 0 };
+        float[] sollwinkel = new float[] { 90f, 0f, 170f, 0, -50, 90 };
         area.R_robot.InStartposition(sollwinkel, sollgeschwindigkeit);
     }
 
@@ -36,12 +36,12 @@ public class RoboterAgent : Agent, IStep
         var continuousActions = actionBuffers.ContinuousActions;
         continuousActions[0] = (float)((continuousActions[0] / 2) + 0.5);
         continuousActions[1] = (float)((continuousActions[1] / 2) + 0.5);
-        float kigeschwindigkeit = Mathf.Lerp(10f, 500f, continuousActions[0]);
-        float kiwinkel = Mathf.Lerp(-150f, 0, continuousActions[1]);
+        float kigeschwindigkeit = Mathf.Lerp(10f, 185f, continuousActions[0]);
+        float kiwinkel = Mathf.Lerp(-30f, 170, continuousActions[1]);
         Debug.Log("KI Übergabe: " + continuousActions[0] + " und Winkel: " + continuousActions[1]);
 
         float[] geschwindigkeit = new float[] {0.01f, 0.01f, kigeschwindigkeit, 0.01f, 0.01f, 0.01f };
-        float[] winkel = new float[] { 180f, 60f, kiwinkel, 0f, 0f, 0f };
+        float[] winkel = new float[] { 90f, 0f, kiwinkel, 0, -50, 90 };
         area.R_robot.StarteAbwurf(winkel, geschwindigkeit);
         Debug.Log("Befehl in StartAbwurf mit Geschwindigkeit: " + kigeschwindigkeit + " und Winkel: " + kiwinkel);
     }

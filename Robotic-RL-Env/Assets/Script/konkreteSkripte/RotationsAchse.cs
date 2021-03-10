@@ -67,7 +67,7 @@ public class RotationsAchse : MonoBehaviour
             if(isWirft)
             { 
                 //verändert den Zeitintervall zwischen den Aufruf der FixedUpdate() Methode beim Werfen, um genauer den Abwurfpunkt anzufahren => mehr Berechnugen
-                Time.fixedDeltaTime = 0.001f;
+                Time.fixedDeltaTime = 0.01f;
             }
             // wenn die Rotation der Achse den Toleranzbereich betritt
             else if (AktuelleRotationDerAchse() <= sollRotation + toleranz)
@@ -99,7 +99,7 @@ public class RotationsAchse : MonoBehaviour
         {
             if(isWirft)
             {
-                Time.fixedDeltaTime = 0.001f;
+                Time.fixedDeltaTime = 0.01f;
             }
             else if (AktuelleRotationDerAchse() >= sollRotation - toleranz)
             {

@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using AssetConfigurator.Source.UIComponents;
 using AssetConfigurator.UIComponents;
-using UnityEditor.VersionControl;
 using UnityEngine.EventSystems;
 
 using UnityEngine.UI;

@@ -40,4 +40,9 @@ if __name__ == "__main__":
         total_steps += 1
         if done:
             break
-    print("In %d steps we got %.3f reward" % (total_steps, total_reward))
+    action.data[0] = action.data[0] / 2 + 0.5
+    action.data[1] = action.data[1] / 2 + 0.5
+    action.data[0] = 10 + action.data[0] * 500
+    action.data[1] = (action.data[1] * -150)
+    print("The Target ist %.3f away and with the Actions %.3f and %.3f, we get %.3f Points" % (
+    obs_v, action.data[0], action.data[1], reward))

@@ -25,12 +25,19 @@ LR_ACTS = 1e-4
 LR_VALS = 1e-4
 REPLAY_SIZE = 5000
 REPLAY_INITIAL = 500
-SAC_ENTROPY_ALPHA = 0.1
+SAC_ENTROPY_ALPHA = 0.2
 
-TEST_ITERS = 200
+TEST_ITERS = 500
 
 
-def test_net(net, env, count=128, device="cpu"):
+def test_net(net, env, count=250, device="cpu"):
+    """
+        :param net: Modell welches optimiert werden soll
+        :param env: Umgebung in der das Modell optimiert werden soll
+        :param count: Anzahl an Testwürfen
+        :param device: Gerät auf denen die Berechnungen durchgeführt werden sollen
+        :return Tupel von Belohnungen
+    """
     rewards = 0.0
     steps = 0
     for _ in range(count):
@@ -49,6 +56,7 @@ def test_net(net, env, count=128, device="cpu"):
 
 
 if __name__ == "__main__":
+    # Parsen der Parameterwerte bei Start des Programms
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -59,11 +67,13 @@ if __name__ == "__main__":
     save_path = os.path.join("saves", "sac-" + args.name)
     os.makedirs(save_path, exist_ok=True)
 
+    # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
     channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
+    # Erstellen des Modells nach der SAC-Architektur
     act_net = model.ModelActor(
         env.observation_space.shape[0],
         env.action_space.shape[0]).to(device)
@@ -76,9 +86,9 @@ if __name__ == "__main__":
     print(act_net)
     print(crt_net)
     print(twinq_net)
-
+    # Erstellen des Zielnetzes nachdem Optimiert werden soll
     tgt_crt_net = ptan.agent.TargetNet(crt_net)
-
+    # Erstellen des Agenten mit der PTAN-Bibliothek
     writer = SummaryWriter(comment="-sac_" + args.name)
     agent = model.AgentSAC(act_net, device=device)
     exp_source = ptan.experience.ExperienceSourceFirstLast(
@@ -103,9 +113,11 @@ if __name__ == "__main__":
                     tb_tracker.track("episode_steps", steps[0], frame_idx)
                     tracker.reward(rewards[0], frame_idx)
 
+                # Zufällige Würfe durchführen bis die Mindestbuffergröße erreicht ist.
                 if len(buffer) < REPLAY_INITIAL:
                     continue
 
+                # Entnahme einer Stichprobes aus dem Buffer
                 batch = buffer.sample(BATCH_SIZE)
                 states_v, actions_v, ref_vals_v, ref_q_v = \
                     common.unpack_batch_sac(
@@ -116,7 +128,7 @@ if __name__ == "__main__":
                 tb_tracker.track("ref_v", ref_vals_v.mean(), frame_idx)
                 tb_tracker.track("ref_q", ref_q_v.mean(), frame_idx)
 
-                # train TwinQ
+                # Optimieren der zwei Q-Netze mit den Verlustfunktionen
                 twinq_opt.zero_grad()
                 q1_v, q2_v = twinq_net(states_v, actions_v)
                 q1_loss_v = F.mse_loss(q1_v.squeeze(),
@@ -129,7 +141,7 @@ if __name__ == "__main__":
                 tb_tracker.track("loss_q1", q1_loss_v, frame_idx)
                 tb_tracker.track("loss_q2", q2_loss_v, frame_idx)
 
-                # Critic
+                # Optimieren des Critic-Netzes nach der Vorhersage des Zustandwertes
                 crt_opt.zero_grad()
                 val_v = crt_net(states_v)
                 v_loss_v = F.mse_loss(val_v.squeeze(),
@@ -138,7 +150,7 @@ if __name__ == "__main__":
                 crt_opt.step()
                 tb_tracker.track("loss_v", v_loss_v, frame_idx)
 
-                # Actor
+                # Optimieren des Actor-Netzes nach der Verwendung der Q-Netze
                 act_opt.zero_grad()
                 acts_v = act_net(states_v)
                 q_out_v, _ = twinq_net(states_v, acts_v)
@@ -149,6 +161,7 @@ if __name__ == "__main__":
 
                 tgt_crt_net.alpha_sync(alpha=1 - 1e-3)
 
+                # Nach jedem Durchlaufen der 500 Würfe wird die Testfunktion aufgerufen
                 if frame_idx % TEST_ITERS == 0:
                     ts = time.time()
                     rewards, steps = test_net(act_net, env, device=device)

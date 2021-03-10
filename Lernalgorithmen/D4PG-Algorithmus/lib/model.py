@@ -8,23 +8,9 @@ HID_SIZE = 256
 
 
 class D4PGActor(nn.Module):
-    def __init__(self, obs_size, act_size):
-        super(D4PGActor, self).__init__()
-
-        self.net = nn.Sequential(
-            nn.Linear(obs_size, HID_SIZE),
-            nn.ReLU(),
-            nn.Linear(HID_SIZE, HID_SIZE),
-            nn.ReLU(),
-            nn.Linear(HID_SIZE, act_size),
-            nn.Tanh()
-        )
-
-    def forward(self, x):
-        return self.net(x)
-
-
-class D4PGActor(nn.Module):
+    """
+    Erstellung des Actor-Netzes
+    """
     def __init__(self, obs_size, act_size):
         super(D4PGActor, self).__init__()
 
@@ -42,6 +28,9 @@ class D4PGActor(nn.Module):
 
 
 class D4PGCritic(nn.Module):
+    """
+    Erstellung des Critic-Netzes mit Berechnung der Vorhersage der Atoms
+    """
     def __init__(self, obs_size, act_size, n_atoms, v_min, v_max):
         super(D4PGCritic, self).__init__()
 
@@ -71,7 +60,7 @@ class D4PGCritic(nn.Module):
 
 class AgentD4PG(ptan.agent.BaseAgent):
     """
-    Agent implementing noisy agent
+    Agent mit implementierung der zufälligen Aktion daher des Noizy-Netzes
     """
     def __init__(self, net, device="cpu", epsilon=0.3):
         self.net = net

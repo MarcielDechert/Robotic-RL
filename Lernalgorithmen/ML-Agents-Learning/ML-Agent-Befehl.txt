@@ -1,3 +1,0 @@
-E:
-E:\Hochschule\Master\Masterarbeit\GitHub\Robotic-RL\RoboticReinforcementLearning
-mlagents-learn Robotsarm_config.yaml --run-id=RobotArticulation

@@ -5,14 +5,20 @@ using UnityEngine;
 public abstract class BallController : MonoBehaviour, IStep
 {
     [SerializeField] protected RobotsLearningArea area;
+<<<<<<< Updated upstream
     private bool kollidiert = false;
+=======
 
-    public bool Kollidiert { get => kollidiert; set => kollidiert = value; }
+    private bool isKollidiert = false;
+>>>>>>> Stashed changes
+
+    public bool IsKollidiert { get => isKollidiert; set => isKollidiert = value; }
 
     private float einwurfWinkel;
     public float EinwurfWinkel { get => einwurfWinkel; set => einwurfWinkel = value; }
-    private bool luftwiderstandAktiv = true;
-    public bool LuftwiderstandAktiv  { get => luftwiderstandAktiv ; set => luftwiderstandAktiv  = value; }
+
+    private bool isLuftwiderstandAktiv = true;
+    public bool IsLuftwiderstandAktiv  { get => isLuftwiderstandAktiv ; set => isLuftwiderstandAktiv  = value; }
 
     private KollisionsLayer kollisionsStatus = KollisionsLayer.Neutral;
     public KollisionsLayer KollisionsStatus { get => kollisionsStatus; set => kollisionsStatus = value; }
@@ -20,10 +26,14 @@ public abstract class BallController : MonoBehaviour, IStep
     private IList<KollisionsLayer> kollisionsListe = new List<KollisionsLayer>();
     public IList<KollisionsLayer> KollisionsListe { get => kollisionsListe; set => kollisionsListe = value; }
 
-    private Vector3 ballgeschwindigkeit;
+    private Vector3 ballGeschwindigkeit;
 
+<<<<<<< Updated upstream
     public Vector3 Ballgeschwindigkeit { get => ballgeschwindigkeit; set => ballgeschwindigkeit = value; }
     private Vector3 letztePosition = Vector3.zero;
+=======
+    public Vector3 BallGeschwindigkeit { get => ballGeschwindigkeit; set => ballGeschwindigkeit = value; }
+>>>>>>> Stashed changes
 
     public abstract void Step();
 
@@ -38,8 +48,14 @@ public abstract class BallController : MonoBehaviour, IStep
 
         if (other.gameObject.layer != 0)
         {
+<<<<<<< Updated upstream
             Kollidiert = true;
             Debug.Log(KollisionsListe.Count);
+=======
+            IsKollidiert = true;
+
+            //wenn die KollisonsListe leer ist
+>>>>>>> Stashed changes
             if(KollisionsListe.Count == 0)
             {
                 area.BerechneAbwurfhoehe();
@@ -90,13 +106,17 @@ public abstract class BallController : MonoBehaviour, IStep
 
     protected void BerechneBallgeschwindigkeit()
     {
+<<<<<<< Updated upstream
         Ballgeschwindigkeit = (this.transform.position - letztePosition) / Time.fixedDeltaTime;
         letztePosition = this.transform.position;
+=======
+        BallGeschwindigkeit = area.R_ball.GetComponent<Rigidbody>().velocity;
+>>>>>>> Stashed changes
     }
 
     protected float BerechneEinwurfwinkel()
     {
-        return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(Ballgeschwindigkeit.y) / Ballgeschwindigkeit.magnitude));
+        return Mathf.Abs(Mathf.Rad2Deg * Mathf.Asin(Mathf.Abs(BallGeschwindigkeit.y) / BallGeschwindigkeit.magnitude));
     }
 
 }

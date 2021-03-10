@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class RoboterGUIV7 : MonoBehaviour
 {
+    [SerializeField] private RobotsLearningArea area;
+
     [SerializeField] private Button abwurfButton;
     [SerializeField] private Button StartfButton;
     [SerializeField] private Text abwurfgeschwindigkeitText;
@@ -54,9 +56,16 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private InputField abwurfwinkelJ3;
 
     [SerializeField] private Toggle toggleFlugbahn;
+<<<<<<< Updated upstream
 
     [SerializeField] private Toggle toggleLuftwidertand;
 
+=======
+    [SerializeField] private Toggle toggleLuftwiderstand;
+    [SerializeField] private Toggle toggleMenue;
+
+    [SerializeField] private GameObject panel;
+>>>>>>> Stashed changes
 
     [SerializeField] private Dropdown dropdownModi;
 
@@ -64,8 +73,11 @@ public class RoboterGUIV7 : MonoBehaviour
 
     [SerializeField] private int segmente = 100;
 
+<<<<<<< Updated upstream
     [SerializeField] private RobotsLearningArea area;
     private Vector3 letzteBallposition = Vector3.zero;
+=======
+>>>>>>> Stashed changes
     private int count;
     private bool abwurfbereit;
     private float[] startRotation;
@@ -86,14 +98,26 @@ public class RoboterGUIV7 : MonoBehaviour
 
         toggleFlugbahn.onValueChanged.AddListener(delegate
         {
-            FlugbahnAktivieren(toggleFlugbahn);
+            AktiviereFlugbahn(toggleFlugbahn);
         });
 
         toggleLuftwidertand.onValueChanged.AddListener(delegate
         {
+<<<<<<< Updated upstream
             LuftwiderstandAktivieren(toggleLuftwidertand);
         });
 
+=======
+            AktiviereLuftwiderstand(toggleLuftwiderstand);
+        });
+
+        toggleMenue.onValueChanged.AddListener(delegate
+        {
+            EinblendenMenue(toggleMenue);
+        });
+
+        /*
+>>>>>>> Stashed changes
         dropdownModi.onValueChanged.AddListener(delegate
         {
             WechselModi(dropdownModi);
@@ -144,7 +168,13 @@ public class RoboterGUIV7 : MonoBehaviour
         inputJ2.text = "0";
         inputJ3.text = "80";
         inputJ4.text = "0";
+<<<<<<< Updated upstream
         inputJ5.text = "40";
+=======
+        inputJ5.text = "-50";
+        inputJ6.text = "90";
+
+>>>>>>> Stashed changes
         wurfgeschwindigkeitJ3.text = "180";
         abwurfwinkelJ3.text = "-60";
 
@@ -159,9 +189,15 @@ public class RoboterGUIV7 : MonoBehaviour
     // Update is called once per frame
     public void LateUpdate()
     {
+<<<<<<< Updated upstream
         SetzeTextfelder();
         FlugbahnZeichnen();
         SliderAktivieren();
+=======
+        SetTextfelder();
+        SetFlugbahn();
+        AktiviereManuelleAusrichtung();
+>>>>>>> Stashed changes
     }
 
     private void SliderAktivieren()
@@ -183,7 +219,14 @@ public class RoboterGUIV7 : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
     private void FlugbahnZeichnen()
+=======
+    /// <summary>
+    /// Zeichnet die Flugbahn des Balls
+    /// </summary>
+    private void SetFlugbahn()
+>>>>>>> Stashed changes
     {
 
         if (area.R_robot.RoboterStatus == RoboterStatus.Wirft && count < segmente && abwurfbereit)
@@ -205,7 +248,34 @@ public class RoboterGUIV7 : MonoBehaviour
         count = 0;
     }
 
+<<<<<<< Updated upstream
     private void SetzeStartRotation()
+=======
+    private void SetRoboterStatus()
+    {
+        switch (area.R_robot.RoboterStatus)
+        {
+            case RoboterStatus.Neutral:
+                roboterStatusText.text = "Roboter Status: Neutral";
+                break;
+            case RoboterStatus.Faehrt:
+                roboterStatusText.text = "Roboter Status: Fährt";
+                break;
+            case RoboterStatus.Wirft:
+                roboterStatusText.text = "Roboter Status: Wirft";
+                break;
+            case RoboterStatus.Abwurfbereit:
+                roboterStatusText.text = "Roboter Status: Abwurfbereit";
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// Füllt das Array startRotaion mit dem Inhalt der Eingabefelder
+    /// </summary>
+    private void SetStartRotation()
+>>>>>>> Stashed changes
     {
         startRotation[0] = float.Parse(inputJ1.text);
         startRotation[1] = float.Parse(inputJ2.text);
@@ -214,8 +284,15 @@ public class RoboterGUIV7 : MonoBehaviour
         startRotation[4] = float.Parse(inputJ5.text);
         startRotation[5] = 0.0f;
     }
+<<<<<<< Updated upstream
 
     private void SetzeStartGeschwindigkeit()
+=======
+    /// <summary>
+    ///  Füllt das Array startGeschwindigkeit mit den Startwinkelgeschwindigkeiten in Grad/s
+    /// </summary>
+    private void SetStartGeschwindigkeit()
+>>>>>>> Stashed changes
     {
         startGeschwindigkeit[0] = 180.0f;
         startGeschwindigkeit[1] = 180.0f;
@@ -224,8 +301,15 @@ public class RoboterGUIV7 : MonoBehaviour
         startGeschwindigkeit[4] = 180.0f;
         startGeschwindigkeit[5] = 180.0f;
 
+<<<<<<< Updated upstream
     }
     private void SetzeAbwurfRotation()
+=======
+    /// <summary>
+    /// Füllt das Array abwurfRotaion mit dem Inhalt der Eingabefelder
+    /// </summary>
+    private void SetAbwurfRotation()
+>>>>>>> Stashed changes
     {
         abwurfRotation[0] = float.Parse(inputJ1.text);
         abwurfRotation[1] = float.Parse(inputJ2.text);
@@ -235,7 +319,14 @@ public class RoboterGUIV7 : MonoBehaviour
         abwurfRotation[5] = 0.0f;
     }
 
+<<<<<<< Updated upstream
     private void SetzeAbwurfGeschwindigkeit()
+=======
+    /// <summary>
+    /// Füllt das Array abwurfGeschwindigkeit mit den Abwurfwinkelgeschwindigkeiten in Grad/s
+    /// </summary>
+    private void SetAbwurfGeschwindigkeit()
+>>>>>>> Stashed changes
     {
         abwurfGeschwindigkeit[0] = 80.0f;
         abwurfGeschwindigkeit[1] = 80.0f;
@@ -245,8 +336,17 @@ public class RoboterGUIV7 : MonoBehaviour
         abwurfGeschwindigkeit[5] = 80.0f;
     }
 
+<<<<<<< Updated upstream
     private void SetzeTextfelder()
     {
+=======
+    /// <summary>
+    /// Aktualisiert Anzeigeelemente
+    /// </summary>
+    private void SetTextfelder()
+    {
+        SetRoboterStatus();
+>>>>>>> Stashed changes
         achsen = area.R_robot.GetAchsen();
         if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
@@ -258,8 +358,14 @@ public class RoboterGUIV7 : MonoBehaviour
             abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
         }else
         {
+<<<<<<< Updated upstream
             abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfwinkelBall + " Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.Abwurfgeschwindigkeit + " ms";
+=======
+            // Setzt Textanzeigen auf aktuellen Wert
+            abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfWinkelBall + " Grad";
+            abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.AbwurfGeschwindigkeit + " ms";
+>>>>>>> Stashed changes
             einwurfwinkelText.text = "Einwurfwinkel: " + area.R_ball.EinwurfWinkel + " Grad";
             wurfweiteText.text = "Wurfweite: " + area.Wurfweite + " m";
             abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
@@ -276,8 +382,8 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void StartButtonGedrueckt()
     {
-        SetzeStartRotation();
-        SetzeStartGeschwindigkeit();
+        SetStartRotation();
+        SetStartGeschwindigkeit();
         area.R_robot.InStartposition(startRotation, startGeschwindigkeit);
         ResetFlugbahn();
 
@@ -285,14 +391,22 @@ public class RoboterGUIV7 : MonoBehaviour
 
     private void AbwurfButtonGedrueckt()
     {
-        SetzeAbwurfRotation();
-        SetzeAbwurfGeschwindigkeit();
+        SetAbwurfRotation();
+        SetAbwurfGeschwindigkeit();
         area.R_robot.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
         abwurfbereit = true;
 
     }
 
+<<<<<<< Updated upstream
     private void FlugbahnAktivieren(Toggle change)
+=======
+    /// <summary>
+    /// Aktiviert und deaktiviert die Flugbahnaufzeichnung
+    /// </summary>
+    /// <param name="change"> Toggle</param>
+    private void AktiviereFlugbahn(Toggle change)
+>>>>>>> Stashed changes
     {
         if (change.isOn)
         {
@@ -305,15 +419,23 @@ public class RoboterGUIV7 : MonoBehaviour
 
     }
 
+<<<<<<< Updated upstream
     private void LuftwiderstandAktivieren(Toggle change)
+=======
+    /// <summary>
+    /// Aktiviert und deaktiviert den Lufwiderstands Flag im BallController
+    /// </summary>
+    /// <param name="change"> Toggle</param>
+    private void AktiviereLuftwiderstand(Toggle change)
+>>>>>>> Stashed changes
     {
         if (change.isOn)
         {
-            area.R_ball.LuftwiderstandAktiv = true;
+            area.R_ball.IsLuftwiderstandAktiv = true;
         }
         else
         {
-            area.R_ball.LuftwiderstandAktiv = false;
+            area.R_ball.IsLuftwiderstandAktiv = false;
         }
 
     }
@@ -340,6 +462,32 @@ public class RoboterGUIV7 : MonoBehaviour
                 break;
         }
     }
+<<<<<<< Updated upstream
+=======
+
+    */
+    /// <summary>
+    /// Blendet die untere Menüleiste über den Toggle ein und aus
+    /// </summary>
+    /// <param name="change"></param>
+    private void EinblendenMenue(Toggle change)
+    {   
+        // Wenn Toggle aktiviert
+        if (change.isOn)
+        {
+            panel.SetActive(true);
+        }
+        else
+        {
+            panel.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Verändert die Geschwindigkeit der Scene 
+    /// </summary>
+    /// <param name="change"> Inhaltswert des Sliders</param>
+>>>>>>> Stashed changes
     private void SetzeGeschwindikeitDerScene(Slider change)
     {
         Time.timeScale = change.value;

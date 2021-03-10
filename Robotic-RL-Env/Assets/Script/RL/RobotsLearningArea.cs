@@ -10,7 +10,14 @@ public class RobotsLearningArea : MonoBehaviour
     [SerializeField] private BallController r_ball;
     public BallController R_ball { get => r_ball;}
 
+<<<<<<< Updated upstream
     [SerializeField] private Rigidbody target;
+=======
+    [SerializeField] private RoboterAgent agent;
+    public RoboterAgent Agent { get => agent;}
+
+    [SerializeField] public Rigidbody target;
+>>>>>>> Stashed changes
     [SerializeField] private Rigidbody ball;
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent;}
@@ -45,11 +52,21 @@ public class RobotsLearningArea : MonoBehaviour
         ball.angularVelocity = Vector3.zero;
         ball.useGravity = false;
 
+<<<<<<< Updated upstream
         r_robot.AbwurfgeschwindigkeitVector3 = Vector3.zero;
         r_robot.Abwurfgeschwindigkeit= 0.0f;
         r_robot.AbwurfwinkelBall = 0.0f;
 
         r_ball.Kollidiert = false;
+=======
+        // Setzt Abwurfparameter des Roboters zurück
+        r_robot.AbwurfGeschwindigkeitVector3 = Vector3.zero;
+        r_robot.AbwurfGeschwindigkeit= 0.0f;
+        r_robot.AbwurfWinkelBall = 0.0f;
+
+        // Löscht den Inhalt der Kollisionsliste
+        r_ball.IsKollidiert = false;
+>>>>>>> Stashed changes
         r_ball.KollisionsListe.Clear();
 
         wurfweite = 0.0f;

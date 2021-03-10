@@ -63,7 +63,7 @@ public class RoboterAgent : Agent
             Abwurfvorgang = true;
         }
 
-        if (area.R_ball.Kollidiert == true)
+        if (area.R_ball.IsKollidiert == true)
         {
             if(area.R_ball.KollisionsListe.Contains(KollisionsLayer.Becherboden))
             {

@@ -36,7 +36,7 @@ public class RoboterAgent : Agent, IStep
         var continuousActions = actionBuffers.ContinuousActions;
         continuousActions[0] = (float)((continuousActions[0] / 2) + 0.5);
         continuousActions[1] = (float)((continuousActions[1] / 2) + 0.5);
-        float kigeschwindigkeit = Mathf.Lerp(10f, 185f, continuousActions[0]);
+        float kigeschwindigkeit = Mathf.Lerp(10f, 360f, continuousActions[0]);
         float kiwinkel = Mathf.Lerp(-30f, 170, continuousActions[1]);
         Debug.Log("KI Übergabe: " + continuousActions[0] + " und Winkel: " + continuousActions[1]);
 

@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-HID_SIZE = 512
+HID_SIZE = 256
 
 
 class ModelActor(nn.Module):

@@ -169,7 +169,7 @@ if __name__ == "__main__":
                         time.time() - ts, rewards, steps))
                     writer.add_scalar("test_reward", rewards, frame_idx)
                     writer.add_scalar("test_steps", steps, frame_idx)
-                    if best_reward is None or best_reward < rewards:
+                    if best_reward is None or best_reward <= rewards:
                         if best_reward is not None:
                             print("Best reward updated: %.3f -> %.3f" % (best_reward, rewards))
                             name = "best_%+.3f_%d.dat" % (rewards, frame_idx)

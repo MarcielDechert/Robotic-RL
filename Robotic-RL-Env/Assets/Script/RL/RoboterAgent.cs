@@ -18,7 +18,7 @@ public class RoboterAgent : Agent, IStep
     public override void OnEpisodeBegin()
     {
         area.AreaReset();
-        area.target.transform.localPosition = new Vector3((float)(-0.25 * UnityEngine.Random.value - 0.5f), 0.06f, 0);
+        area.Target.transform.localPosition = new Vector3((float)(-0.25 * UnityEngine.Random.value - 0.5f), 0.06f, 0);
         Abwurfvorgang = false;
 
         float[] sollgeschwindigkeit = new float[] { 100f, 100f, 100f, 25f, 25f, 25f };

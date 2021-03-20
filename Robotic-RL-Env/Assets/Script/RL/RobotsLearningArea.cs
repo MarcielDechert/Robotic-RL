@@ -8,7 +8,7 @@ using UnityEngine;
 public class RobotsLearningArea : MonoBehaviour
 {
     [Header("Learning Parts")]
-    [SerializeField] public RoboterController r_robot;
+    [SerializeField] private RoboterController r_robot;
     public RoboterController R_robot { get => r_robot;}
 
     [SerializeField] private BallController r_ball;
@@ -17,7 +17,11 @@ public class RobotsLearningArea : MonoBehaviour
     [SerializeField] private RoboterAgent agent;
     public RoboterAgent Agent { get => agent;}
 
-    [SerializeField] public Rigidbody target;
+    [SerializeField] private Rigidbody target;
+
+    public Rigidbody Target { get => target;}
+
+
     [SerializeField] private Rigidbody ball;
 
     private float wurfweite;
@@ -26,17 +30,24 @@ public class RobotsLearningArea : MonoBehaviour
     private float abwurfhoehe;
     public float Abwurfhoehe { get => abwurfhoehe; set => abwurfhoehe = value; }
 
+
+    private Vector3 defaultBallposition;
+
+    /*
+     * Für mögliche Zeitanzeigen => Bsp. Flugdauer
     private float stopZeit = 0.0f;
 
     public float StopZeit { get => stopZeit; set => stopZeit = value; }
+    */
 
 
 
     /// <summary>
-    /// Wird beim Start einmalig aufgerufen. Initialisiert Attribute
+    /// Wird beim Start einmalig aufgerufen. Deklariert Attribute
     /// </summary>
     private void Start()
     {
+        defaultBallposition = r_ball.transform.position;
         r_ball = ball.GetComponent<TTBallController>();
     }
 
@@ -48,11 +59,11 @@ public class RobotsLearningArea : MonoBehaviour
         // wenn der Agent der KI aktiv ist
         if(agent.enabled)
         {
-            // Versetzt den Becher auf ein begrenzten Zufallswert in x richtung
+            // Versetzt den Becher auf ein begrenzten Zufallswert in x Richtung
             target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
         }
         // Setzt die Position des Balls zurück
-        ball.transform.localPosition = new Vector3(0.6f, 0.16f, 0);
+        ball.transform.localPosition = defaultBallposition;
 
         // Setzt Eigenschaften des Balls zurück
         ball.velocity = Vector3.zero;
@@ -68,10 +79,11 @@ public class RobotsLearningArea : MonoBehaviour
         r_ball.IsKollidiert = false;
         r_ball.KollisionsListe.Clear();
 
+        // Setzt Ergebnis Werte zurück
         wurfweite = 0.0f;
         abwurfhoehe = 0.0f;
         r_ball.EinwurfWinkel = 0.0f;
-        stopZeit = 0.0f;
+        //stopZeit = 0.0f;
 
     }
 
@@ -110,18 +122,26 @@ public class RobotsLearningArea : MonoBehaviour
     }
 
     /// <summary>
-    /// Steuert die Schritte der Komonenten Roboter Ball und Agent
+    /// Verschiebt den Becher in x Richtung 
+    /// </summary>
+    /// <param name="xPosition">beliebiger Wert</param>
+    public void SetBecherposition(float xPosition)
+    {
+        target.position = new Vector3( xPosition, target.position.y);
+    }
+
+    /// <summary>
+    /// Steuert/Koordiniert die Schritte der Komponenten Roboter, Ball und Agent
     /// </summary>
     private void FixedUpdate()
     {
         r_robot.Step();
 
-        // Wenn der Roboter den Status wirft hat
+        // Wenn sich der Roboter im Status Wirft befindet
         if(r_robot.RoboterStatus == RoboterStatus.Wirft)
         {
             r_ball.Step();
             //stopZeit += Time.fixedDeltaTime;
-            //Debug.Log(stopZeit);
         }
 
         // wenn das Agent-Skript aktiv ist

@@ -13,7 +13,6 @@ public enum Befehl { Neutral = 0, Abwurf = 1, Start = 2 };
 /// </summary>
 public class Achsen6RoboterController : RoboterController
 {
-    [SerializeField] private RobotsLearningArea area;
 
     private RotationsAchse[] rotationsAchse;
     public RotationsAchse[] RotationsAchse { get => rotationsAchse; set => rotationsAchse = value; }
@@ -41,7 +40,7 @@ public class Achsen6RoboterController : RoboterController
     }
 
     /// <summary>
-    /// Initialisiert und deklariert Attribute
+    /// Deklariert Attribute
     /// </summary>
     void Init()
     {
@@ -61,7 +60,7 @@ public class Achsen6RoboterController : RoboterController
     }
 
     /// <summary>
-    /// Kontrolliert und wechselt die Roboterzustände. Ersetzt die FixedUpdate() Methode
+    /// Kontrolliert und wechselt die Roboterzustände. Ersetzt die FixedUpdate() Methode => Umsetzung der Zustandssteuerung
     /// </summary>
     public override void Step()
     {
@@ -96,7 +95,6 @@ public class Achsen6RoboterController : RoboterController
                     else
                     {
                         RoboterStatus = RoboterStatus.Abwurfbereit;
-                       // area.AreaReset();
                     }
                 }
                 else
@@ -104,7 +102,7 @@ public class Achsen6RoboterController : RoboterController
                     //wenn die Flag abwurfSingnal gesetzt ist
                     if (isAbwurfSignal)
                     {
-                        //Position des Balls wird verändert
+                        //Position des Balls wird verändert => Ball wird am TCP mitgeführt
                         area.R_ball.GetComponent<Rigidbody>().MovePosition(AbwurfPosition.position); 
                     }
                     BerechneAbwurfgeschwindigkeit();
@@ -236,5 +234,14 @@ public class Achsen6RoboterController : RoboterController
     public override RotationsAchse[] GetAchsen()
     {
         return rotationsAchse;
+    }
+
+    /// <summary>
+    /// Berechnet den Radius zwischen dem TCP und der J3 Achse des Roboters
+    /// </summary>
+    /// <returns> absoluten Distanzwert als Float </returns>
+    public override float GetRadiusJ3TCP()
+    {
+        return Vector3.Distance(rotationsAchse[2].transform.GetChild(0).GetChild(0).transform.position, rotationsAchse[5].transform.GetChild(1).transform.position);
     }
 }

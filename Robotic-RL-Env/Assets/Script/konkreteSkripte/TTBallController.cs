@@ -12,9 +12,9 @@ public enum KollisionsLayer { Neutral = 0, Wand = 1, Boden = 2, Decke = 3, Beche
 /// </summary>
 public class TTBallController : BallController
 {
-    private const double  luftDichte = 1.2041;          // Luftdruck in kg/m^3 bei 20°C Umgebungstemp.
+    private const double  luftDichte = 1.2041;          // Luftdruck in kg/m^3 bei 20°C Umgebungstemperatur
     private const double  luftViskositaet = 0.0000182;  // Viskosität der Luft in Pa*s
-    private const double  reynoldzahlKrit = 3692.0;     // kritische Reynoldszahl: Laminar --> Turbulent
+    private const double  reynoldzahlKrit = 3692.0;     // kritische Reynoldszahl: Für den Übergang von Laminar --> Turbulent
 
     private double luftWiderstand;                      // in Newton
     private double flaeche;                             // m² 
@@ -31,7 +31,7 @@ public class TTBallController : BallController
     */
 
     /// <summary>
-    /// Wird beim Start einmalig aufgerufen. Initialisiert Attribute
+    /// Wird beim Start einmalig aufgerufen. Deklariert Attribute
     /// </summary>
     private void Start()
     {
@@ -59,7 +59,7 @@ public class TTBallController : BallController
             // wenn die Geschwindigkeit des Balls ungleich 0 ist 
             if ( BallGeschwindigkeit.magnitude != 0 ) 
             {
-                // Reynoldszahl wird neu geseztzt
+                // Reynoldszahl wird neu gesetzt
                 reynoldzahl = BerechneReynoldszahl( BallGeschwindigkeit.magnitude, ballDurchmesser);
 
                 // wenn die aktuelle Reynoldszahl größer der kritischen Reynoldszahl ist
@@ -78,18 +78,19 @@ public class TTBallController : BallController
                      luftWiderstand = BerechneLuftwiderstandLaminar( ballDurchmesser, BallGeschwindigkeit.magnitude);
                 }
 
-                //Debug.Log("V_Betrag:"+Ballgeschwindigkeit.magnitude);
-                //Debug.Log("F_Betrag:" + luftwiderstand);
-                //Debug.Log(stopZeit);
-
-                //stopZeit += Time.fixedDeltaTime;
-
                 // der Luftwidertand wird dem Ball entgegengewirkt
                 area.R_ball.GetComponent<Rigidbody>().AddForce(-BallGeschwindigkeit.normalized * (float)luftWiderstand, ForceMode.Force);
 
                 
                  /* Export der Flugdaten
                   
+
+                //Debug.Log("V_Betrag:"+Ballgeschwindigkeit.magnitude);
+                //Debug.Log("F_Betrag:" + luftwiderstand);
+                //Debug.Log(stopZeit);
+
+                //stopZeit += Time.fixedDeltaTime;
+
                 if (this.transform.position.y > 0.015)
                 {
                     writer = new StreamWriter(path, true);
@@ -117,8 +118,7 @@ public class TTBallController : BallController
     /// Berechnet den Luftwiderstand für turbulente Strömung
     /// </summary>
     /// <param name="_cw"> Widerstandsbeiwert</param>
-    /// <param name="_flaeche"> Querschnitsfläsche des Balls</param>
-    /// <param name="_luftDichte"> Luftdichte</param>
+    /// <param name="_flaeche"> Querschnitsfläche des Balls</param>
     /// <param name="_geschwindigkeit"> Betrag der Geschwindigkeit des Balls </param>
     /// <returns> Widertand in Newton als Double</returns>
     private double BerechneLuftwiderstandTurbulent(double _cw, double _flaeche, double _geschwindigkeit)
@@ -129,7 +129,6 @@ public class TTBallController : BallController
     /// <summary>
     /// Berechnet den Luftwiderstand für laminare Strömung
     /// </summary>
-    /// <param name="_viskoseLuft"> Viskosität der Luft</param>
     /// <param name="_ballDurchmesser"> Durchmesser des Balls</param>
     /// <param name="_geschwindigkeit"> Betrag der Geschwindigkeit des Balls</param>
     /// <returns>Widertand in Newton als Double</returns>
@@ -151,10 +150,8 @@ public class TTBallController : BallController
     /// <summary>
     /// Berechnet die Reynoldszahl
     /// </summary>
-    /// <param name="_luftDichte"> Luftdichte</param>
     /// <param name="_geschwindigkeit">Betrag der Geschwindigkeit des Balls</param>
     /// <param name="_durchmesser"> Durchmesser des Balls</param>
-    /// <param name="_viskoseLuft"> Viskosität des Balls</param>
     /// <returns> Reynoldszahl als Double</returns>
     private double BerechneReynoldszahl( double _geschwindigkeit, double _durchmesser)
     {
@@ -170,6 +167,27 @@ public class TTBallController : BallController
     {
         return 24/_reynoldzahl + 4/Mathf.Sqrt( (float) _reynoldzahl) + 0.4  ;
     }
-    
+
+    /// <summary>
+    /// Verändert die Physik des Balls, damit der Ball springt
+    /// </summary>
+    public override void SetBallaufprall()
+    {
+        BallPhysik.dynamicFriction = 0.1f;
+        BallPhysik.staticFriction = 0.0f;
+        BallPhysik.bounciness = 1.0f;
+        BallPhysik.frictionCombine = PhysicMaterialCombine.Multiply;
+    }
+    /// <summary>
+    ///  Verändert die Physik des Balls, damit der Ball nicht springt
+    /// </summary>
+    public override void ResetBallaufprall()
+    {
+        BallPhysik.dynamicFriction = 0.1f;
+        BallPhysik.staticFriction = 0.0f;
+        BallPhysik.bounciness = 0.0f;
+        BallPhysik.frictionCombine = PhysicMaterialCombine.Average;
+    }
+
 
 }

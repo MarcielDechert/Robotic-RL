@@ -5,14 +5,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Diese Klasse ist für die Verarbeitung und Darstellungen von Daten aus 
-/// der GUI zuständig.
+/// Klasse ist für die Verarbeitung und Darstellungen von Daten aus 
+/// den anderen Klassen zuständig. Realisierung der GUI.
 /// </summary>
 
 public class RoboterGUIV7 : MonoBehaviour
 {
     [SerializeField] private Button abwurfButton;
     [SerializeField] private Button startButton;
+    [SerializeField] private Button resetStartpositionButton;
 
     [SerializeField] private Text roboterStatusText;
     [SerializeField] private Text abwurfgeschwindigkeitText;
@@ -36,6 +37,7 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private Slider sliderJ5;
     [SerializeField] private Slider sliderJ6;
     [SerializeField] private Slider sliderGeschwindigkeitScene;
+    [SerializeField] private Slider sliderBecherposition;
 
     [SerializeField] private InputField inputJ1;
     [SerializeField] private InputField inputJ2;
@@ -49,6 +51,8 @@ public class RoboterGUIV7 : MonoBehaviour
     [SerializeField] private Toggle toggleFlugbahn;
     [SerializeField] private Toggle toggleLuftwiderstand;
     [SerializeField] private Toggle toggleMenue;
+    [SerializeField] private Toggle toggleBallaufprall;
+
     [SerializeField] private GameObject panel;
     [SerializeField] private Dropdown dropdownModi;
     [SerializeField] private LineRenderer flugbahn;
@@ -63,6 +67,9 @@ public class RoboterGUIV7 : MonoBehaviour
     private float[] startGeschwindigkeit;
     private float[] abwurfGeschwindigkeit;
     private RotationsAchse[] achsen;
+
+    // Default Rotation für die Startposition
+    private string[] defaultStartposition = { "90", "0", "170", "0", "-50", "90" };
 
     /// <summary>
     /// Wird beim Start einmalig aufgerufen
@@ -90,6 +97,11 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleMenue.onValueChanged.AddListener(delegate
         {
             EinblendenMenue(toggleMenue);
+        });
+
+        toggleBallaufprall.onValueChanged.AddListener(delegate
+        {
+            AktiviereBallaufprall(toggleBallaufprall);
         });
 
         /*
@@ -133,6 +145,12 @@ public class RoboterGUIV7 : MonoBehaviour
             SetzeGeschwindikeitDerScene(sliderGeschwindigkeitScene);
         });
 
+
+        sliderBecherposition.onValueChanged.AddListener(delegate
+        {
+            SetBecherposition(sliderBecherposition);
+        });
+
         startRotation = new float[6];
 
         abwurfRotation = new float[6];
@@ -143,14 +161,18 @@ public class RoboterGUIV7 : MonoBehaviour
 
         startButton.onClick.AddListener(StartButtonGedrueckt);
         abwurfButton.onClick.AddListener(AbwurfButtonGedrueckt);
+        resetStartpositionButton.onClick.AddListener(ResetStartpositionButtonGedrueckt);
 
-        inputJ1.text = "90";
-        inputJ2.text = "0";
-        inputJ3.text = "170";
-        inputJ4.text = "0";
-        inputJ5.text = "-50";
-        inputJ6.text = "90";
 
+
+        inputJ1.text = defaultStartposition[0];
+        inputJ2.text = defaultStartposition[1];
+        inputJ3.text = defaultStartposition[2];
+        inputJ4.text = defaultStartposition[3];
+        inputJ5.text = defaultStartposition[4];
+        inputJ6.text = defaultStartposition[5];
+
+        // Default Abwurfparameter
         wurfgeschwindigkeitJ3.text = "180";
         abwurfwinkelJ3.text = "-15";
 
@@ -159,10 +181,11 @@ public class RoboterGUIV7 : MonoBehaviour
         toggleFlugbahn.isOn = false;
         abwurfbereit = false;
         count = 0;
+        sliderBecherposition.value = area.Target.position.x;
     }
 
     /// <summary>
-    /// Wird einmal pro Frame aufgerufen und führt 3 Methoden aus die der GUI ein Verhalten geben
+    /// Wird einmal pro Frame aufgerufen und führt 3 Methoden aus die der GUI ein Verhalten gibt
     /// </summary>
     public void LateUpdate()
     {
@@ -176,7 +199,7 @@ public class RoboterGUIV7 : MonoBehaviour
     /// </summary>
     private void AktiviereManuelleAusrichtung()
     {
-        // wenn der Roboter in der Abwurfposition ist
+        // wenn der Roboter in den Status Abwurfbereit hat => Roboter in Startposition
         if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
             sliderJ1.enabled = true;
@@ -195,7 +218,7 @@ public class RoboterGUIV7 : MonoBehaviour
             sliderJ5.enabled = false;
             sliderJ6.enabled = false;
         }
-        // wenn der Roboter in der Abwurfposition ist
+        // wenn der Roboter in den Status Wirft hat => Roboter in Abwufposition
         if (area.R_robot.RoboterStatus == RoboterStatus.Wirft || area.R_robot.RoboterStatus == RoboterStatus.Neutral)
         {
             inputJ1.enabled = true;
@@ -221,7 +244,7 @@ public class RoboterGUIV7 : MonoBehaviour
     /// </summary>
     private void SetFlugbahn()
     {
-        // wenn der Roboter im Status Wirft ist, die Segemete vom Line Renderer nicht voll sind und die Flag abwurfbereit gestezt ist
+        // wenn der Roboter im Status Wirft ist, die Segemete vom Line Renderer nicht voll sind und die Flag abwurfbereit gesetzt ist
         if (area.R_robot.RoboterStatus == RoboterStatus.Wirft && count < segmente && abwurfbereit)
         {
             // zeichnet ein Punkt an der Position des Balls
@@ -244,6 +267,9 @@ public class RoboterGUIV7 : MonoBehaviour
         count = 0;
     }
 
+    /// <summary>
+    /// Zeigt den aktuellen Roboter Zustand an
+    /// </summary>
     private void SetRoboterStatus()
     {
         switch (area.R_robot.RoboterStatus)
@@ -261,11 +287,10 @@ public class RoboterGUIV7 : MonoBehaviour
                 roboterStatusText.text = "Roboter Status: Abwurfbereit";
                 break;
         }
-
     }
 
     /// <summary>
-    /// Füllt das Array startRotaion mit dem Inhalt der Eingabefelder
+    /// Füllt das Array startRotation mit dem Inhalt der Eingabefelder
     /// </summary>
     private void SetStartRotation()
     {
@@ -290,7 +315,7 @@ public class RoboterGUIV7 : MonoBehaviour
     }
 
     /// <summary>
-    /// Füllt das Array abwurfRotaion mit dem Inhalt der Eingabefelder
+    /// Füllt das Array abwurfRotaion mit dem Inhalt der Eingabefelder für die Abwurfrotation
     /// </summary>
     private void SetAbwurfRotation()
     {
@@ -316,22 +341,23 @@ public class RoboterGUIV7 : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiert Anzeigeelemente
+    /// Aktualisiert alle Anzeigeelemente
     /// </summary>
     private void SetTextfelder()
     {
         SetRoboterStatus();
         achsen = area.R_robot.GetAchsen();
 
-        // Wenn der Roboter im Status Abwurfberit ist
+        // Wenn der Roboter im Status Abwurfbereit ist
         if (area.R_robot.RoboterStatus == RoboterStatus.Abwurfbereit)
         {
-            // Setzt Textanzeigen auf 0
+            // Setzt Ergebnis-Textanzeigen auf 0
             abwurfwinkelBallText.text = "Abwurfwinkel: 0.0 Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: 0.0 ms";
             einwurfwinkelText.text = "Einwurfwinkel: 0.0 Grad";
             wurfweiteText.text = "Wurfweite: 0.0 m";
             abwurfhoeheText.text = "Abwurfhoehe: 0.0 m";
+
             // Richtet die Slider neu aus
             sliderJ1.value = Mathf.Round(achsen[0].AktuelleRotationDerAchse());
             sliderJ2.value = Mathf.Round(achsen[1].AktuelleRotationDerAchse());
@@ -342,15 +368,15 @@ public class RoboterGUIV7 : MonoBehaviour
         }
         else
         {
-            // Setzt Textanzeigen auf aktuellen Wert
+            // Setzt Ergebnis-Textanzeigen auf aktuellen Wert
             abwurfwinkelBallText.text = "Abwurfwinkel: " + area.R_robot.AbwurfWinkelBall + " Grad";
             abwurfgeschwindigkeitText.text = "Abwurfgeschwindigkeit: " + area.R_robot.AbwurfGeschwindigkeit + " ms";
             einwurfwinkelText.text = "Einwurfwinkel: " + area.R_ball.EinwurfWinkel + " Grad";
             wurfweiteText.text = "Wurfweite: " + area.Wurfweite + " m";
             abwurfhoeheText.text = "Abwurfhoehe: " + area.Abwurfhoehe + " m";
-            radiusJ3TCP.text = "Radius J3-TCP: " + BerechneRadiusJ3TCP() + " m";
+            radiusJ3TCP.text = "Radius J3-TCP: " + area.R_robot.GetRadiusJ3TCP() + " m";
         }
-        // Setzt Textanzeigen auf aktuellen Wert
+        // Setzt Textanzeigen für die aktuellen Rotationen auf aktuellen Wert
         j1RotationText.text = "J1: " + Mathf.Round(achsen[0].AktuelleRotationDerAchse()) + " Grad";
         j2RotationText.text = "J2: " + Mathf.Round(achsen[1].AktuelleRotationDerAchse()) + " Grad";
         j3RotationText.text = "J3: " + Mathf.Round(achsen[2].AktuelleRotationDerAchse()) + " Grad";
@@ -372,7 +398,7 @@ public class RoboterGUIV7 : MonoBehaviour
     }
 
     /// <summary>
-    /// Ruft Methoden für auf damit der Roboter in Abwurfposition fährt
+    /// Ruft Methoden auf damit der Roboter in Abwurfposition fährt
     /// </summary>
     private void AbwurfButtonGedrueckt()
     {
@@ -380,6 +406,19 @@ public class RoboterGUIV7 : MonoBehaviour
         SetAbwurfGeschwindigkeit();
         area.R_robot.StarteAbwurf(abwurfRotation, abwurfGeschwindigkeit);
         abwurfbereit = true;
+    }
+
+    /// <summary>
+    /// Setzt die Eingabefelder für die Startposition auf die Default-Startrotationen
+    /// </summary>
+    private void ResetStartpositionButtonGedrueckt()
+    {
+        inputJ1.text = defaultStartposition[0];
+        inputJ2.text = defaultStartposition[1];
+        inputJ3.text = defaultStartposition[2];
+        inputJ4.text = defaultStartposition[3];
+        inputJ5.text = defaultStartposition[4];
+        inputJ6.text = defaultStartposition[5];
     }
 
     /// <summary>
@@ -400,7 +439,7 @@ public class RoboterGUIV7 : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktiviert und deaktiviert den Lufwiderstands Flag im BallController
+    /// Aktiviert und deaktiviert den Lufwiderstands-Flag im TTBallController
     /// </summary>
     /// <param name="change"> Toggle</param>
     private void AktiviereLuftwiderstand(Toggle change)
@@ -414,15 +453,6 @@ public class RoboterGUIV7 : MonoBehaviour
         {
             area.R_ball.IsLuftwiderstandAktiv = false;
         }
-    }
-
-    /// <summary>
-    /// Berechnet den Radius zwischen dem TCP und der J3 Achse des Roboters
-    /// </summary>
-    /// <returns> absoluten Distanzwert als Float </returns>
-    private float BerechneRadiusJ3TCP()
-    {
-        return Vector3.Distance(achsen[2].transform.GetChild(0).GetChild(0).transform.position,achsen[5].transform.GetChild(1).transform.position);
     }
 
     /*
@@ -465,6 +495,22 @@ public class RoboterGUIV7 : MonoBehaviour
             panel.SetActive(false);
         }
     }
+    /// <summary>
+    /// Verändert die Physik des Ball, durch Methoden im TTBallController damit er springt
+    /// </summary>
+    /// <param name="change"></param>
+    private void AktiviereBallaufprall(Toggle change)
+    {
+        // Wenn Toggle aktiviert
+        if (change.isOn)
+        {
+            area.R_ball.SetBallaufprall();
+        }
+        else
+        {
+            area.R_ball.ResetBallaufprall();
+        }
+    }
 
     /// <summary>
     /// Verändert die Geschwindigkeit der Scene 
@@ -473,6 +519,15 @@ public class RoboterGUIV7 : MonoBehaviour
     private void SetzeGeschwindikeitDerScene(Slider change)
     {
         Time.timeScale = change.value;
+    }
+
+    /// <summary>
+    /// verändert die Position des Bechers anhand des eingestelten Sliderwerts
+    /// </summary>
+    /// <param name="change"> Wert des Sliders </param>
+    private void SetBecherposition(Slider change)
+    {
+        area.SetBecherposition(change.value);
     }
 
     /// <summary>

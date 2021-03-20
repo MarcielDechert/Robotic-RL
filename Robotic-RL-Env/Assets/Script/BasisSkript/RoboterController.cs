@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Abstarkte Klasse die die allgmeinen Attribute und Methoden für den Roboter bereitstellt
+/// Abstrakte Klasse die die allgmeinen Attribute und Methoden für den Roboter bereitstellt
 /// </summary>
 public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 {
+    [SerializeField] protected RobotsLearningArea area;
 
     private RoboterStatus roboterStatus = RoboterStatus.Neutral;
     public RoboterStatus RoboterStatus { get => roboterStatus; set => roboterStatus = value; }
@@ -31,6 +32,8 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
 
     public abstract void Step();
 
+    public abstract float GetRadiusJ3TCP();
+
     public abstract void StarteAbwurf(float[] abwurfRotation, float[] abwurfGeschwindigkeit);
 
     public abstract void InStartposition(float[] startRotation, float[] startGeschwindigkeit);
@@ -48,13 +51,11 @@ public abstract class RoboterController : MonoBehaviour, IRobotControl, IStep
     }
 
     /// <summary>
-    /// Berechnet den Abwurfwinkel anhand den Geschwindigkeitsvektors 
+    /// Berechnet den Abwurfwinkel anhand des Geschwindigkeitsvektors 
     /// </summary>
     /// <returns> Abwurfwinkel in Grad</returns>
     protected float BerechneAbwurfwinkel()
     {
         return Mathf.Rad2Deg * Mathf.Asin((AbwurfGeschwindigkeitVector3.y) / AbwurfGeschwindigkeitVector3.magnitude);
     }
-
-
 }

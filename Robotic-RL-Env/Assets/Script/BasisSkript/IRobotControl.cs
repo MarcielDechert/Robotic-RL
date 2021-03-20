@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Stellt zwei Methoden bereit für die Fahrt in die Abwurfposition und Startposition
+/// Stellt zwei Methoden für die Fahrt in die Abwurfposition und Startposition bereit 
 /// </summary>
 public interface IRobotControl
 {

@@ -8,6 +8,9 @@ using UnityEngine;
 public abstract class BallController : MonoBehaviour, IStep
 {
     [SerializeField] protected RobotsLearningArea area;
+    [SerializeField] private PhysicMaterial ballPhysik;
+
+    public PhysicMaterial BallPhysik { get => ballPhysik; set => ballPhysik= value; }
 
     private bool isKollidiert = false;
 
@@ -31,8 +34,12 @@ public abstract class BallController : MonoBehaviour, IStep
 
     public abstract void Step();
 
+    public abstract void SetBallaufprall();
+
+    public abstract void ResetBallaufprall();
+
     /// <summary>
-    /// Positioniert den Ball an vorgegebner Stelle und gibt ihn eine vorgegeben Anfangsgeschwindigkeit für den Abwurf
+    /// Positioniert den Ball an vorgegebener Stelle und gibt ihn eine vorgegeben Anfangsgeschwindigkeit für den Abwurf
     /// </summary>
     /// <param name="_position"> Position des Abwurfs als Vektor3</param>
     /// <param name="_geschwindigkeit"> Startgeschwindigkeit als Vektor3</param>
@@ -44,7 +51,7 @@ public abstract class BallController : MonoBehaviour, IStep
     }
 
     /// <summary>
-    /// Verarbeitet Kollisionen mit andern Objekten
+    /// Verarbeitet Kollisionen mit anderen Objekten
     /// </summary>
     /// <param name="other"> Andere GameObjects</param>
     protected void OnCollisionEnter(Collision other)
@@ -61,7 +68,7 @@ public abstract class BallController : MonoBehaviour, IStep
                 area.BerechneWurfweite();
             }
 
-            //wenn das Objekt mit Layer x getroffen wird er zur KollisionsListe hinzugefügt
+            //wenn das Objekt mit Layer x getroffen wird, wird er zur KollisionsListe hinzugefügt
 
             if (other.collider.gameObject.layer == 10 && KollisionsListe.Contains(KollisionsLayer.Wand) == false)
             {
@@ -91,7 +98,7 @@ public abstract class BallController : MonoBehaviour, IStep
     }
 
     /// <summary>
-    /// Verarbeitet Kollisionen mit Objekten die die Eigenschaft "Is Trigger" hat
+    /// Verarbeitet Kollisionen mit Objekten die die Eigenschaft "Is Trigger" haben
     /// </summary>
     /// <param name="other"></param>
     protected void OnTriggerEnter(Collider other)

@@ -59,8 +59,8 @@ public class RobotsLearningArea : MonoBehaviour
         // wenn der Agent der KI aktiv ist
         if(agent.enabled)
         {
-            // Versetzt den Becher auf ein begrenzten Zufallswert in x Richtung
-            target.transform.localPosition = new Vector3((float)(-0.25*Random.value - 0.5f), 0.06f, 0);
+            // Versetzt den Becher auf ein begrenzten Zufallswert in x richtung
+            target.transform.localPosition = new Vector3((float)(-0.5*Random.value - 0.25f), 0.06f, 0);
         }
         // Setzt die Position des Balls zurück
         ball.transform.localPosition = defaultBallposition;

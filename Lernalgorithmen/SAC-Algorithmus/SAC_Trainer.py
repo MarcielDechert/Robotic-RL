@@ -17,7 +17,10 @@ from mlagents_envs.environment import UnityEnvironment
 from mlagents_envs.side_channel.engine_configuration_channel import EngineConfigurationChannel
 from gym_unity.envs import UnityToGymWrapper
 
-
+"""
+    Dies sind die Hyperparameter des Lernprozesses. Mit diesen kann der Lernprozess optimiert werden und ein schnelleres
+    bzw. besseres Ergebnis ermöglicht werden.
+"""
 ENV_ID = "../../Robotic-RL-Env/Build/Robotic-RL-Env"
 GAMMA = 0.99
 BATCH_SIZE = 32
@@ -40,6 +43,8 @@ def test_net(net, env, count=250, device="cpu"):
     """
     rewards = 0.0
     steps = 0
+    # Test wird 250 mal durchgeführt und der Mittelwert wird in rewards ausgegeben. Eine erhöhung des Counts führt zu einem
+    # besseren vergleich zwischen den unterschiedlichen testzyklen
     for _ in range(count):
         obs = env.reset()
         while True:
@@ -56,7 +61,11 @@ def test_net(net, env, count=250, device="cpu"):
 
 
 if __name__ == "__main__":
-    # Parsen der Parameterwerte bei Start des Programms
+    """
+        Dies ist das Hauptprogramm in dem das Modell trainiert wird. Der Lernalgorithmus wird soalnge durchlaufen, bis
+        das Prorgamm über die Konsole beendet wird.
+    """
+    # Parsen der Parameterwerte bei Start des Programms. Wichtig ist dass der Name unter -n übergeben wird.
     parser = argparse.ArgumentParser()
     parser.add_argument("--cuda", default=False, action='store_true', help='Enable CUDA')
     parser.add_argument("-n", "--name", required=True, help="Name of the run")
@@ -70,6 +79,7 @@ if __name__ == "__main__":
     # Wrappen der Unity-Umgebung in eine Gym-Umgebung
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(ENV_ID, seed=1, side_channels=[channel])
+    # Zeitfaktor muss je nach Computersystem angepasst werden und so eingestellt werden, dass das Programm noch flüssig läuft.
     channel.set_configuration_parameters(time_scale=20.0)
     env = UnityToGymWrapper(unity_env)
 
@@ -91,6 +101,7 @@ if __name__ == "__main__":
     # Erstellen des Agenten mit der PTAN-Bibliothek
     writer = SummaryWriter(comment="-sac_" + args.name)
     agent = model.AgentSAC(act_net, device=device)
+    # ptan ist hier der Player der die Würfe im laufe des Prozesses durchführt.
     exp_source = ptan.experience.ExperienceSourceFirstLast(
         env, agent, gamma=GAMMA, steps_count=1)
     buffer = ptan.experience.ExperienceReplayBuffer(
@@ -107,7 +118,9 @@ if __name__ == "__main__":
             while True:
                 frame_idx += 1
                 buffer.populate(1)
+                # Entnahme eines Wurfes aus dem Expierence Buffer
                 rewards_steps = exp_source.pop_rewards_steps()
+                # Speichern des Wurfes in Tensorbaord
                 if rewards_steps:
                     rewards, steps = zip(*rewards_steps)
                     tb_tracker.track("episode_steps", steps[0], frame_idx)
@@ -117,7 +130,7 @@ if __name__ == "__main__":
                 if len(buffer) < REPLAY_INITIAL:
                     continue
 
-                # Entnahme einer Stichprobes aus dem Buffer
+                # Entnahme einer Stichprobes aus dem Buffer. Hier werden die Zustände, Aktionen und Referenzwerte aus einer Stichprobe erstellt.
                 batch = buffer.sample(BATCH_SIZE)
                 states_v, actions_v, ref_vals_v, ref_q_v = \
                     common.unpack_batch_sac(
@@ -135,6 +148,7 @@ if __name__ == "__main__":
                                        ref_q_v.detach())
                 q2_loss_v = F.mse_loss(q2_v.squeeze(),
                                        ref_q_v.detach())
+                # Addieren der Lossfunktionen um ein gemeinsames optimieren des TwinNetzes zu ermöglichen
                 q_loss_v = q1_loss_v + q2_loss_v
                 q_loss_v.backward()
                 twinq_opt.step()
@@ -164,12 +178,14 @@ if __name__ == "__main__":
                 # Nach jedem Durchlaufen der 500 Würfe wird die Testfunktion aufgerufen
                 if frame_idx % TEST_ITERS == 0:
                     ts = time.time()
+                    # Erhalten der Belohnung des Testzykluses
                     rewards, steps = test_net(act_net, env, device=device)
                     print("Test done in %.2f sec, reward %.3f, steps %d" % (
                         time.time() - ts, rewards, steps))
                     writer.add_scalar("test_reward", rewards, frame_idx)
                     writer.add_scalar("test_steps", steps, frame_idx)
-                    if best_reward is None or best_reward < rewards:
+                    # Ist die Belohnung besser als der bisherige Highscore wird das Modell gespeichert.
+                    if best_reward is None or best_reward <= rewards:
                         if best_reward is not None:
                             print("Best reward updated: %.3f -> %.3f" % (best_reward, rewards))
                             name = "best_%+.3f_%d.dat" % (rewards, frame_idx)
